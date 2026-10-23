@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Naturopata Digitale · Piante, benessere e natura, spiegati con cura</title>
+  <meta name="description" content="Erbario interattivo, manuale, fitoalimurgia, schede di benessere e quiz. Con Neura, l'intelligenza locale che spiega e controlla. Funziona anche senza Internet, senza account e senza pubblicità.">
+  <meta name="author" content="Danilo D'Auria">
+  <meta name="theme-color" content="#1f4d3a">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Naturopata Digitale">
+  <meta property="og:description" content="Il sapere gentile delle piante: schede, manuale, fitoalimurgia, quiz e l'IA locale Neura. Anche offline.">
+  <meta property="og:site_name" content="Naturopata Digitale">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("naturopata-digitale:v1:theme");
+        if (t !== "dark" && t !== "light") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Vai al contenuto</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="#/" aria-label="Naturopata Digitale, pagina iniziale">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" focusable="false">
+            <path d="M24 43c0-11 3.5-19 13-25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M24 43c0-9-3-15-11-20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+            <path d="M36 12c2 8-2 14-10 16 0-8 3-13 10-16Z" fill="currentColor" opacity=".9"/>
+            <path d="M13 18c-1 7 2 12 8 14 1-7-1-11-8-14Z" fill="currentColor" opacity=".55"/>
+            <circle cx="24" cy="10" r="3.4" fill="currentColor" opacity=".8"/>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>Naturopata</strong>
+          <em>Digitale</em>
+        </span>
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navigazione principale">
+        <a href="#/erbario" data-nav="erbario">Erbario</a>
+        <a href="#/manuale" data-nav="manuale">Manuale</a>
+        <a href="#/fitoalimurgia" data-nav="fitoalimurgia">Fitoalimurgia</a>
+        <a href="#/benessere" data-nav="benessere">Benessere</a>
+        <a href="#/quiz" data-nav="quiz">Quiz</a>
+        <a href="#/neura" data-nav="neura" class="nav-neura">
+          <span class="nav-dot" aria-hidden="true"></span>Neura
+        </a>
+        <div class="nav-more">
+          <button class="nav-more-btn" id="moreBtn" aria-expanded="false" aria-controls="moreMenu">Altro</button>
+          <div class="nav-more-menu" id="moreMenu" hidden>
+            <a href="#/calendario" data-nav="calendario">Calendario di raccolta</a>
+            <a href="#/glossario" data-nav="glossario">Glossario</a>
+            <a href="#/sicurezza" data-nav="sicurezza">Sicurezza e fonti</a>
+            <a href="#/licenze" data-nav="licenze">Licenze e progetto</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Cambia tema chiaro o scuro" title="Tema chiaro / scuro">
+          <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M2 12h2.6M19.4 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+          <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+        </button>
+        <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav">
+          <span class="menu-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="menu-label">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div id="app" class="app">
+      <div class="wrap loading-shell" id="loadingShell">
+        <div class="loading-leaf" aria-hidden="true"></div>
+        <p>Sto preparando l'erbario…</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <p class="footer-title">Naturopata Digitale</p>
+        <p class="footer-sub">Il sapere gentile delle piante, sul tuo dispositivo.</p>
+        <p class="footer-badge"><span class="dot"></span> Gratuito · Senza account · Anche offline</p>
+      </div>
+      <div>
+        <h2 class="footer-h">Esplora</h2>
+        <ul class="footer-links">
+          <li><a href="#/erbario">Erbario</a></li>
+          <li><a href="#/manuale">Manuale interattivo</a></li>
+          <li><a href="#/fitoalimurgia">Fitoalimurgia</a></li>
+          <li><a href="#/quiz">Quiz</a></li>
+          <li><a href="#/neura">Neura</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-h">Il progetto</h2>
+        <ul class="footer-links">
+          <li><a href="#/sicurezza">Sicurezza e fonti</a></li>
+          <li><a href="#/licenze">Licenze</a></li>
+          <li><a href="#/licenze">Privacy</a></li>
+          <li><a href="#/glossario">Glossario</a></li>
+        </ul>
+      </div>
+      <div class="footer-note">
+        <h2 class="footer-h">Avvertenza</h2>
+        <p>Questo programma ha finalità informative ed educative. Non diagnostica, non cura e non sostituisce il parere di un medico o di un farmacista. Le piante possono interagire con i farmaci.</p>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong></p>
+      <p>Codice <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT</a> · Contenuti <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · v1.0.0</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="page-veil" id="pageVeil" hidden></div>
+
+  <noscript>
+    <div class="wrap" style="padding:2rem 1rem">
+      <h1>Naturopata Digitale</h1>
+      <p>Per usare l'erbario interattivo, il manuale, i quiz e Neura serve JavaScript attivo. I contenuti restano comunque tuoi: puoi consultarli anche senza connessione dopo aver aperto il programma una volta.</p>
+    </div>
+  </noscript>
+
+  <script src="assets/js/data-plants.js"></script>
+  <script src="assets/js/data-plants-2.js"></script>
+  <script src="assets/js/data-manual.js"></script>
+  <script src="assets/js/data-manual-2.js"></script>
+  <script src="assets/js/data-manual-3.js"></script>
+  <script src="assets/js/data-manual-4.js"></script>
+  <script src="assets/js/data-manual-5.js"></script>
+  <script src="assets/js/data-extra.js"></script>
+  <script src="assets/js/data-extra-2.js"></script>
+  <script src="assets/js/data-extra-3.js"></script>
+  <script src="assets/js/data-quiz.js"></script>
+  <script src="assets/js/data-quiz-2.js"></script>
+  <script src="assets/js/data-quiz-3.js"></script>
+  <script src="assets/js/neura.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/app-views.js"></script>
+  <script src="assets/js/app-quiz.js"></script>
+  <script src="assets/js/app-neura.js"></script>
+  <script src="assets/js/app-init.js"></script>
+</body>
+</html>

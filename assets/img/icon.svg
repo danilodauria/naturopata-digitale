@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Naturopata Digitale">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#173a2b"/>
+      <stop offset="1" stop-color="#357a5a"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#f5f1e6"/>
+      <stop offset="1" stop-color="#d9e6dc"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="188" fill="none" stroke="#f5f1e6" stroke-opacity=".12" stroke-width="2"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#f5f1e6" stroke-opacity=".08" stroke-width="2"/>
+  <path d="M256 402c0-94 30-164 112-214" fill="none" stroke="#f5f1e6" stroke-width="14" stroke-linecap="round" opacity=".9"/>
+  <path d="M256 402c0-76-24-128-92-170" fill="none" stroke="#f5f1e6" stroke-width="12" stroke-linecap="round" opacity=".5"/>
+  <path d="M362 170c18 72-18 126-90 144 0-72 28-118 90-144Z" fill="url(#leaf)"/>
+  <path d="M152 222c-8 58 16 100 68 120 8-58-8-94-68-120Z" fill="#f5f1e6" opacity=".62"/>
+  <circle cx="256" cy="140" r="30" fill="#f5f1e6" opacity=".72"/>
+  <path d="M180 322c38 12 70 12 108 0" fill="none" stroke="#f5f1e6" stroke-width="8" stroke-linecap="round" opacity=".25"/>
+</svg>

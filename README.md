@@ -126,6 +126,26 @@ Quando aggiorni i contenuti, incrementa `VERSION` in `sw.js` (per esempio
 `nd-v1.0.1`): il service worker elimina la cache vecchia e serve la nuova
 versione.
 
+## Vademecum in PDF
+
+`assets/pdf/vademecum-naturopata-digitale.pdf` è una guida tascabile di 25
+pagine in formato A5: segnali d'allarme, dieci piante tossiche, confusioni
+pericolose, interazioni con i farmaci, decalogo della raccolta, calendario,
+forme d'uso, le 27 piante in tabella, glossario e fonti.
+
+Non è scritta a mano: il generatore legge gli stessi dati dell'app e compone
+il PDF, quindi quando una scheda cambia il documento si rigenera identico ai
+contenuti del sito.
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install reportlab
+.venv/bin/python scripts/build_vademecum.py   # oppure: npm run vademecum
+```
+
+Serve Python 3 e Node (per esportare i dati). Il PDF richiede `reportlab`; il
+controllo delle anteprime, se serve, usa `pymupdf`.
+
 ## Pubblicare su GitHub Pages
 
 1. Crea un repository chiamato `naturopata-digitale` (o un altro nome).
@@ -161,6 +181,9 @@ assets/
     app-neura.js           # interfaccia chat e controllo
     app-init.js            # eventi globali e avvio
 scripts/make_icons.py      # rigenera le icone PNG
+scripts/export-data.cjs    # esporta i dati dell'app in JSON
+scripts/build_vademecum.py # genera il Vademecum in PDF
+assets/pdf/                # Vademecum scaricabile (A5, 25 pagine)
 tests/                     # test dati e DOM
 .github/workflows/         # pubblicazione GitHub Pages
 ```

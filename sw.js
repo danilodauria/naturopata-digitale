@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.0.1";
+const VERSION = "nd-v1.1.0";
 const SHELL = [
   "./",
   "index.html",
@@ -55,6 +55,10 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
+  // I PDF si scaricano su richiesta e non entrano nella cache: sono un allegato,
+  // non una parte dell'app, e non devono occupare spazio senza un gesto esplicito.
+  if (/\.pdf$/i.test(url.pathname)) return;
 
   if (request.mode === "navigate") {
     event.respondWith(

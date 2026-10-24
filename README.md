@@ -123,8 +123,9 @@ I test non sono necessari per pubblicare il sito e non vengono caricati
 all'interno dell'applicazione.
 
 Quando aggiorni i contenuti, incrementa `VERSION` in `sw.js` (per esempio
-`nd-v1.0.1`): il service worker elimina la cache vecchia e serve la nuova
-versione.
+`nd-v1.1.0`): il service worker elimina la cache vecchia e serve la nuova
+versione. I file `.pdf` sono esclusi dalla cache: si scaricano su richiesta e
+non occupano spazio senza un gesto esplicito.
 
 ## Vademecum in PDF
 
@@ -133,9 +134,10 @@ pagine in formato A5: segnali d'allarme, dieci piante tossiche, confusioni
 pericolose, interazioni con i farmaci, decalogo della raccolta, calendario,
 forme d'uso, le 27 piante in tabella, glossario e fonti.
 
-Non è scritta a mano: il generatore legge gli stessi dati dell'app e compone
-il PDF, quindi quando una scheda cambia il documento si rigenera identico ai
-contenuti del sito.
+Il PDF si scarica dalla pagina **Licenze** (pulsante *Scarica il Vademecum*)
+e dal footer. Non è scritto a mano: il generatore legge gli stessi dati
+dell'app e compone il documento, quindi quando una scheda cambia il PDF si
+rigenera identico ai contenuti del sito.
 
 ```bash
 python3 -m venv .venv
@@ -219,4 +221,4 @@ Ideato, scritto e sviluppato da **Danilo D'Auria**, autore anche del
 [Consulente Digitale](https://danilodauria.github.io/consulente-digitale/), di
 FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».
 
-Versione **1.0.0** · ottobre 2026.
+Versione **1.1.0** · ottobre 2026.

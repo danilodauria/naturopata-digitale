@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scarica Naturopata Digitale · Windows, Linux, macOS e telefono</title>
+  <meta name="description" content="Naturopata Digitale si installa su Windows, Linux e macOS, oppure si usa dal browser su telefono e tablet. Gratuito, senza pubblicità, senza account, funziona anche senza Internet. Con il Vademecum in PDF da stampare.">
+  <meta name="author" content="Danilo D'Auria">
+  <meta name="theme-color" content="#1f4d3a">
+  <link rel="canonical" href="https://danilodauria.github.io/naturopata-digitale/scarica/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Scarica Naturopata Digitale">
+  <meta property="og:description" content="Erbario, manuale, sopravvivenza e biblioteca: sul computer, sul telefono e in PDF da stampare. Gratuito e offline.">
+  <meta property="og:url" content="https://danilodauria.github.io/naturopata-digitale/scarica/">
+  <meta property="og:site_name" content="Naturopata Digitale">
+  <link rel="icon" href="../assets/img/icon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("naturopata-digitale:v1:theme");
+        if (t !== "dark" && t !== "light") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --verde-900: #173a2b;
+      --verde-800: #1f4d3a;
+      --verde-700: #296149;
+      --verde-600: #357a5a;
+      --salvia: #93b39f;
+      --salvia-chiara: #d9e6dc;
+      --crema: #f5f1e6;
+      --carta: #fffdf7;
+      --carta-2: #fbf7ec;
+      --inchiostro: #1d2b24;
+      --inchiostro-soft: #4a5b51;
+      --inchiostro-faint: #63756a;
+      --terra: #a9603f;
+      --terra-soft: #f2e2d6;
+      --oro: #b08a2e;
+      --oro-soft: #f5ecd2;
+      --bordo: #e2ddcd;
+      --bordo-forte: #cfc7b2;
+      --ombra: 0 1px 2px rgba(20, 45, 33, .04), 0 12px 30px -18px rgba(20, 45, 33, .35);
+      --ombra-alta: 0 2px 4px rgba(20, 45, 33, .05), 0 28px 60px -30px rgba(20, 45, 33, .45);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --bg: var(--crema);
+      --surface: var(--carta);
+      --surface-2: var(--carta-2);
+      --text: var(--inchiostro);
+      --text-soft: var(--inchiostro-soft);
+      --text-faint: var(--inchiostro-faint);
+      --line: var(--bordo);
+      --accent: var(--verde-700);
+      --accent-soft: var(--salvia-chiara);
+    }
+
+    html[data-theme="dark"] {
+      --crema: #0d1a15;
+      --carta: #13241c;
+      --carta-2: #172b21;
+      --inchiostro: #e9efe6;
+      --inchiostro-soft: #b7c6ba;
+      --inchiostro-faint: #8fa394;
+      --bordo: #294135;
+      --bordo-forte: #3a5748;
+      --salvia-chiara: #233d2f;
+      --terra-soft: #3a2a22;
+      --oro-soft: #3a3320;
+      --bg: #0b1712;
+      --surface: #13241c;
+      --surface-2: #172b21;
+      --text: #e9efe6;
+      --text-soft: #b7c6ba;
+      --text-faint: #8fa394;
+      --line: #294135;
+      --accent: #8fc6a5;
+      --accent-soft: #233d2f;
+      --ombra: 0 1px 2px rgba(0, 0, 0, .3), 0 14px 34px -20px rgba(0, 0, 0, .7);
+      --ombra-alta: 0 2px 4px rgba(0, 0, 0, .35), 0 30px 60px -30px rgba(0, 0, 0, .8);
+      color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16.5px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--serif);
+      font-weight: 600;
+      line-height: 1.16;
+      letter-spacing: -.012em;
+      margin: 0 0 .55em;
+    }
+
+    h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); }
+    h2 { font-size: clamp(1.5rem, 2.8vw, 2.05rem); }
+    h3 { font-size: 1.16rem; }
+    p { margin: 0 0 1em; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { color: var(--verde-800); }
+    html[data-theme="dark"] a:hover { color: #b7e3c8; }
+    img, svg { display: block; max-width: 100%; }
+    ul, ol { margin: 0 0 1em; padding-left: 1.2em; }
+    li { margin-bottom: .35em; }
+    code {
+      font-family: var(--mono);
+      font-size: .86em;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: .1em .38em;
+      overflow-wrap: anywhere;
+    }
+
+    :focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(53, 122, 90, .35);
+      border-radius: 8px;
+    }
+
+    .wrap { width: min(1080px, 100% - 2.5rem); margin-inline: auto; }
+
+    .skip {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+    }
+    .skip:focus {
+      left: 1rem;
+      top: 1rem;
+      z-index: 50;
+      background: var(--surface);
+      padding: .6rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    /* Intestazione ------------------------------------------------------- */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      min-height: 70px;
+      padding-block: .6rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--serif);
+      font-size: 1.08rem;
+      line-height: 1.05;
+      margin-right: auto;
+      flex: none;
+    }
+    .brand strong { display: block; font-weight: 600; }
+    .brand em { display: block; font-style: normal; color: var(--text-faint); font-size: .82em; letter-spacing: .02em; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: var(--verde-800);
+      color: #f4efe1;
+      flex: none;
+    }
+    .brand-mark svg { width: 26px; height: 26px; }
+
+    .page-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.05rem;
+      font-size: .88rem;
+    }
+    .page-nav a {
+      color: var(--text-soft);
+      text-decoration: none;
+      padding: .35rem 0;
+      border-bottom: 2px solid transparent;
+    }
+    .page-nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+    /* Pulsanti ----------------------------------------------------------- */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      min-height: 44px;
+      padding: .55rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-size: .94rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn svg { width: 18px; height: 18px; }
+    .btn-primary { background: var(--verde-800); color: #f7f3e7; }
+    .btn-primary:hover { background: var(--verde-900); color: #fffdf3; }
+    .btn-secondary { background: transparent; color: var(--text); border-color: var(--bordo-forte); }
+    .btn-secondary:hover { background: var(--surface); border-color: var(--accent); color: var(--text); }
+    .btn-ghost { background: transparent; color: var(--accent); padding-inline: .8rem; }
+    .btn-sm { min-height: 38px; font-size: .86rem; padding: .4rem .9rem; }
+    .btn-block { width: 100%; }
+
+    /* Eroe --------------------------------------------------------------- */
+
+    .hero {
+      position: relative;
+      padding: clamp(2.6rem, 6vw, 4.6rem) 0 clamp(2.2rem, 4vw, 3.4rem);
+      background:
+        radial-gradient(1200px 420px at 12% -10%, color-mix(in srgb, var(--accent-soft) 70%, transparent), transparent 70%),
+        radial-gradient(900px 380px at 92% 0%, color-mix(in srgb, var(--oro-soft) 60%, transparent), transparent 70%);
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      bottom: -180px;
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      box-shadow: 0 0 0 40px color-mix(in srgb, var(--accent) 5%, transparent), 0 0 0 90px color-mix(in srgb, var(--accent) 3%, transparent);
+      pointer-events: none;
+    }
+    .hero .wrap { position: relative; z-index: 1; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: .9rem;
+    }
+    .lead { font-size: clamp(1.02rem, 1.6vw, 1.18rem); color: var(--text-soft); max-width: 46rem; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: 1.4rem 0 1.6rem;
+      padding: 0;
+      list-style: none;
+    }
+    .chips li {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      margin: 0;
+      padding: .34rem .8rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 80%, transparent);
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; }
+
+    .hero-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .75rem;
+      margin: 2.2rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .hero-facts li {
+      margin: 0;
+      padding: .85rem 1rem;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--ombra);
+    }
+    .hero-facts strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.45rem;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    .hero-facts span { font-size: .78rem; color: var(--text-faint); }
+
+    /* Sezioni ------------------------------------------------------------ */
+
+    .section { padding: clamp(2.2rem, 5vw, 3.6rem) 0; }
+    .section + .section { border-top: 1px solid var(--line); }
+    .section-head { max-width: 46rem; margin-bottom: 1.8rem; }
+    .section-head p { color: var(--text-soft); margin-bottom: 0; }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+      box-shadow: var(--ombra);
+    }
+    .card h3 { margin-bottom: .4rem; }
+    .card p { color: var(--text-soft); font-size: .92rem; margin-bottom: 0; }
+    .card .tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .5rem;
+    }
+
+    .steps { counter-reset: passo; list-style: none; padding: 0; margin: 0; }
+    .steps li {
+      counter-increment: passo;
+      position: relative;
+      padding-left: 2.1rem;
+      margin-bottom: .55rem;
+      color: var(--text-soft);
+      font-size: .92rem;
+    }
+    .steps li::before {
+      content: counter(passo);
+      position: absolute;
+      left: 0;
+      top: .05rem;
+      width: 1.45rem;
+      height: 1.45rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .split { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+    /* Download ----------------------------------------------------------- */
+
+    .download-card { display: flex; flex-direction: column; gap: .55rem; }
+    .download-card .head { display: flex; align-items: center; gap: .65rem; }
+    .os-icon {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      font-size: 1.2rem;
+      flex: none;
+    }
+    .download-card .head h3 { margin: 0; }
+    .download-card .req {
+      font-size: .78rem;
+      color: var(--text-faint);
+      margin: 0;
+    }
+    .download-card .actions { margin-top: auto; padding-top: .6rem; }
+    .download-card .note { font-size: .78rem; color: var(--text-faint); margin: .1rem 0 0; }
+
+    .file-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.2rem;
+      padding: .9rem 1.1rem;
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      border: 1px dashed var(--bordo-forte);
+      font-size: .84rem;
+      color: var(--text-soft);
+    }
+    .file-note p { margin: 0; }
+
+    /* Avvisi ------------------------------------------------------------- */
+
+    .callout {
+      display: flex;
+      gap: .8rem;
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      font-size: .9rem;
+      color: var(--text-soft);
+      margin-top: 1.2rem;
+    }
+    .callout span[aria-hidden] { font-size: 1.1rem; line-height: 1.4; }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout.warn { background: var(--oro-soft); border-color: color-mix(in srgb, var(--oro) 30%, var(--line)); }
+    .callout.danger { background: var(--terra-soft); border-color: color-mix(in srgb, var(--terra) 30%, var(--line)); }
+
+    /* Licenza ------------------------------------------------------------ */
+
+    .license-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .license-mark {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .04em;
+      padding: .2rem .5rem;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-bottom: .6rem;
+    }
+    .license-grid ul { font-size: .88rem; color: var(--text-soft); padding-left: 1.1rem; margin-bottom: 0; }
+
+    .quote {
+      margin: 0;
+      padding: 1rem 1.2rem;
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: .9rem;
+      color: var(--text-soft);
+    }
+    .quote strong { color: var(--text); }
+
+    /* Piede -------------------------------------------------------------- */
+
+    .site-footer {
+      margin-top: 1rem;
+      padding: 2.2rem 0 2.6rem;
+      border-top: 1px solid var(--line);
+      background: var(--surface-2);
+      font-size: .86rem;
+      color: var(--text-soft);
+    }
+    .footer-grid {
+      display: grid;
+      gap: 1.6rem;
+      grid-template-columns: minmax(220px, 1.4fr) repeat(2, minmax(140px, 1fr));
+    }
+    .footer-grid h2 {
+      font-family: var(--sans);
+      font-size: .74rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: .6rem;
+    }
+    .footer-grid ul { list-style: none; padding: 0; margin: 0; }
+    .footer-grid li { margin-bottom: .35rem; }
+    .footer-grid a { color: var(--text-soft); text-decoration: none; }
+    .footer-grid a:hover { color: var(--accent); text-decoration: underline; }
+    .footer-title { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: .3rem; }
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem 1.2rem;
+      justify-content: space-between;
+      margin-top: 1.8rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      font-size: .78rem;
+      color: var(--text-faint);
+    }
+    .footer-bottom p { margin: 0; }
+
+    @media (max-width: 860px) {
+      .page-nav { display: none; }
+      .bar { min-height: 64px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+      .btn:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Vai al contenuto</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="../" aria-label="Naturopata Digitale, pagina iniziale">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" focusable="false">
+            <path d="M24 43c0-11 3.5-19 13-25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M24 43c0-9-3-15-11-20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+            <path d="M36 12c2 8-2 14-10 16 0-8 3-13 10-16Z" fill="currentColor" opacity=".9"/>
+            <path d="M13 18c-1 7 2 12 8 14 1-7-1-11-8-14Z" fill="currentColor" opacity=".55"/>
+            <circle cx="24" cy="10" r="3.4" fill="currentColor" opacity=".8"/>
+          </svg>
+        </span>
+        <span><strong>Naturopata</strong><em>Digitale</em></span>
+      </a>
+
+      <nav class="page-nav" aria-label="Sezioni della pagina">
+        <a href="#dentro">Cosa contiene</a>
+        <a href="#telefono">Telefono</a>
+        <a href="#computer">Computer</a>
+        <a href="#vademecum">Vademecum</a>
+        <a href="#licenza">Licenza</a>
+      </nav>
+
+      <a class="btn btn-primary btn-sm" href="../">Apri il programma</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Erbario · Manuale · Sopravvivenza · Biblioteca</p>
+        <h1>Il sapere delle piante,<br>anche sul tuo computer.</h1>
+        <p class="lead">Sessanta piante officinali con usi, preparazioni e avvertenze, diciotto capitoli di manuale, la fitoalimurgia, tre livelli di sopravvivenza, i <em>Discorsi</em> di Mattioli e Neura, l'assistente che resta sul tuo dispositivo. Gratuito, senza pubblicità, senza account.</p>
+
+        <ul class="chips">
+          <li>🆓 Gratuito, senza pubblicità</li>
+          <li>🔒 Non raccoglie dati</li>
+          <li>📴 Funziona anche senza Internet</li>
+          <li>🇮🇹 Tutto in italiano</li>
+        </ul>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="../">Apri il programma nel browser</a>
+          <a class="btn btn-secondary" href="#computer">Scarica per il computer</a>
+        </div>
+
+        <ul class="hero-facts">
+          <li><strong>60</strong><span>schede di piante</span></li>
+          <li><strong>18</strong><span>capitoli di manuale</span></li>
+          <li><strong>27</strong><span>schede di sopravvivenza</span></li>
+          <li><strong>3</strong><span>PDF da stampare</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="dentro">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Che cosa trovi dentro</h2>
+          <p>Un progetto editoriale, non un catalogo. Ogni scheda dice anche quando <strong>non</strong> usare una pianta, e cita le fonti.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <span class="tag">Erbario</span>
+            <h3>60 piante, dalla A alla Z</h3>
+            <p>Parti usate, raccolta, proprietà, preparazioni, sicurezza per gravidanza, allattamento e bambini, sosia pericolosi, uso in cucina e livello di evidenza.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Manuale</span>
+            <h3>Capire prima di usare</h3>
+            <p>Diciotto capitoli in cinque parti: fondamenti, piante, raccolta, pratica quotidiana e consapevolezza. Con glossario di 44 termini.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Fitoalimurgia</span>
+            <h3>Le erbe in cucina</h3>
+            <p>Riconoscere, raccogliere e cucinare le piante selvatiche commestibili, con le regole del raccolto responsabile e i divieti locali.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Sopravvivenza</span>
+            <h3>Acqua, fuoco, riparo, segnali</h3>
+            <p>Ventisette schede divise in base, intermedio ed esperto, con l'errore da evitare in ciascuna e le norme italiane su fuoco e bivacco.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Biblioteca</span>
+            <h3>I <em>Discorsi</em> di Mattioli</h3>
+            <p>Storia, struttura e sei edizioni cinquecentesche dell'opera che ha insegnato la botanica all'Europa, con i link alle digitalizzazioni libere.</p>
+          </article>
+          <article class="card">
+            <span class="tag">Neura e quiz</span>
+            <h3>Domande e risposte locali</h3>
+            <p>Ottantacinque domande di quiz con spiegazioni e un assistente che risponde con i contenuti dell'app: nessuna richiesta a un server.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="telefono">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sul telefono e sul tablet</h2>
+          <p>Non serve installare niente dal negozio di app: si apre dal browser e si aggiunge alla schermata Home, come un'app. Dopo la prima apertura funziona anche senza Internet.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>🤖 Telefono Android</h3>
+            <ol class="steps">
+              <li>Apri <a href="../">Naturopata Digitale</a> con Chrome.</li>
+              <li>Tocca i tre puntini ⋮ in alto a destra.</li>
+              <li>Tocca «Aggiungi a schermata Home» o «Installa app».</li>
+              <li>Conferma con «Aggiungi» o «Installa».</li>
+            </ol>
+          </article>
+
+          <article class="card">
+            <h3>🍏 iPhone e iPad</h3>
+            <ol class="steps">
+              <li>Apri <a href="../">Naturopata Digitale</a> con Safari.</li>
+              <li>Tocca il pulsante Condividi, il quadrato con la freccia verso l'alto.</li>
+              <li>Scorri e tocca «Aggiungi alla schermata Home».</li>
+              <li>Tocca «Aggiungi» in alto a destra.</li>
+            </ol>
+          </article>
+        </div>
+
+        <div class="callout">
+          <span aria-hidden="true">📌</span>
+          <p><strong>I tuoi progressi restano sul dispositivo.</strong> Preferiti, capitoli letti e statistiche dei quiz sono salvati nel browser e non vengono inviati a nessuno. Se cancelli i dati del browser o usi la modalità privata, si cancellano anche i progressi: dalla pagina Licenze puoi esportare un piccolo backup JSON.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="computer">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sul computer</h2>
+          <p>La stessa app in un pacchetto da installare, senza dipendenze da configurare. Funziona offline e salva i dati sul computer. Versione <strong>1.2.0</strong> · ottobre 2026.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card download-card">
+            <div class="head">
+              <span class="os-icon" aria-hidden="true">🪟</span>
+              <div><h3>Windows</h3><p class="req">Windows 10 e 11 · 64 bit</p></div>
+            </div>
+            <p>Installer con collegamento nel menu Start e sul desktop. Doppio clic sul file e segui la procedura; non servono permessi di amministratore.</p>
+            <p class="note">Windows SmartScreen può chiedere una conferma: il pacchetto non ha una firma commerciale. Scegli «Ulteriori informazioni» → «Esegui comunque».</p>
+            <div class="actions">
+              <a class="btn btn-primary btn-sm btn-block" href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/Naturopata-Digitale-Windows-x64.exe">Scarica per Windows</a>
+            </div>
+            <p class="note"><a href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/Naturopata-Digitale-Windows-portatile.zip">Versione portatile (.zip)</a>, da scompattare su una chiavetta: nessuna installazione.</p>
+          </article>
+
+          <article class="card download-card">
+            <div class="head">
+              <span class="os-icon" aria-hidden="true">🐧</span>
+              <div><h3>Linux</h3><p class="req">Debian, Ubuntu, Mint, Fedora, Arch · 64 bit</p></div>
+            </div>
+            <p>Pacchetto <code>.deb</code> per Debian e derivate, più <code>.AppImage</code> per tutte le altre distribuzioni. Il pacchetto è per <code>amd64</code>.</p>
+            <p class="note">Per il <code>.deb</code>: doppio clic, oppure <code>sudo apt install ./Naturopata-Digitale-Linux-amd64.deb</code>. Per l'AppImage: <code>chmod +x</code> e avvia.</p>
+            <div class="actions">
+              <a class="btn btn-primary btn-sm" href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/Naturopata-Digitale-Linux-amd64.deb">Scarica .deb</a>
+              <a class="btn btn-secondary btn-sm" href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/Naturopata-Digitale-Linux-x86_64.AppImage">Scarica .AppImage</a>
+            </div>
+          </article>
+
+          <article class="card download-card">
+            <div class="head">
+              <span class="os-icon" aria-hidden="true">🍎</span>
+              <div><h3>macOS</h3><p class="req">macOS 10.15 o successivo</p></div>
+            </div>
+            <p>Immagine disco separata per Mac Intel e per Apple Silicon. Apri il <code>.dmg</code> e trascina «Naturopata Digitale» nella cartella Applicazioni.</p>
+            <p class="note">L'app non è firmata con un certificato Apple: al primo avvio fai tasto destro sull'icona → «Apri» → «Apri».</p>
+            <div class="actions">
+              <a class="btn btn-primary btn-sm" href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/Naturopata-Digitale-Mac-arm64.dmg">Apple Silicon</a>
+              <a class="btn btn-secondary btn-sm" href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/Naturopata-Digitale-Mac-x64.dmg">Intel</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="file-note">
+          <p>I pulsanti puntano sempre all'ultima release ufficiale del repository. Le dimensioni esatte e le note di versione sono indicate nella pagina della release.</p>
+          <a href="https://github.com/danilodauria/naturopata-digitale/releases/latest">Tutte le versioni e le note →</a>
+        </div>
+
+        <div class="callout warn">
+          <span aria-hidden="true">🔐</span>
+          <p><strong>Scarica solo da qui.</strong> I pacchetti sono generati automaticamente dal codice pubblico del repository con GitHub Actions. Se un file arriva da un altro sito o da un messaggio, non aprirlo. Il codice è MIT: puoi controllarlo e ricompilarlo da solo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="vademecum">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Il Vademecum, da stampare</h2>
+          <p>Ventotto pagine ricavate dagli stessi contenuti dell'app: avvertenza, segnali d'allarme, dieci piante tossiche, interazioni con i farmaci, calendario del raccolto, preparazioni, le sessanta piante in tabella, glossario e fonti.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card download-card">
+            <span class="tag">A5 · 28 pagine · 74 kB</span>
+            <h3>Da leggere e portare con te</h3>
+            <p>Il formato tascabile, comodo sullo schermo e da stampare fronte-retro su A5. Con i link alle fonti attivi.</p>
+            <div class="actions">
+              <a class="btn btn-primary btn-sm btn-block" href="../assets/pdf/vademecum-naturopata-digitale.pdf" download="Vademecum-Naturopata-Digitale-A5.pdf">Scarica in A5</a>
+            </div>
+          </article>
+
+          <article class="card download-card">
+            <span class="tag">A4 · 28 pagine · 70 kB</span>
+            <h3>Da stampare su fogli normali</h3>
+            <p>Le stesse pagine ingrandite su A4, con margini di sicurezza per le stampanti domestiche e caratteri più grandi.</p>
+            <div class="actions">
+              <a class="btn btn-secondary btn-sm btn-block" href="../assets/pdf/vademecum-naturopata-digitale-a4.pdf" download="Vademecum-Naturopata-Digitale-A4.pdf">Scarica in A4</a>
+            </div>
+          </article>
+
+          <article class="card download-card">
+            <span class="tag">A4 · libricino · 65 kB</span>
+            <h3>Già imposto per la piega</h3>
+            <p>Quattordici facciate A4 orizzontali con due pagine per lato: stampa fronte-retro, piega a metà e ottieni un libretto A5 di ventotto pagine. Bastano sette fogli.</p>
+            <div class="actions">
+              <a class="btn btn-secondary btn-sm btn-block" href="../assets/pdf/vademecum-naturopata-digitale-libricino-a4.pdf" download="Vademecum-Naturopata-Digitale-Libricino-A4.pdf">Scarica il libricino</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="callout">
+          <span aria-hidden="true">🖨️</span>
+          <div>
+            <p><strong>Come stampare il libricino.</strong> Stampa su A4 orizzontale, fronte-retro, con rilegatura sul <strong>lato corto</strong> e al 100%, senza adattamento alla pagina. Piega i fogli a metà, raccoglili nell'ordine e fissali al centro con due punti metallici.</p>
+            <p>Se il retro esce capovolto, scegli la rilegatura sul lato lungo: dipende dal driver della stampante. Il PDF è già nell'ordine giusto, non riordinare i fogli a mano.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="novita">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Novità della versione 1.2.0</h2>
+          <p>Ottobre 2026. Un aggiornamento editoriale, non solo tecnico.</p>
+        </div>
+        <div class="split">
+          <div class="card">
+            <ul>
+              <li><strong>Trentatré nuove piante</strong>, dalle schede A alla Z: ora l'erbario ne conta sessanta, ognuna con sicurezza, sosia e fonti.</li>
+              <li><strong>I <em>Discorsi</em> di Mattioli</strong>: biografia, struttura dell'opera, sei edizioni e link alle digitalizzazioni in pubblico dominio.</li>
+              <li><strong>Sopravvivenza in tre livelli</strong>: ventisette schede pratiche, dai kit essenziali alle tecniche avanzate.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <ul>
+              <li><strong>Vademecum in tre formati</strong>: A5, A4 e libricino già imposto per la stampa.</li>
+              <li><strong>Programma desktop</strong> per Windows, Linux e macOS, con la stessa app e gli stessi contenuti.</li>
+              <li><strong>Neura più preciso</strong>: risponde citando le schede e segnala quando la domanda riguarda un sintomo da valutare con un medico.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="licenza">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Licenza e diritti</h2>
+          <p>Contenuti liberi per l'uso personale, didattico e associativo. Non commerciali, con attribuzione.</p>
+        </div>
+
+        <div class="license-grid">
+          <article class="card">
+            <span class="license-mark">MIT</span>
+            <h3>Il codice</h3>
+            <p>Il programma è software libero: puoi usarlo, studiarlo, modificarlo e redistribuirlo mantenendo l'avviso di copyright.</p>
+          </article>
+          <article class="card">
+            <span class="license-mark">CC BY-NC-SA 4.0</span>
+            <h3>I contenuti</h3>
+            <p>Testi, schede, quiz, grafica e Vademecum sono distribuiti con licenza Creative Commons Attribuzione – Non commerciale – Condividi allo stesso modo 4.0.</p>
+            <ul>
+              <li><strong>Attribuzione:</strong> cita autore, titolo e licenza.</li>
+              <li><strong>Non commerciale:</strong> nessun uso di lucro.</li>
+              <li><strong>Condividi allo stesso modo:</strong> le versioni modificate usano la stessa licenza.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="license-mark">Pubblico dominio</span>
+            <h3>Le opere storiche</h3>
+            <p>I testi cinquecenteschi citati nella biblioteca, come <em>I Discorsi</em> di Mattioli, sono in pubblico dominio. Le scansioni restano soggette alle condizioni della biblioteca che le ha digitalizzate.</p>
+          </article>
+        </div>
+
+        <blockquote class="quote">
+          <p><strong>Come citare.</strong> «Naturopata Digitale — Il sapere gentile delle piante» di Danilo D'Auria — un progetto FeniceOS — licenza CC BY-NC-SA 4.0 — <a href="https://danilodauria.github.io/naturopata-digitale/">danilodauria.github.io/naturopata-digitale</a></p>
+          <p>Usarlo in corsi gratuiti, scuole, biblioteche, associazioni e ambulatori è sempre permesso. I diritti morali restano dell'autore.</p>
+        </blockquote>
+
+        <div class="callout danger">
+          <span aria-hidden="true">⚕️</span>
+          <p><strong>Avvertenza sanitaria.</strong> Naturopata Digitale è un'opera divulgativa: non fornisce diagnosi, prescrizioni o trattamenti e non sostituisce il parere di medico, farmacista o dietista. Le piante sono sostanze attive e possono interagire con i farmaci. In caso di sintomi importanti rivolgiti alle strutture sanitarie; per un'emergenza chiama il 112 o il 118.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <p class="footer-title">Naturopata Digitale</p>
+          <p>Il sapere gentile delle piante, sul tuo dispositivo. Gratuito, senza account, senza pubblicità, anche offline.</p>
+          <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong>.</p>
+        </div>
+        <div>
+          <h2>Programma</h2>
+          <ul>
+            <li><a href="../">Apri l'app nel browser</a></li>
+            <li><a href="#computer">Scarica per computer</a></li>
+            <li><a href="#vademecum">Vademecum in PDF</a></li>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale/releases/latest">Release e note di versione</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Progetto</h2>
+          <ul>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale">Codice sorgente</a></li>
+            <li><a href="../#/licenze">Licenze e privacy</a></li>
+            <li><a href="../#/sicurezza">Sicurezza e fonti</a></li>
+            <li><a href="https://danilodauria.github.io/professore-digitale/">Professore Digitale</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Versione 1.2.0 · ottobre 2026</p>
+        <p>Codice MIT · Contenuti CC BY-NC-SA 4.0</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

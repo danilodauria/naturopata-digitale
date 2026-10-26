@@ -66,16 +66,22 @@ self.addEventListener("fetch", (event) => {
   if (/\.pdf$/i.test(url.pathname)) return;
 
   if (request.mode === "navigate") {
+    // Solo la pagina dell'app aggiorna la copia di "index.html": le altre pagine
+    // del sito (per esempio /scarica/) si salvano con il proprio indirizzo, così
+    // una visita alla pagina di download non sostituisce l'app nella cache.
+    const root = new URL(self.registration.scope).pathname;
+    const isAppShell = url.pathname === root || url.pathname === root + "index.html";
     event.respondWith(
       fetch(request)
         .then((response) => {
           if (response && response.ok) {
             const copy = response.clone();
-            caches.open(VERSION).then((cache) => cache.put("index.html", copy)).catch(() => {});
+            const key = isAppShell ? "index.html" : request;
+            caches.open(VERSION).then((cache) => cache.put(key, copy)).catch(() => {});
           }
           return response;
         })
-        .catch(() => caches.match("index.html").then((cached) => cached || caches.match("./")))
+        .catch(() => caches.match(request).then((cached) => cached || caches.match("index.html")))
     );
     return;
   }

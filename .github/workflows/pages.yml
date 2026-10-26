@@ -39,7 +39,7 @@ jobs:
       - name: Prepara il sito
         run: |
           mkdir -p _site
-          cp -r index.html manifest.webmanifest sw.js assets _site/
+          cp -r index.html manifest.webmanifest sw.js assets scarica _site/
           cp LICENSE LICENSE-CONTENT.md README.md .nojekyll _site/
 
       - name: Configura Pages

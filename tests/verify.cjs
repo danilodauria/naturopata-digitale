@@ -174,6 +174,27 @@ srcs.forEach((s) => {
   ok(fs.existsSync(path.join(root, f)), "index: script mancante " + f);
 });
 
+// Pagina di download
+const scarica = fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8");
+ok(/<html lang="it"/.test(scarica), "scarica: lingua italiana");
+ok(/Scarica Naturopata Digitale/.test(scarica), "scarica: titolo");
+ok(/href="\.\.\/"/.test(scarica), "scarica: ritorno all'app");
+ok((scarica.match(/assets\/pdf\/vademecum-[a-z0-9-]+\.pdf/g) || []).length >= 3, "scarica: tre Vademecum");
+[
+  "Naturopata-Digitale-Windows-x64.exe",
+  "Naturopata-Digitale-Windows-portatile.zip",
+  "Naturopata-Digitale-Linux-amd64.deb",
+  "Naturopata-Digitale-Linux-x86_64.AppImage",
+  "Naturopata-Digitale-Mac-arm64.dmg",
+  "Naturopata-Digitale-Mac-x64.dmg"
+].forEach((f) => ok(scarica.indexOf("releases/latest/download/" + f) !== -1, "scarica: manca il link a " + f));
+ok(/112/.test(scarica) && /CC BY-NC-SA 4.0/.test(scarica), "scarica: emergenza e licenza");
+ok(scarica.indexOf("undefined") === -1, "scarica: nessun 'undefined'");
+const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
+ok(/scarica/.test(pagesWorkflow), "workflow Pages: pagina di download inclusa");
+ok(/caches\.match\(request\)\.then\(\(cached\) => cached \|\| caches\.match\("index\.html"\)\)/.test(sw), "service worker: fallback navigazione");
+ok(/isAppShell/.test(sw), "service worker: le altre pagine non sovrascrivono la shell");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

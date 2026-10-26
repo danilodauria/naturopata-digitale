@@ -22,7 +22,7 @@
     "appId": "it.feniceos.naturopatadigitale",
     "productName": "Naturopata Digitale",
     "copyright": "Copyright © 2026 Danilo D'Auria · FeniceOS",
-    "artifactName": "naturopata-digitale-${version}-${os}-${arch}.${ext}",
+    "artifactName": "Naturopata-Digitale-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -36,9 +36,9 @@
     },
     "win": {
       "icon": "build/icon.png",
+      "artifactName": "Naturopata-Digitale-Windows-${arch}.${ext}",
       "target": [
-        { "target": "nsis", "arch": ["x64"] },
-        { "target": "portable", "arch": ["x64"] }
+        { "target": "nsis", "arch": ["x64"] }
       ]
     },
     "nsis": {
@@ -52,6 +52,7 @@
     "mac": {
       "icon": "build/icon.png",
       "category": "public.app-category.education",
+      "artifactName": "Naturopata-Digitale-Mac-${arch}.${ext}",
       "target": [
         { "target": "dmg", "arch": ["x64", "arm64"] }
       ]
@@ -61,6 +62,7 @@
     },
     "linux": {
       "icon": "build/icon.png",
+      "artifactName": "Naturopata-Digitale-Linux-${arch}.${ext}",
       "category": "Education",
       "packageCategory": "education",
       "maintainer": "Danilo D'Auria",

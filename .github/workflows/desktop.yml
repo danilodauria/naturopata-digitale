@@ -53,12 +53,18 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Crea la versione portatile (ZIP)
+        if: matrix.artifact == 'windows'
+        shell: pwsh
+        run: Compress-Archive -Path desktop/dist/win-unpacked/* -DestinationPath "desktop/dist/Naturopata-Digitale-Windows-portatile.zip"
+
       - name: Carica gli artefatti
         uses: actions/upload-artifact@v4
         with:
           name: naturopata-digitale-${{ matrix.artifact }}
           path: |
             desktop/dist/*.exe
+            desktop/dist/*.zip
             desktop/dist/*.deb
             desktop/dist/*.AppImage
             desktop/dist/*.dmg
@@ -71,6 +77,7 @@ jobs:
         with:
           files: |
             desktop/dist/*.exe
+            desktop/dist/*.zip
             desktop/dist/*.deb
             desktop/dist/*.AppImage
             desktop/dist/*.dmg

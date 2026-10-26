@@ -99,9 +99,33 @@ l'applicazione funziona comunque perché non usa `fetch` per i dati.
 
 Le release GitHub contengono anche i pacchetti per computer:
 
-- **Windows**: installer NSIS (`.exe`) e versione portabile;
+- **Windows**: installer NSIS (`.exe`) e versione portabile in `.zip`;
 - **Linux**: `.deb` per Debian/Ubuntu e `.AppImage` per le altre distribuzioni;
 - **macOS**: `.dmg` per Intel e Apple Silicon.
+
+I nomi dei file sono stabili tra le versioni, così i link della pagina di
+download non cambiano:
+
+| File | Contenuto |
+|---|---|
+| `Naturopata-Digitale-Windows-x64.exe` | Installer per Windows 10 e 11 |
+| `Naturopata-Digitale-Windows-portatile.zip` | App scompattata, senza installazione |
+| `Naturopata-Digitale-Linux-amd64.deb` | Pacchetto Debian/Ubuntu |
+| `Naturopata-Digitale-Linux-x86_64.AppImage` | Eseguibile per ogni distribuzione |
+| `Naturopata-Digitale-Mac-arm64.dmg` | Apple Silicon |
+| `Naturopata-Digitale-Mac-x64.dmg` | Mac Intel |
+
+### Pagina di download
+
+`scarica/index.html` è una pagina statica autonoma, sul modello di quella del
+Professore Digitale: badge, istruzioni per telefono e tablet, pulsanti per i
+tre sistemi, i tre Vademecum e la sezione sulle licenze. Non usa JavaScript per
+funzionare e non dipende dal foglio di stile dell'app.
+
+I pulsanti puntano a `releases/latest/download/<nome file>`, quindi mostrano
+sempre l'ultima release senza modifiche al codice. La pagina è collegata dal
+footer, dalla fascia «Novità» della home e dal pannello desktop della pagina
+Licenze, ed è inclusa in `_site` dal workflow di Pages.
 
 Sono build non firmate: Windows SmartScreen e macOS Gatekeeper possono chiedere
 una conferma. Su macOS, al primo avvio, usa tasto destro → *Apri*. Su Linux,
@@ -190,7 +214,7 @@ cd desktop
 npm install
 npm start                          # prova locale
 npm run dist:linux                 # .deb + AppImage
-npm run dist:win                   # .exe (NSIS + portable)
+npm run dist:win                   # installer .exe (NSIS)
 npm run dist:mac                   # .dmg (Intel + Apple Silicon)
 ```
 
@@ -215,6 +239,17 @@ vanno versionati.
 4. Il workflow `.github/workflows/pages.yml` pubblica il sito a ogni push.
 5. L'indirizzo sarà `https://<utente>.github.io/<repository>/`.
 
+Per pubblicare anche i pacchetti desktop, crea un tag con la stessa versione
+di `package.json` e invialo insieme al ramo:
+
+```bash
+git tag v1.2.0
+git push origin main --tags
+```
+
+Il workflow `desktop.yml` compila su Windows, Linux e macOS e allega i file a
+una release con lo stesso nome del tag. La pagina `scarica/` li trova da sola.
+
 Se il repository ha un nome diverso, aggiorna i link di citazione in
 `views.licenze` e nel footer. Il manifest e il service worker usano percorsi
 relativi e funzionano anche in una sottocartella.
@@ -223,6 +258,7 @@ relativi e funzionano anche in una sottocartella.
 
 ```
 index.html                 # shell dell'applicazione
+scarica/index.html         # pagina di presentazione e download
 manifest.webmanifest       # PWA
 sw.js                      # cache offline
 assets/

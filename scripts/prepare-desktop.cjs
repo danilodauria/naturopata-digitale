@@ -11,7 +11,7 @@ const root = path.join(__dirname, "..");
 const dest = path.join(root, "desktop", "app");
 
 const files = ["index.html", "manifest.webmanifest", "sw.js", "LICENSE", "LICENSE-CONTENT.md", "README.md"];
-const dirs = ["assets"];
+const dirs = ["assets", "scarica"];
 
 fs.rmSync(dest, { recursive: true, force: true });
 fs.mkdirSync(dest, { recursive: true });

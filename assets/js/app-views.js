@@ -361,15 +361,15 @@
         '<p class="text-small muted mt-2 mb-0">Tutti i PDF sono senza pubblicità e senza tracciamento, e non entrano nella cache offline: li scarichi solo quando li chiedi. Contengono avvertenza, segnali d\'allarme, piante tossiche, interazioni con i farmaci, calendario del raccolto, preparazioni, le 60 piante in tabella, glossario e fonti.</p>' +
       "</div></section>" +
 
-      '<section class="section"><div class="panel"><div class="section-head"><div><h2>Il programma per computer</h2><p>Non solo browser: la stessa app in un pacchetto da installare, per lavorare senza connessione.</p></div><a class="section-link" href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">Scarica →</a></div>' +
+      '<section class="section"><div class="panel"><div class="section-head"><div><h2>Il programma per computer</h2><p>Non solo browser: la stessa app in un pacchetto da installare, per lavorare senza connessione.</p></div><a class="section-link" href="scarica/">Pagina di download →</a></div>' +
         '<div class="info-grid">' +
-          '<div class="info-card"><h3>Windows</h3><p>Installer <code>.exe</code> con collegamento nel menu Start e versione portabile. Nessuna dipendenza da installare.</p></div>' +
+          '<div class="info-card"><h3>Windows</h3><p>Installer <code>.exe</code> per Windows 10 e 11, più la versione portatile in <code>.zip</code> da chiavetta. Nessuna dipendenza da installare.</p></div>' +
           '<div class="info-card"><h3>Linux</h3><p>Pacchetto <code>.deb</code> per Debian, Ubuntu e derivate, più <code>.AppImage</code> per le altre distribuzioni.</p></div>' +
           '<div class="info-card"><h3>macOS</h3><p>Immagine <code>.dmg</code> per Intel e Apple Silicon. App non firmata: al primo avvio usa tasto destro → Apri.</p></div>' +
         '</div>' +
         '<div class="callout warn mt-2"><span aria-hidden="true">🔐</span><div><p><strong>Perché compaiono gli avvisi.</strong> I pacchetti non sono firmati con certificati commerciali: Windows SmartScreen e macOS Gatekeeper possono chiedere una conferma. Scarica solo dalle release ufficiali del repository e verifica il nome del file.</p><p class="mb-0">Su Linux, per l\'AppImage: <code>chmod +x Naturopata*.AppImage</code>, poi avvia. Il <code>.deb</code> si installa con il gestore software oppure con <code>sudo apt install ./file.deb</code>.</p></div></div>' +
         '<p class="text-small muted mt-2 mb-0">Il programma è un contenitore desktop dell\'app: funziona offline, salva preferiti e progressi sul computer e non invia dati in rete. I pacchetti sono generati dal repository con Electron; il codice resta MIT e i contenuti CC BY-NC-SA 4.0.</p>' +
-        '<p class="mt-2 mb-0"><a class="btn btn-secondary btn-small" href="https://github.com/danilodauria/naturopata-digitale" target="_blank" rel="noopener">Codice sorgente su GitHub</a></p>' +
+        '<p class="mt-2 mb-0"><a class="btn btn-primary btn-small" href="scarica/">Scarica per Windows, Linux o macOS</a> <a class="btn btn-secondary btn-small" href="https://github.com/danilodauria/naturopata-digitale" target="_blank" rel="noopener">Codice sorgente su GitHub</a></p>' +
       '</div></section>' +
 
       '<section class="section"><div class="section-head"><div><h2>Domande frequenti</h2><p>Le risposte che riguardano il programma, non la tua salute.</p></div></div>' +

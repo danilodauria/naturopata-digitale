@@ -196,7 +196,7 @@ NP.app = (function () {
 
       '<section class="section"><div class="panel novita-panel">' +
         '<div><p class="eyebrow">Novità · versione 1.2.0</p><h2>Più piante, una biblioteca, un manuale per restare vivi</h2><p class="text-small muted mb-0">Trentatré nuove schede, i Discorsi di Mattioli in pubblico dominio e la sopravvivenza in tre livelli. Il programma ora esiste anche per Windows, Linux e macOS.</p></div>' +
-        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/sopravvivenza">Sopravvivenza</a><a class="btn btn-secondary btn-small" href="#/matthioli">I Discorsi</a><a class="btn btn-ghost btn-small" href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">Scarica per computer</a></div>' +
+        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/sopravvivenza">Sopravvivenza</a><a class="btn btn-secondary btn-small" href="#/matthioli">I Discorsi</a><a class="btn btn-ghost btn-small" href="scarica/">Scarica per computer</a></div>' +
       "</div></section>" +
 
       '<section class="section home-split">' +

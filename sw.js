@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.1.0";
+const VERSION = "nd-v1.2.0";
 const SHELL = [
   "./",
   "index.html",
@@ -15,6 +15,9 @@ const SHELL = [
   "assets/img/icon-512.png",
   "assets/js/data-plants.js",
   "assets/js/data-plants-2.js",
+  "assets/js/data-plants-3.js",
+  "assets/js/data-plants-4.js",
+  "assets/js/data-plants-5.js",
   "assets/js/data-manual.js",
   "assets/js/data-manual-2.js",
   "assets/js/data-manual-3.js",
@@ -26,9 +29,11 @@ const SHELL = [
   "assets/js/data-quiz.js",
   "assets/js/data-quiz-2.js",
   "assets/js/data-quiz-3.js",
+  "assets/js/data-library.js",
   "assets/js/neura.js",
   "assets/js/app.js",
   "assets/js/app-views.js",
+  "assets/js/app-library.js",
   "assets/js/app-quiz.js",
   "assets/js/app-neura.js",
   "assets/js/app-init.js"

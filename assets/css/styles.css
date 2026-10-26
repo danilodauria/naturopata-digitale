@@ -1491,7 +1491,7 @@ html[data-theme="dark"] .msg.user .msg-body { background: #24503c; border-color:
 .timeline span { font-size: .84rem; color: var(--text-soft); }
 
 .license-grid { display: grid; gap: 1rem; margin: 1.2rem 0; }
-@media (min-width: 760px) { .license-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 760px) { .license-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
 .license-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 1.25rem; }
 .license-card h2 { font-size: 1.15rem; }
 .license-card ul { font-size: .85rem; color: var(--text-soft); padding-left: 1.1rem; }
@@ -1715,6 +1715,164 @@ code {
   .result-stats { gap: 1rem; }
   .mini-stats { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* --------------------------------------------------------------------------
+   Biblioteca, Matthioli e sopravvivenza
+   -------------------------------------------------------------------------- */
+
+.novita-panel {
+  display: flex;
+  gap: 1.2rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.novita-panel > div:first-child { flex: 1 1 420px; }
+.novita-panel .hero-actions { margin: 0; }
+
+.book-stats { margin-top: 1.4rem; max-width: 760px; }
+.license-note { margin-top: 2rem; }
+.license-note a { color: inherit; text-decoration: underline; }
+
+.download-grid {
+  display: grid;
+  gap: .8rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.download-card {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 1.05rem;
+}
+.download-card h3 { font-size: 1rem; margin: 0; }
+.download-card p { font-size: .82rem; color: var(--text-soft); margin: 0 0 .4rem; }
+.download-card .btn { margin-top: auto; }
+.download-tag {
+  align-self: flex-start;
+  font-size: .66rem;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: .1rem .35rem;
+}
+.download-card .btn svg { width: 16px; height: 16px; }
+
+.book-head .lead { max-width: 780px; }
+
+.level-tabs {
+  display: flex;
+  gap: .3rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  margin: .6rem 0 1.5rem;
+}
+.level-tab {
+  border: 0;
+  background: transparent;
+  padding: .62rem 1rem;
+  border-radius: 9px 9px 0 0;
+  border-bottom: 2px solid transparent;
+  color: var(--text-soft);
+  font-size: .9rem;
+}
+.level-tab:hover { background: var(--surface-2); color: var(--text); }
+.level-tab.is-active {
+  color: var(--accent);
+  background: var(--surface);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.level-head { display: grid; gap: 1rem; margin-bottom: 1.3rem; }
+@media (min-width: 900px) { .level-head { grid-template-columns: 1.7fr .85fr; align-items: start; } }
+.level-goal {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: .95rem 1rem;
+}
+.level-goal span {
+  display: block;
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: .25rem;
+}
+.level-goal strong { font-family: var(--serif); font-size: .96rem; font-weight: 600; }
+
+.skill-grid {
+  display: grid;
+  gap: .65rem;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  align-items: start;
+}
+.skill {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  overflow: hidden;
+}
+.skill summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .85rem .95rem;
+  font-family: var(--serif);
+  font-size: .98rem;
+}
+.skill summary::-webkit-details-marker { display: none; }
+.skill summary::after { content: "+"; margin-left: auto; color: var(--text-faint); font-family: var(--sans); }
+.skill[open] summary::after { content: "–"; }
+.skill[open] summary { border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.skill-num {
+  font-family: var(--sans);
+  font-size: .66rem;
+  letter-spacing: .06em;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: .05rem .3rem;
+}
+.skill-body { padding: .9rem .95rem .95rem; }
+.skill-body p { font-size: .86rem; color: var(--text-soft); }
+.skill-error {
+  margin: 0;
+  font-size: .8rem;
+  background: var(--oro-soft);
+  color: #6b5417;
+  border-radius: 8px;
+  padding: .55rem .65rem;
+}
+html[data-theme="dark"] .skill-error { background: #352c18; color: #ecd49a; }
+
+.kit-list {
+  list-style: none;
+  padding: 0;
+  margin: .7rem 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+.kit-list li {
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: var(--radius-pill);
+  padding: .2rem .68rem;
+  font-size: .78rem;
+}
+
+.danger-list li { margin-bottom: .45rem; }
+.danger-list li::marker { color: var(--rosso); font-weight: 700; }
 
 /* --------------------------------------------------------------------------
    Stampa

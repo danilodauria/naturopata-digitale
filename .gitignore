@@ -9,3 +9,7 @@ _site/
 coverage/
 .venv/
 .preview/
+desktop/node_modules/
+desktop/app/
+desktop/dist/
+artifacts/

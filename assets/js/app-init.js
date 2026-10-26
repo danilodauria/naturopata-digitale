@@ -180,6 +180,12 @@
       const printBtn = e.target.closest("[data-print]");
       if (printBtn) { window.print(); }
 
+      const scrollBtn = e.target.closest("[data-scroll]");
+      if (scrollBtn) {
+        const el = document.getElementById(scrollBtn.getAttribute("data-scroll"));
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
       const ask = e.target.closest("[data-ask]");
       if (ask) { e.preventDefault(); A.goNeura(ask.getAttribute("data-ask")); }
 

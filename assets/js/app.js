@@ -96,7 +96,7 @@ NP.app = (function () {
       else a.removeAttribute("aria-current");
     });
     const more = document.getElementById("moreBtn");
-    if (more) more.classList.toggle("is-active", ["calendario", "glossario", "sicurezza", "licenze"].indexOf(active) !== -1);
+    if (more) more.classList.toggle("is-active", ["sopravvivenza", "matthioli", "calendario", "glossario", "sicurezza", "licenze"].indexOf(active) !== -1);
   }
 
   function safetyBadge(level, long) {
@@ -142,6 +142,8 @@ NP.app = (function () {
       { href: "#/manuale", icon: "book", tone: "", title: "Manuale", text: (NP.manual || []).length + " capitoli per capire, non solo per credere." },
       { href: "#/fitoalimurgia", icon: "basket", tone: "tone-oro", title: "Fitoalimurgia", text: "Raccogliere e cucinare le piante selvatiche con rispetto." },
       { href: "#/benessere", icon: "heart", tone: "tone-terra", title: "Benessere", text: "Sonno, stress, digestione, pelle: schede pratiche." },
+      { href: "#/sopravvivenza", icon: "shield", tone: "tone-terra", title: "Sopravvivenza", text: "Acqua, riparo, fuoco e segnalazione in tre livelli." },
+      { href: "#/matthioli", icon: "book", tone: "tone-oro", title: "I Discorsi di Mattioli", text: "Il libro che ha insegnato la botanica all'Europa, in pubblico dominio." },
       { href: "#/quiz", icon: "spark", tone: "", title: "Quiz", text: "Mettiti alla prova con spiegazioni e livelli." },
       { href: "#/neura", icon: "brain", tone: "", title: "Neura", text: "L'assistente locale che spiega e controlla." }
     ];
@@ -180,7 +182,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section">' +
-        '<div class="section-head"><div><h2>Da dove cominciare</h2><p>Sei percorsi, un\'unica idea: conoscere prima di usare.</p></div><a class="section-link" href="#/licenze">Il progetto</a></div>' +
+        '<div class="section-head"><div><h2>Da dove cominciare</h2><p>Otto percorsi, un\'unica idea: conoscere prima di usare.</p></div><a class="section-link" href="#/licenze">Il progetto</a></div>' +
         '<div class="feature-grid">' +
           features.map((f) =>
             '<a class="feature ' + f.tone + '" href="' + f.href + '">' +
@@ -191,6 +193,11 @@ NP.app = (function () {
           ).join("") +
         "</div>" +
       "</section>" +
+
+      '<section class="section"><div class="panel novita-panel">' +
+        '<div><p class="eyebrow">Novità · versione 1.2.0</p><h2>Più piante, una biblioteca, un manuale per restare vivi</h2><p class="text-small muted mb-0">Trentatré nuove schede, i Discorsi di Mattioli in pubblico dominio e la sopravvivenza in tre livelli. Il programma ora esiste anche per Windows, Linux e macOS.</p></div>' +
+        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/sopravvivenza">Sopravvivenza</a><a class="btn btn-secondary btn-small" href="#/matthioli">I Discorsi</a><a class="btn btn-ghost btn-small" href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">Scarica per computer</a></div>' +
+      "</div></section>" +
 
       '<section class="section home-split">' +
         '<div class="panel">' +
@@ -419,6 +426,8 @@ NP.app = (function () {
     capitolo: (p) => (views.capitolo ? views.capitolo(p) : view404()),
     fitoalimurgia: () => (views.fito ? views.fito() : view404()),
     benessere: (p) => (views.benessere ? views.benessere(p) : view404()),
+    sopravvivenza: (p) => (views.sopravvivenza ? views.sopravvivenza(p) : view404()),
+    matthioli: () => (views.matthioli ? views.matthioli() : view404()),
     quiz: () => (views.quiz ? views.quiz() : view404()),
     neura: () => (views.neura ? views.neura() : view404()),
     calendario: () => (views.calendario ? views.calendario() : view404()),
@@ -428,7 +437,7 @@ NP.app = (function () {
   };
 
   function updateTitle(r) {
-    const labels = { home: "Piante, benessere e natura", erbario: "Erbario", manuale: "Manuale interattivo", fitoalimurgia: "Fitoalimurgia", benessere: "Benessere", quiz: "Quiz", neura: "Neura", calendario: "Calendario di raccolta", glossario: "Glossario", sicurezza: "Sicurezza e fonti", licenze: "Licenze e progetto" };
+    const labels = { home: "Piante, benessere e natura", erbario: "Erbario", manuale: "Manuale interattivo", fitoalimurgia: "Fitoalimurgia", benessere: "Benessere", sopravvivenza: "Sopravvivenza", matthioli: "I Discorsi di Mattioli", quiz: "Quiz", neura: "Neura", calendario: "Calendario di raccolta", glossario: "Glossario", sicurezza: "Sicurezza e fonti", licenze: "Licenze e progetto" };
     let label = labels[r.name] || "";
     if (r.name === "pianta") {
       const p = (NP.plants || []).find((x) => x.id === r.params[0]);

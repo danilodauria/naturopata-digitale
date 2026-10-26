@@ -1,0 +1,72 @@
+{
+  "name": "naturopata-digitale",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Naturopata Digitale per Windows, Linux e macOS: erbario, manuale, sopravvivenza e biblioteca, anche offline.",
+  "author": "Danilo D'Auria",
+  "homepage": "https://danilodauria.github.io/naturopata-digitale/",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "dist:linux": "electron-builder --linux --publish never",
+    "dist:mac": "electron-builder --mac --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "it.feniceos.naturopatadigitale",
+    "productName": "Naturopata Digitale",
+    "copyright": "Copyright © 2026 Danilo D'Auria · FeniceOS",
+    "artifactName": "naturopata-digitale-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.cjs",
+      "app/**/*"
+    ],
+    "extraMetadata": {
+      "main": "main.cjs"
+    },
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Naturopata Digitale",
+      "uninstallDisplayName": "Naturopata Digitale"
+    },
+    "mac": {
+      "icon": "build/icon.png",
+      "category": "public.app-category.education",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ]
+    },
+    "dmg": {
+      "title": "Naturopata Digitale"
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "category": "Education",
+      "packageCategory": "education",
+      "maintainer": "Danilo D'Auria",
+      "synopsis": "Erbario, manuale e sapere pratico delle piante, offline",
+      "description": "Naturopata Digitale raccoglie 60 schede di piante officinali, un manuale, la fitoalimurgia, tre livelli di sopravvivenza, i Discorsi di Mattioli, quiz e un assistente locale. Funziona senza Internet e senza account.",
+      "target": ["deb", "AppImage"]
+    }
+  }
+}

@@ -19,7 +19,16 @@ try:
 except ImportError:  # dipendenza facoltativa, solo per il PDF
     raise SystemExit(
         "Serve reportlab per generare il Vademecum.\n"
-        "  python3 -m venv .venv && .venv/bin/pip install reportlab\n"
+        "  python3 -m venv .venv && .venv/bin/pip install reportlab pymupdf\n"
+        "  .venv/bin/python scripts/build_vademecum.py"
+    )
+
+try:
+    import pymupdf
+except ImportError:
+    raise SystemExit(
+        "Serve pymupdf per le versioni A4 e libricino.\n"
+        "  .venv/bin/pip install pymupdf\n"
         "  .venv/bin/python scripts/build_vademecum.py"
     )
 from reportlab.lib.colors import HexColor
@@ -35,7 +44,10 @@ from reportlab.platypus import (
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "assets" / "pdf" / "vademecum-naturopata-digitale.pdf"
+PDF_DIR = ROOT / "assets" / "pdf"
+OUT = PDF_DIR / "vademecum-naturopata-digitale.pdf"
+OUT_A4 = PDF_DIR / "vademecum-naturopata-digitale-a4.pdf"
+OUT_BOOK = PDF_DIR / "vademecum-naturopata-digitale-libricino-a4.pdf"
 
 # --------------------------------------------------------------------------
 #  Palette: la stessa del sito
@@ -356,7 +368,8 @@ class Vademecum(BaseDocTemplate):
         canv.setFillColor(SALVIA_CHIARA)
         canv.setFont(F_BODY, 9)
         canv.drawString(M_L, PH - 54 * mm,
-                        "Sicurezza, raccolta, forme d'uso e 27 schede da portare con sé.")
+                        "Sicurezza, raccolta, forme d'uso e %d schede da portare con sé."
+                        % getattr(doc, "plants", 0))
 
         # filetto e testi bassi
         canv.setStrokeColor(BORDO_FORTE)
@@ -370,7 +383,8 @@ class Vademecum(BaseDocTemplate):
         canv.setFillColor(INCHIOSTRO_SOFT)
         canv.setFont(F_BODY, 8.6)
         righe = [
-            "27 piante officinali · 10 piante tossiche · 14 interazioni",
+            "%d piante officinali · 10 piante tossiche · 14 interazioni"
+            % getattr(doc, "plants", 0),
             "12 segnali d'allarme · calendario del raccolto · glossario",
         ]
         y = PH - 94 * mm
@@ -464,9 +478,9 @@ def pagina_liminare(d, indice=None):
     out.append(band(
         rich("<b>Le dosi non sono in questa guida.</b> Cambiano da pianta a "
              "pianta, dalla parte usata e dalla preparazione: una dose "
-             "generica sarebbe un errore. Le dosi indicative delle 27 schede "
+             "generica sarebbe un errore. Le dosi indicative delle %d schede "
              "sono nell'app, accanto alle avvertenze per gravidanza, "
-             "allattamento e bambini.", "small"),
+             "allattamento e bambini." % len(d["plants"]), "small"),
         accent=TERRA, bg=TERRA_SOFT))
     out.append(Spacer(1, 3 * mm))
     out.append(para(
@@ -946,7 +960,7 @@ def pagina_forme(d):
 def pagina_erbario(d):
     out = [PageBreak()]
     out += section(
-        "Le 27 piante in tasca",
+        "Le %d piante in tasca" % len(d["plants"]),
         "Erbario essenziale",
         "Nome, parti usate, primo impiego e livello di attenzione. Il pallino "
         "verde indica una pianta di uso corrente, il giallo una che richiede "
@@ -1182,9 +1196,78 @@ def storia(d, indice=None):
     return story
 
 
+def genera_versioni_stampa():
+    """Crea l'edizione A4 e il libricino A4 già imposto per la stampa.
+
+    L'A4 ingrandisce le pagine A5 lasciando un margine di sicurezza per le
+    stampanti domestiche. Il libricino impone due pagine A5 per facciata A4
+    orizzontale, nell'ordine classico per la cucitura a sella (piega e punti).
+    """
+    src = pymupdf.open(OUT)
+    n = src.page_count
+    sw = src[0].rect.width
+    sh = src[0].rect.height
+
+    # --- A4: una pagina per foglio, con margini stampabili -----------------
+    a4 = pymupdf.open()
+    a4_w, a4_h = pymupdf.paper_size("a4")
+    margine_x, margine_y = 12 * mm, 15 * mm
+    scala = min((a4_w - 2 * margine_x) / sw, (a4_h - 2 * margine_y) / sh)
+    larghezza, altezza = sw * scala, sh * scala
+    x0 = (a4_w - larghezza) / 2
+    y0 = (a4_h - altezza) / 2
+
+    for i, pagina in enumerate(src):
+        foglio = a4.new_page(width=a4_w, height=a4_h)
+        foglio.show_pdf_page(
+            pymupdf.Rect(x0, y0, x0 + larghezza, y0 + altezza), src, i)
+        for link in pagina.get_links():
+            uri = link.get("uri")
+            if not uri:
+                continue
+            r = link["from"]
+            foglio.insert_link({
+                "kind": pymupdf.LINK_URI,
+                "from": pymupdf.Rect(
+                    x0 + r.x0 * scala, y0 + r.y0 * scala,
+                    x0 + r.x1 * scala, y0 + r.y1 * scala),
+                "uri": uri,
+            })
+    a4.save(OUT_A4, garbage=4, deflate=True)
+
+    # --- Libricino: due A5 per facciata, ordine da cucitura a sella --------
+    padded = pymupdf.open()
+    padded.insert_pdf(src)
+    while padded.page_count % 4:
+        padded.new_page(width=sw, height=sh)
+    totale = padded.page_count
+
+    book = pymupdf.open()
+    a4_portrait_w, a4_portrait_h = pymupdf.paper_size("a4")
+    book_w, book_h = a4_portrait_h, a4_portrait_w
+    offset = (book_w - 2 * sw) / 2
+
+    def facciata(sinistra, destra):
+        foglio = book.new_page(width=book_w, height=book_h)
+        foglio.show_pdf_page(pymupdf.Rect(offset, 0, offset + sw, sh), padded, sinistra)
+        foglio.show_pdf_page(
+            pymupdf.Rect(offset + sw, 0, offset + 2 * sw, sh), padded, destra)
+
+    for i in range(totale // 4):
+        # fronte: ultima pagina accanto alla prima, poi a scendere
+        facciata(totale - 2 * i - 1, 2 * i)
+        # retro: la seconda accanto alla penultima
+        facciata(2 * i + 1, totale - 2 * i - 2)
+
+    book.save(OUT_BOOK, garbage=4, deflate=True)
+
+    return n, a4.page_count, book.page_count
+
+
 def compila(d, percorso, indice):
     doc = Vademecum(str(percorso), edizione=EDIZIONE)
     doc.app_version = d["version"]
+    doc.plants = len(d["plants"])
     doc.build(storia(d, indice))
     return doc
 
@@ -1210,6 +1293,12 @@ def main():
     size = OUT.stat().st_size
     print("PDF: %s" % OUT.relative_to(ROOT))
     print("Pagine: %d · %.0f kB" % (doc.page, size / 1024))
+
+    n_a5, n_a4, n_book = genera_versioni_stampa()
+    for percorso, pagine in ((OUT_A4, n_a4), (OUT_BOOK, n_book)):
+        print("PDF: %s · %d pagine · %.0f kB" % (
+            percorso.relative_to(ROOT), pagine, percorso.stat().st_size / 1024))
+    print("Libricino: %d fogli A4 (fronte-retro), piega a met\u00e0 e cuci." % (n_book // 2))
     for titolo, pagina in indice:
         print("  %-26s %3d" % (titolo, pagina))
 

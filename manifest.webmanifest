@@ -1,7 +1,7 @@
 {
   "name": "Naturopata Digitale",
   "short_name": "Naturopata",
-  "description": "Il sapere gentile delle piante: erbario, manuale, fitoalimurgia, quiz e l'assistente locale Neura. Anche offline.",
+  "description": "Il sapere gentile delle piante: 60 schede, manuale, fitoalimurgia, sopravvivenza, Discorsi di Mattioli, quiz e l'assistente locale Neura. Anche offline.",
   "lang": "it",
   "dir": "ltr",
   "start_url": "./",
@@ -49,6 +49,12 @@
       "name": "Chiedi a Neura",
       "short_name": "Neura",
       "url": "./#/neura",
+      "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Sopravvivenza",
+      "short_name": "Sopravvivenza",
+      "url": "./#/sopravvivenza",
       "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }]
     },
     {

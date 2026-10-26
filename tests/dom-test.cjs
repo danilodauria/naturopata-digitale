@@ -56,18 +56,18 @@ async function go(hash) {
   // Home
   ok(!!doc.querySelector(".hero"), "home: hero presente");
   ok(/sapere/i.test(doc.querySelector(".hero h1").textContent), "home: titolo");
-  ok(doc.querySelectorAll(".feature").length === 6, "home: 6 percorsi");
+  ok(doc.querySelectorAll(".feature").length === 8, "home: 8 percorsi");
   ok(!!doc.querySelector(".today-card"), "home: pianta del giorno");
   ok(doc.querySelector(".site-footer").textContent.indexOf("Danilo") !== -1, "footer: autore");
 
   // Erbario
   await go("#/erbario");
-  ok(doc.querySelectorAll(".plant-card").length === 27, "erbario: 27 schede");
+  ok(doc.querySelectorAll(".plant-card").length === 60, "erbario: 60 schede");
   const input = doc.querySelector("#plantSearch");
-  input.value = "malva";
+  input.value = "malva selvatica";
   input.dispatchEvent(new win.Event("input", { bubbles: true }));
   await tick(20);
-  ok(doc.querySelectorAll(".plant-card").length === 1, "erbario: ricerca malva");
+  ok(doc.querySelectorAll(".plant-card").length === 1, "erbario: ricerca malva selvatica");
   ok(/1 scheda/.test(doc.querySelector("#plantCount").textContent), "erbario: contatore ricerca");
   input.value = "zzzzz";
   input.dispatchEvent(new win.Event("input", { bubbles: true }));
@@ -75,7 +75,7 @@ async function go(hash) {
   ok(!!doc.querySelector(".empty-state"), "erbario: stato vuoto");
   doc.querySelector("[data-reset-filters]").click();
   await tick(60);
-  ok(doc.querySelectorAll(".plant-card").length === 27, "erbario: reset filtri");
+  ok(doc.querySelectorAll(".plant-card").length === 60, "erbario: reset filtri");
 
   // Dettaglio pianta
   await go("#/pianta/camomilla");
@@ -100,7 +100,8 @@ async function go(hash) {
   await go("#/fitoalimurgia");
   ok(doc.querySelectorAll(".rule").length === 8, "fito: 8 regole");
   ok(doc.querySelectorAll(".toxic-card").length === 10, "fito: 10 piante tossiche");
-  ok(doc.querySelectorAll(".data-table tbody tr").length === 23, "fito: 23 piante alimentari");
+  const edibleCount = win.NP.plants.filter((p) => p.fito && p.fito.commestibile).length;
+  ok(doc.querySelectorAll(".data-table tbody tr").length === edibleCount, "fito: " + edibleCount + " piante alimentari");
 
   // Benessere
   await go("#/benessere");
@@ -204,11 +205,37 @@ async function go(hash) {
   ok(/contraccett/i.test(checkText), "neura: controllo cita contraccettivi");
   ok(/alto/i.test(checkText), "neura: livello alto");
 
+  // I Discorsi di Matthioli
+  await go("#/matthioli");
+  ok(/I Discorsi di Mattioli/i.test(doc.querySelector("h1").textContent), "matthioli: titolo");
+  ok(doc.querySelectorAll(".data-table tbody tr").length >= 5, "matthioli: tabella delle edizioni");
+  ok(/pubblico dominio/i.test(doc.body.textContent), "matthioli: nota sul pubblico dominio");
+  ok(doc.querySelectorAll(".timeline li").length >= 8, "matthioli: biografia");
+  ok(doc.querySelectorAll(".source-list a").length >= 8, "matthioli: fonti");
+
+  // Sopravvivenza
+  await go("#/sopravvivenza");
+  ok(doc.querySelectorAll("[data-survival-tab]").length === 3, "sopravvivenza: tre livelli");
+  ok(doc.querySelectorAll("[data-survival-panel]").length === 3, "sopravvivenza: tre pannelli");
+  ok(!doc.querySelector('[data-survival-panel="base"]').hidden, "sopravvivenza: base visibile");
+  ok(doc.querySelector('[data-survival-panel="esperto"]').hidden, "sopravvivenza: esperto nascosto");
+  doc.querySelector('[data-survival-tab="intermedio"]').click();
+  await tick(30);
+  ok(!doc.querySelector('[data-survival-panel="intermedio"]').hidden, "sopravvivenza: cambio livello");
+  ok(doc.querySelector('[data-survival-panel="base"]').hidden, "sopravvivenza: base nascosta");
+  ok(doc.querySelectorAll(".skill").length >= 24, "sopravvivenza: schede pratiche");
+  await go("#/sopravvivenza/esperto");
+  ok(!doc.querySelector('[data-survival-panel="esperto"]').hidden, "sopravvivenza: link diretto al livello esperto");
+  ok(/112/.test(doc.body.textContent), "sopravvivenza: numero di emergenza");
+
   // Licenze e FAQ
   await go("#/licenze");
   ok(doc.querySelectorAll("details.glossary-item").length === 8, "licenze: 8 FAQ");
   ok(doc.body.textContent.indexOf("CC BY-NC-SA 4.0") !== -1, "licenze: CC BY-NC-SA");
   ok(doc.body.textContent.indexOf("MIT") !== -1, "licenze: MIT");
+  ok(doc.querySelectorAll(".download-card").length === 3, "licenze: tre versioni del Vademecum");
+  ok(doc.querySelectorAll('.download-card a[href$=".pdf"]').length === 3, "licenze: tre download PDF");
+  ok(/lato corto/i.test(doc.body.textContent), "licenze: istruzioni per il libricino");
 
   // Tema
   const before = doc.documentElement.getAttribute("data-theme");

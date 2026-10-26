@@ -1,9 +1,10 @@
 # Naturopata Digitale
 
-**Il sapere gentile delle piante.** Erbario interattivo, manuale, fitoalimurgia,
-schede di benessere, quiz e **Neura**, un assistente di conoscenza locale che
-spiega e controlla. Tutto in italiano, senza account, senza pubblicità e
-funzionante anche offline.
+**Il sapere gentile delle piante.** Erbario interattivo con 60 schede, manuale,
+fitoalimurgia, schede di benessere, sopravvivenza in tre livelli, biblioteca
+storica, quiz e **Neura**, un assistente di conoscenza locale che spiega e
+controlla. Tutto in italiano, senza account, senza pubblicità e funzionante
+anche offline.
 
 > Un progetto indipendente di **Danilo D'Auria** · un progetto **FeniceOS**.
 
@@ -24,11 +25,14 @@ che prova a mettere insieme **tradizione, evidenza scientifica e sicurezza**.
 
 | Sezione | Contenuto |
 |---|---|
-| **Erbario** | 27 schede di piante officinali, aromatiche e alimentari: proprietà, usi, preparazioni, sicurezza, sosia pericolosi, evidenza, curiosità e fonti. |
+| **Erbario** | 60 schede di piante officinali, aromatiche e alimentari, dalla A alla Z: proprietà, usi, preparazioni, sicurezza, sosia pericolosi, evidenza, curiosità e fonti. |
 | **Manuale** | 18 capitoli in 5 parti: fondamenti, linguaggio delle piante, fitoalimurgia, olistica pratica, consapevolezza. |
-| **Fitoalimurgia** | Regole del raccolto responsabile, 23 piante commestibili, 10 piante tossiche da riconoscere, preparazioni di base. |
+| **Fitoalimurgia** | Regole del raccolto responsabile, 46 piante commestibili, 10 piante tossiche da riconoscere, preparazioni di base. |
+| **Sopravvivenza** | Tre livelli (base, intermedio, esperto), 27 schede pratiche, kit essenziale, errori da evitare, norme italiane e fonti istituzionali. |
+| **Biblioteca** | *I Discorsi* di Pietro Andrea Mattioli: storia, struttura dell'opera, edizioni digitalizzate in pubblico dominio, lezioni di metodo e fonti. |
 | **Benessere** | 8 schede tematiche (sonno, stress, digestione, pelle, vie respiratorie, ciclo, articolazioni, difese) con piante collegate e segnali d'allarme. |
 | **Quiz** | 85 domande in 6 categorie e 3 livelli, con timer opzionale, spiegazioni, ripasso degli errori e statistiche locali. |
+| **Desktop** | Pacchetti per Windows (`.exe`), Linux (`.deb`, AppImage) e macOS (`.dmg`), generati da GitHub Actions. |
 | **Calendario** | 12 mesi di raccolte e lavori, con collegamenti alle schede. |
 | **Glossario** | 44 termini di botanica e fitoterapia, con ricerca istantanea. |
 | **Sicurezza** | Segnali d'allarme, piante tossiche, tabella delle interazioni, fonti e numeri utili. |
@@ -91,6 +95,21 @@ USB e aprire `index.html` con un doppio clic. In questa modalità il service
 worker non si attiva (i browser lo consentono solo su `http`/`https`), ma
 l'applicazione funziona comunque perché non usa `fetch` per i dati.
 
+### Programma installabile
+
+Le release GitHub contengono anche i pacchetti per computer:
+
+- **Windows**: installer NSIS (`.exe`) e versione portabile;
+- **Linux**: `.deb` per Debian/Ubuntu e `.AppImage` per le altre distribuzioni;
+- **macOS**: `.dmg` per Intel e Apple Silicon.
+
+Sono build non firmate: Windows SmartScreen e macOS Gatekeeper possono chiedere
+una conferma. Su macOS, al primo avvio, usa tasto destro → *Apri*. Su Linux,
+per l'AppImage, rendi eseguibile il file con `chmod +x`.
+
+I pacchetti sono generati automaticamente da `.github/workflows/desktop.yml`
+su Windows, Linux e macOS. Vedi la sezione [Programma desktop](#programma-desktop).
+
 ## Sviluppo locale
 
 Non serve compilare nulla. Per un'anteprima con service worker:
@@ -123,30 +142,70 @@ I test non sono necessari per pubblicare il sito e non vengono caricati
 all'interno dell'applicazione.
 
 Quando aggiorni i contenuti, incrementa `VERSION` in `sw.js` (per esempio
-`nd-v1.1.0`): il service worker elimina la cache vecchia e serve la nuova
+`nd-v1.2.0`): il service worker elimina la cache vecchia e serve la nuova
 versione. I file `.pdf` sono esclusi dalla cache: si scaricano su richiesta e
 non occupano spazio senza un gesto esplicito.
 
 ## Vademecum in PDF
 
-`assets/pdf/vademecum-naturopata-digitale.pdf` è una guida tascabile di 25
-pagine in formato A5: segnali d'allarme, dieci piante tossiche, confusioni
-pericolose, interazioni con i farmaci, decalogo della raccolta, calendario,
-forme d'uso, le 27 piante in tabella, glossario e fonti.
+La guida tascabile è generata in tre versioni, tutte scaricabili dalla pagina
+**Licenze** e dal footer:
 
-Il PDF si scarica dalla pagina **Licenze** (pulsante *Scarica il Vademecum*)
-e dal footer. Non è scritto a mano: il generatore legge gli stessi dati
-dell'app e compone il documento, quindi quando una scheda cambia il PDF si
-rigenera identico ai contenuti del sito.
+| File | Formato | Uso |
+|---|---|---|
+| `vademecum-naturopata-digitale.pdf` | A5, 28 pagine | Lettura su schermo e stampa tascabile |
+| `vademecum-naturopata-digitale-a4.pdf` | A4, 28 pagine | Stampa domestica con margini di sicurezza |
+| `vademecum-naturopata-digitale-libricino-a4.pdf` | A4 orizzontale, 14 facciate | Libricino A5 già imposto: 7 fogli, fronte-retro |
+
+Contengono segnali d'allarme, dieci piante tossiche, confusioni pericolose,
+interazioni con i farmaci, decalogo della raccolta, calendario, forme d'uso,
+le 60 piante in tabella, glossario e fonti.
+
+Per il libricino: stampa su A4 orizzontale, fronte-retro con rilegatura sul
+**lato corto**, al 100% (nessun adattamento). Piega i fogli a metà, raccoglili
+nell'ordine e cuci al centro con due punti metallici. Se il retro esce
+capovolto, usa la rilegatura sul lato lungo: dipende dal driver della
+stampante. L'ordine delle pagine è già impostato, non va modificato.
+
+I PDF non sono scritti a mano: il generatore legge gli stessi dati dell'app e
+compone il documento, quindi quando una scheda cambia si rigenera tutto.
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install reportlab
+.venv/bin/pip install reportlab pymupdf
 .venv/bin/python scripts/build_vademecum.py   # oppure: npm run vademecum
 ```
 
-Serve Python 3 e Node (per esportare i dati). Il PDF richiede `reportlab`; il
-controllo delle anteprime, se serve, usa `pymupdf`.
+Serve Python 3 e Node (per esportare i dati). Il PDF A5 richiede `reportlab`;
+le versioni A4 e libricino usano `pymupdf` per l'impaginazione di stampa.
+
+## Programma desktop
+
+Il contenitore Electron è in `desktop/`: carica la stessa app statica, apre i
+link esterni nel browser e non richiede rete. La build usa `electron-builder`.
+
+```bash
+node scripts/prepare-desktop.cjs   # copia il sito in desktop/app
+cd desktop
+npm install
+npm start                          # prova locale
+npm run dist:linux                 # .deb + AppImage
+npm run dist:win                   # .exe (NSIS + portable)
+npm run dist:mac                   # .dmg (Intel + Apple Silicon)
+```
+
+Non è necessario compilare tutto sul proprio computer: il workflow
+`.github/workflows/desktop.yml` esegue la build su runner nativi. Si avvia a
+mano da **Actions → Pacchetti desktop → Run workflow**, oppure creando un tag
+`v1.2.0` (in quel caso i file vengono allegati alla release).
+
+I pacchetti non sono firmati con certificati commerciali. Per distribuirli
+senza avvisi servono un certificato Windows (code signing) e la notarizzazione
+Apple, che richiedono account e credenziali propri: non sono inclusi nel
+repository.
+
+`desktop/app/`, `desktop/dist/` e `desktop/node_modules/` sono generati e non
+vanno versionati.
 
 ## Pubblicare su GitHub Pages
 
@@ -172,22 +231,26 @@ assets/
   img/icon-192.png         # icona PWA
   img/icon-512.png         # icona PWA / maskable
   js/
-    data-plants*.js        # 27 schede piante
+    data-plants*.js        # 60 schede piante (cinque file)
     data-manual*.js        # 18 capitoli
     data-extra*.js         # benessere, calendario, tossiche, glossario, FAQ
     data-quiz*.js          # 85 domande
+    data-library.js        # Matthioli e sopravvivenza
     neura.js               # motore locale
     app.js                 # nucleo, routing, home, erbario
     app-views.js           # manuale, fito, benessere, calendario, licenze
+    app-library.js         # viste Matthioli e sopravvivenza
     app-quiz.js            # motore del quiz
     app-neura.js           # interfaccia chat e controllo
     app-init.js            # eventi globali e avvio
 scripts/make_icons.py      # rigenera le icone PNG
 scripts/export-data.cjs    # esporta i dati dell'app in JSON
 scripts/build_vademecum.py # genera il Vademecum in PDF
-assets/pdf/                # Vademecum scaricabile (A5, 25 pagine)
+scripts/prepare-desktop.cjs # prepara desktop/app
+assets/pdf/                # Vademecum A5, A4 e libricino imposto
+desktop/                   # contenitore Electron e build .exe/.deb/.dmg
 tests/                     # test dati e DOM
-.github/workflows/         # pubblicazione GitHub Pages
+.github/workflows/         # GitHub Pages e pacchetti desktop
 ```
 
 ## Fonti e metodo
@@ -213,6 +276,13 @@ le tradizioni sono efficaci e non tutte le piante sono sicure.
   domande fuori dal corpus e non apprende dalle conversazioni.
 - Il programma non raccoglie dati, quindi non può sincronizzare i progressi tra
   dispositivi. Il backup JSON serve a questo.
+- La pagina Sopravvivenza è divulgativa e non sostituisce un corso di primo
+  soccorso, topografia o soccorso alpino. In emergenza la priorità è chiamare
+  il 112.
+- La pagina su Mattioli è una guida storica: non riproduce il testo originale e
+  non usa le indicazioni mediche del Cinquecento come consigli attuali.
+- I pacchetti desktop non sono firmati: il sistema operativo può chiedere una
+  conferma esplicita all'apertura.
 
 ## Crediti
 
@@ -221,4 +291,4 @@ Ideato, scritto e sviluppato da **Danilo D'Auria**, autore anche del
 [Consulente Digitale](https://danilodauria.github.io/consulente-digitale/), di
 FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».
 
-Versione **1.1.0** · ottobre 2026.
+Versione **1.2.0** · ottobre 2026.

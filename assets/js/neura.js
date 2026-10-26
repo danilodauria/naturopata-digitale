@@ -452,6 +452,14 @@ NP.neura = (function () {
 
     const plants = findPlants(clean);
 
+    if (!plants.length && /(mattioli|dioscoride|discorsi|erbario storico|cinquecento)/.test(n)) {
+      return { html: "<p><strong>I Discorsi</strong> di Pietro Andrea Mattioli sono un commento ai sei libri di Dioscoride, pubblicato per la prima volta a Venezia nel 1544 e cresciuto nelle edizioni successive.</p><p>Non è una traduzione moderna: Mattioli scrisse in italiano e discusse le piante con osservazioni proprie, aggiungendo specie del Nuovo Mondo e un libro sui veleni. L'opera è in pubblico dominio.</p><p><a href=\"#/matthioli\">Storia, edizioni digitalizzate e lezioni →</a></p>" };
+    }
+
+    if (!plants.length && /(sopravvivenza|zaino|escursion|trekking|perdersi|mi sono perso|fuoco|riparo|acqua potabile|bollire|ipotermia|colpo di calore|segnalare|112)/.test(n)) {
+      return { html: "<p>In emergenza la priorità è sempre la stessa: <strong>chiamare il 112</strong>, proteggersi dal freddo e dal caldo, poi acqua e segnalazione. Il cibo viene molto dopo.</p><ul><li>Se ti sei perso, fermati e resta in un punto visibile.</li><li>Acqua: filtra i solidi e fai bollire per 1 minuto (3 minuti sopra i 2.000 m).</li><li>Fuoco: solo se è permesso in quel luogo e in quel giorno.</li><li>Segnala con fischietto, torcia o specchio: sei segnali al minuto, pausa, ripeti.</li></ul><p><a href=\"#/sopravvivenza\">Apri la guida per livelli →</a></p>" };
+    }
+
     if (/(differenza|confronto|meglio tra|oppure)/.test(n) && plants.length >= 2) {
       return differenceAnswer(plants[0], plants[1]);
     }

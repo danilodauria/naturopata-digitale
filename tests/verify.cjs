@@ -5,9 +5,10 @@
 global.window = global;
 const path = require("path");
 const files = [
-  "data-plants", "data-plants-2", "data-manual", "data-manual-2", "data-manual-3",
+  "data-plants", "data-plants-2", "data-plants-3", "data-plants-4", "data-plants-5",
+  "data-manual", "data-manual-2", "data-manual-3",
   "data-manual-4", "data-manual-5", "data-extra", "data-extra-2", "data-extra-3",
-  "data-quiz", "data-quiz-2", "data-quiz-3", "neura"
+  "data-quiz", "data-quiz-2", "data-quiz-3", "data-library", "neura"
 ];
 files.forEach((f) => require(path.join(__dirname, "..", "assets", "js", f + ".js")));
 
@@ -27,7 +28,7 @@ const parts = NP.manualParts;
 
 console.log("Dati: " + plants.length + " piante, " + manual.length + " capitoli, " + quiz.length + " domande.");
 
-ok(plants.length === 27, "ci sono 27 piante");
+ok(plants.length === 60, "ci sono 60 piante");
 ok(manual.length === 18, "ci sono 18 capitoli");
 ok(quiz.length >= 80, "almeno 80 domande (" + quiz.length + ")");
 ok(NP.conditions.length === 8, "8 schede di benessere");
@@ -81,6 +82,27 @@ NP.conditions.forEach((c) => {
 
 NP.interactions.forEach((it) => ok(["alto", "medio", "basso"].indexOf(it.livello) !== -1, "interazione con livello errato: " + it.pianta));
 
+// Biblioteca storica
+ok(!!NP.matthioli, "esiste la scheda Matthioli");
+ok(NP.matthioli.edizioni.length >= 5, "Matthioli: almeno 5 edizioni");
+ok(NP.matthioli.edizioni.some((e) => e.lingua === "Italiano"), "Matthioli: edizioni italiane");
+ok(NP.matthioli.fonti.every((f) => /^https:\/\//.test(f.u)), "Matthioli: fonti https");
+ok(/pubblico dominio/i.test(NP.matthioli.pubblicoDominio.testo), "Matthioli: nota pubblico dominio");
+ok(NP.matthioli.lezioni.length >= 4, "Matthioli: lezioni");
+
+// Sopravvivenza
+ok(!!NP.survival, "esiste la scheda sopravvivenza");
+ok(NP.survival.livelli.length === 3, "sopravvivenza: tre livelli");
+ok(NP.survival.livelli.map((l) => l.id).join(",") === "base,intermedio,esperto", "sopravvivenza: ordine dei livelli");
+NP.survival.livelli.forEach((l) => {
+  ok(l.schede.length >= 8, "sopravvivenza " + l.id + ": almeno 8 schede");
+  ok(l.kit.length >= 8, "sopravvivenza " + l.id + ": kit essenziale");
+  ok(l.obiettivo && l.motto, "sopravvivenza " + l.id + ": obiettivo e motto");
+  l.schede.forEach((s, i) => ok(s.titolo && s.testo && s.errore, "sopravvivenza " + l.id + ": scheda " + (i + 1) + " incompleta"));
+});
+ok(NP.survival.errori.length >= 8, "sopravvivenza: errori da evitare");
+ok(NP.survival.fonti.every((f) => /^https:\/\//.test(f.u)), "sopravvivenza: fonti https");
+
 // Collegamenti interni
 const all = JSON.stringify({ plants, manual, quiz, conditions: NP.conditions, extra: [NP.toxic, NP.glossary, NP.faq] });
 const linkRe = /#\/(pianta|capitolo|benessere)\/([a-z0-9-]+)/g;
@@ -110,6 +132,8 @@ ok(/Sonno|sonno|addorment/i.test(answer("cosa aiuta per l'insonnia?")), "Neura r
 ok(/Domanda di Neura/.test(answer("fammi una domanda di quiz")), "Neura genera un quiz");
 ok(/non trovo|Non trovo|riformulare/i.test(answer("qual è il prezzo del petrolio?")), "Neura ammette di non sapere");
 ok(/Iperico/i.test(answer("confronta iperico e valeriana")), "Neura confronta due piante");
+ok(/Mattioli/i.test(answer("chi era Mattioli?")), "Neura conosce la pagina Mattioli");
+ok(/112|bollire/i.test(answer("come si tratta l'acqua in escursione?")), "Neura rimanda alla sopravvivenza");
 ok(NP.neura.findPlants("le ortiche").length === 1, "Neura riconosce il plurale 'ortiche'");
 ok(/Interazioni|contraccett|Iperico/i.test(answer("posso prendere iperico con la pillola?")), "Neura riconosce il rischio con la pillola");
 
@@ -129,6 +153,10 @@ ok(/112|urgen|soccorsi/i.test(c4.summary), "controllo riconosce il dolore toraci
 // File, manifest e service worker
 const fs = require("fs");
 const root = path.join(__dirname, "..");
+["vademecum-naturopata-digitale.pdf", "vademecum-naturopata-digitale-a4.pdf", "vademecum-naturopata-digitale-libricino-a4.pdf"].forEach((f) => {
+  const p = path.join(root, "assets", "pdf", f);
+  ok(fs.existsSync(p) && fs.statSync(p).size > 30000, "PDF mancante o troppo piccolo: " + f);
+});
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.webmanifest"), "utf8"));
 ok(manifest.name === "Naturopata Digitale", "manifest: nome");
 ok(manifest.start_url === "./", "manifest: start_url relativo");

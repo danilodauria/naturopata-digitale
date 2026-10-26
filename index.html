@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Naturopata Digitale · Piante, benessere e natura, spiegati con cura</title>
-  <meta name="description" content="Erbario interattivo, manuale, fitoalimurgia, schede di benessere e quiz. Con Neura, l'intelligenza locale che spiega e controlla. Funziona anche senza Internet, senza account e senza pubblicità.">
+  <meta name="description" content="Erbario con 60 piante officinali, manuale, fitoalimurgia, schede di benessere, sopravvivenza e quiz. Con Neura, l'assistente locale che spiega e controlla. Anche offline, senza account e senza pubblicità.">
   <meta name="author" content="Danilo D'Auria">
   <meta name="theme-color" content="#1f4d3a">
   <meta name="color-scheme" content="light dark">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="it_IT">
   <meta property="og:title" content="Naturopata Digitale">
-  <meta property="og:description" content="Il sapere gentile delle piante: schede, manuale, fitoalimurgia, quiz e l'IA locale Neura. Anche offline.">
+  <meta property="og:description" content="Il sapere gentile delle piante: 60 schede, manuale, fitoalimurgia, sopravvivenza, Discorsi di Mattioli, quiz e l'assistente locale Neura. Anche offline.">
   <meta property="og:site_name" content="Naturopata Digitale">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
@@ -60,6 +60,8 @@
         <div class="nav-more">
           <button class="nav-more-btn" id="moreBtn" aria-expanded="false" aria-controls="moreMenu">Altro</button>
           <div class="nav-more-menu" id="moreMenu" hidden>
+            <a href="#/sopravvivenza" data-nav="sopravvivenza">Sopravvivenza</a>
+            <a href="#/matthioli" data-nav="matthioli">I Discorsi di Mattioli</a>
             <a href="#/calendario" data-nav="calendario">Calendario di raccolta</a>
             <a href="#/glossario" data-nav="glossario">Glossario</a>
             <a href="#/sicurezza" data-nav="sicurezza">Sicurezza e fonti</a>
@@ -103,6 +105,8 @@
           <li><a href="#/erbario">Erbario</a></li>
           <li><a href="#/manuale">Manuale interattivo</a></li>
           <li><a href="#/fitoalimurgia">Fitoalimurgia</a></li>
+          <li><a href="#/sopravvivenza">Sopravvivenza</a></li>
+          <li><a href="#/matthioli">I Discorsi di Mattioli</a></li>
           <li><a href="#/quiz">Quiz</a></li>
           <li><a href="#/neura">Neura</a></li>
         </ul>
@@ -114,7 +118,10 @@
           <li><a href="#/licenze">Licenze</a></li>
           <li><a href="#/licenze">Privacy</a></li>
           <li><a href="#/glossario">Glossario</a></li>
-          <li><a href="assets/pdf/vademecum-naturopata-digitale.pdf" download>Vademecum in PDF</a></li>
+          <li><a href="assets/pdf/vademecum-naturopata-digitale.pdf" download>Vademecum A5</a></li>
+          <li><a href="assets/pdf/vademecum-naturopata-digitale-a4.pdf" download>Vademecum A4</a></li>
+          <li><a href="assets/pdf/vademecum-naturopata-digitale-libricino-a4.pdf" download>Libricino da stampare</a></li>
+          <li><a href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">Programma per computer</a></li>
         </ul>
       </div>
       <div class="footer-note">
@@ -124,7 +131,7 @@
     </div>
     <div class="wrap footer-bottom">
       <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong></p>
-      <p>Codice <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT</a> · Contenuti <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · v1.1.0</p>
+      <p>Codice <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT</a> · Contenuti <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · v1.2.0</p>
     </div>
   </footer>
 
@@ -140,6 +147,9 @@
 
   <script src="assets/js/data-plants.js"></script>
   <script src="assets/js/data-plants-2.js"></script>
+  <script src="assets/js/data-plants-3.js"></script>
+  <script src="assets/js/data-plants-4.js"></script>
+  <script src="assets/js/data-plants-5.js"></script>
   <script src="assets/js/data-manual.js"></script>
   <script src="assets/js/data-manual-2.js"></script>
   <script src="assets/js/data-manual-3.js"></script>
@@ -151,9 +161,11 @@
   <script src="assets/js/data-quiz.js"></script>
   <script src="assets/js/data-quiz-2.js"></script>
   <script src="assets/js/data-quiz-3.js"></script>
+  <script src="assets/js/data-library.js"></script>
   <script src="assets/js/neura.js"></script>
   <script src="assets/js/app.js"></script>
   <script src="assets/js/app-views.js"></script>
+  <script src="assets/js/app-library.js"></script>
   <script src="assets/js/app-quiz.js"></script>
   <script src="assets/js/app-neura.js"></script>
   <script src="assets/js/app-init.js"></script>

@@ -218,6 +218,12 @@ npm run dist:win                   # installer .exe (NSIS)
 npm run dist:mac                   # .dmg (Intel + Apple Silicon)
 ```
 
+In `desktop/package.json` la voce `build.publish` è impostata a `null`: la
+release la crea il workflow con `softprops/action-gh-release`. Serve perché
+electron-builder 25, compilando da un tag con `GH_TOKEN` presente, prova a
+generare le informazioni di aggiornamento e va in errore (`Cannot read
+properties of null (reading 'channel')`).
+
 Non è necessario compilare tutto sul proprio computer: il workflow
 `.github/workflows/desktop.yml` esegue la build su runner nativi. Si avvia a
 mano da **Actions → Pacchetti desktop → Run workflow**, oppure creando un tag

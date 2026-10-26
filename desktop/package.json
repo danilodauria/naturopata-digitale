@@ -23,6 +23,7 @@
     "productName": "Naturopata Digitale",
     "copyright": "Copyright © 2026 Danilo D'Auria · FeniceOS",
     "artifactName": "Naturopata-Digitale-${version}-${os}-${arch}.${ext}",
+    "publish": null,
     "directories": {
       "output": "dist",
       "buildResources": "build"

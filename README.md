@@ -6,6 +6,9 @@ storica, quiz e **Neura**, un assistente di conoscenza locale che spiega e
 controlla. Tutto in italiano, senza account, senza pubblicità e funzionante
 anche offline.
 
+**Online:** [danilodauria.github.io/naturopata-digitale](https://danilodauria.github.io/naturopata-digitale/) ·
+[scarica per Windows, Linux e macOS](https://danilodauria.github.io/naturopata-digitale/scarica/)
+
 > Un progetto indipendente di **Danilo D'Auria** · un progetto **FeniceOS**.
 
 ---

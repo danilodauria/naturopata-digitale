@@ -199,9 +199,12 @@ ok(scarica.indexOf("undefined") === -1, "scarica: nessun 'undefined'");
 const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
 ok(/scarica/.test(pagesWorkflow), "workflow Pages: pagina di download inclusa");
 const desktopWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8");
-ok(/sha256sum Naturopata-Digitale-\*/.test(desktopWorkflow), "workflow desktop: calcola le impronte");
+ok(/gh api "repos\/\$GITHUB_REPOSITORY\/releases\/tags\/\$TAG"/.test(desktopWorkflow), "workflow desktop: legge i digest dall'API");
+ok(/sub\("\^sha256:"; ""\)/.test(desktopWorkflow), "workflow desktop: toglie il prefisso sha256:");
 ok(/gh release upload "\$TAG" SHA256SUMS\.txt/.test(desktopWorkflow), "workflow desktop: allega SHA256SUMS.txt");
 ok(/\n  checksums:/.test(desktopWorkflow), "workflow desktop: job delle impronte");
+ok(/branches: \[main\]/.test(desktopWorkflow), "workflow desktop: parte anche sui push su main");
+ok(/if: startsWith\(github\.ref, 'refs\/tags\/v'\) \|\| github\.event_name == 'workflow_dispatch'/.test(desktopWorkflow), "workflow desktop: niente build sui push su main");
 ok(/caches\.match\(request\)\.then\(\(cached\) => cached \|\| caches\.match\("index\.html"\)\)/.test(sw), "service worker: fallback navigazione");
 ok(/isAppShell/.test(sw), "service worker: le altre pagine non sovrascrivono la shell");
 

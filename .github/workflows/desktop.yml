@@ -3,6 +3,7 @@ name: Pacchetti desktop
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     tags: ["v*"]
 
 permissions:
@@ -15,6 +16,8 @@ concurrency:
 jobs:
   build:
     name: ${{ matrix.os }}
+    # Sui push su main gira solo il job delle impronte: le build servono per i tag.
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -120,8 +123,8 @@ jobs:
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "Release di riferimento: $tag"
 
-      - name: Attende i sei pacchetti
-        id: attesa
+      - name: Genera SHA256SUMS.txt
+        id: somme
         if: steps.rel.outputs.pronta == '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -129,44 +132,40 @@ jobs:
           DA_TAG: ${{ startsWith(github.ref, 'refs/tags/v') }}
         run: |
           set -euo pipefail
-          attesi=(
-            Naturopata-Digitale-Windows-x64.exe
-            Naturopata-Digitale-Windows-portatile.zip
-            Naturopata-Digitale-Linux-amd64.deb
-            Naturopata-Digitale-Linux-x86_64.AppImage
-            Naturopata-Digitale-Mac-arm64.dmg
-            Naturopata-Digitale-Mac-x64.dmg
-          )
+          # GitHub calcola il digest SHA-256 di ogni allegato al momento del
+          # caricamento: leggerlo dall'API evita di riscaricare centinaia di
+          # megabyte e garantisce che il file coincida con i valori mostrati
+          # dalla pagina di download.
+          righe=0
           for tentativo in $(seq 1 10); do
-            presenti="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')"
-            mancanti=0
-            for f in "${attesi[@]}"; do
-              grep -qxF "$f" <<< "$presenti" || mancanti=$((mancanti + 1))
-            done
-            if [[ $mancanti -eq 0 ]]; then
-              echo "pronti=1" >> "$GITHUB_OUTPUT"
-              exit 0
+            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '
+              .assets[]
+              | select(.name | startswith("Naturopata-Digitale-"))
+              | select(.digest != null and (.digest | startswith("sha256:")))
+              | "\(.digest | sub("^sha256:"; ""))  \(.name)"' 2>/dev/null | sort -k2 > SHA256SUMS.txt || true
+            righe="$(wc -l < SHA256SUMS.txt)"
+            if [[ "$righe" -ge 6 ]]; then
+              echo "pronte=1" >> "$GITHUB_OUTPUT"
+              break
             fi
-            echo "Mancano $mancanti pacchetti, nuovo controllo tra 60 secondi."
-            sleep 60
+            echo "Impronte disponibili: $righe, nuovo controllo tra 30 secondi."
+            sleep 30
           done
-          if [[ "$DA_TAG" == "true" ]]; then
-            echo "::error::Pacchetti mancanti nella release $TAG: impronte non calcolate."
-            exit 1
+          cat SHA256SUMS.txt
+          if [[ "$(wc -l < SHA256SUMS.txt)" -lt 6 ]]; then
+            if [[ "$DA_TAG" == "true" ]]; then
+              echo "::error::Meno di sei pacchetti con impronta nella release $TAG."
+              exit 1
+            fi
+            echo "::notice::Release $TAG incompleta, impronte rimandate."
+            echo "pronte=0" >> "$GITHUB_OUTPUT"
           fi
-          echo "::notice::Release $TAG ancora incompleta, impronte rimandate."
-          echo "pronti=0" >> "$GITHUB_OUTPUT"
 
-      - name: Calcola e allega SHA256SUMS.txt
-        if: steps.attesa.outputs.pronti == '1'
+      - name: Allega SHA256SUMS.txt
+        if: steps.somme.outputs.pronte == '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.rel.outputs.tag }}
         run: |
           set -euo pipefail
-          cartella="$(mktemp -d)"
-          cd "$cartella"
-          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern 'Naturopata-Digitale-*' --skip-existing
-          sha256sum Naturopata-Digitale-* | sort -k2 > SHA256SUMS.txt
-          cat SHA256SUMS.txt
           gh release upload "$TAG" SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --clobber

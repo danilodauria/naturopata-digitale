@@ -136,11 +136,14 @@ per l'AppImage, rendi eseguibile il file con `chmod +x`.
 
 ### Impronte SHA-256
 
-Alla fine di ogni build il job `checksums` di `desktop.yml` scarica i sei
-pacchetti, calcola le impronte e allega alla release il file `SHA256SUMS.txt`
+Alla fine di ogni build il job `checksums` di `desktop.yml` legge dall'API i
+digest SHA-256 dei sei allegati e allega alla release il file `SHA256SUMS.txt`
 (formato `sha256sum`, quindi verificabile con `sha256sum -c` e
-`shasum -a 256 -c`). Il job gira anche sui push su `main`: così una release
-già pubblicata riceve il file senza dover rifare le build.
+`shasum -a 256 -c`). Sono gli stessi digest che mostra la pagina, così i due
+valori non possono divergere, e non serve riscaricare centinaia di megabyte.
+
+Il job gira anche sui push su `main` (dove le build sono saltate): così una
+release già pubblicata riceve il file senza rifare i pacchetti.
 
 La pagina `scarica/` mostra nome e impronta di ogni pacchetto accanto ai
 pulsanti, con i comandi per PowerShell, prompt dei comandi, Linux e macOS. I

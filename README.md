@@ -134,6 +134,28 @@ Sono build non firmate: Windows SmartScreen e macOS Gatekeeper possono chiedere
 una conferma. Su macOS, al primo avvio, usa tasto destro → *Apri*. Su Linux,
 per l'AppImage, rendi eseguibile il file con `chmod +x`.
 
+### Impronte SHA-256
+
+Alla fine di ogni build il job `checksums` di `desktop.yml` scarica i sei
+pacchetti, calcola le impronte e allega alla release il file `SHA256SUMS.txt`
+(formato `sha256sum`, quindi verificabile con `sha256sum -c` e
+`shasum -a 256 -c`). Il job gira anche sui push su `main`: così una release
+già pubblicata riceve il file senza dover rifare le build.
+
+La pagina `scarica/` mostra nome e impronta di ogni pacchetto accanto ai
+pulsanti, con i comandi per PowerShell, prompt dei comandi, Linux e macOS. I
+valori non sono scritti nella pagina: arrivano dall'API delle release
+(`/repos/<utente>/<repo>/releases/latest`, campo `digest` degli allegati), così
+restano allineati all'ultima versione senza manutenzione.
+
+L'API è l'unica sorgente leggibile dal browser: i file scaricabili da
+`releases/latest/download/` **non** mandano l'intestazione CORS, quindi un
+`fetch` del solo `SHA256SUMS.txt` verrebbe bloccato. Il file resta comunque
+allegato alla release per il controllo da terminale (`sha256sum -c`,
+`shasum -a 256 -c`). Se la richiesta all'API fallisce (rete assente, limite di
+richieste), la tabella resta nascosta e la pagina rimanda al file: il controllo
+manuale funziona comunque.
+
 I pacchetti sono generati automaticamente da `.github/workflows/desktop.yml`
 su Windows, Linux e macOS. Vedi la sezione [Programma desktop](#programma-desktop).
 

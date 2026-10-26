@@ -89,3 +89,84 @@ jobs:
             desktop/dist/*.dmg
           overwrite_files: true
           generate_release_notes: true
+
+  checksums:
+    name: Impronte SHA-256
+    needs: build
+    # Gira a fine release e anche sui push su main: così una release già
+    # pubblicata riceve SHA256SUMS.txt senza rifare le build.
+    if: >-
+      always() && !cancelled() &&
+      (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Individua la release
+        id: rel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            tag="${GITHUB_REF#refs/tags/}"
+          else
+            tag="$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName --jq '.tagName' 2>/dev/null || true)"
+          fi
+          if [[ -z "$tag" ]]; then
+            echo "::notice::Nessuna release pubblicata, niente impronte da calcolare."
+            echo "pronta=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "pronta=1" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Release di riferimento: $tag"
+
+      - name: Attende i sei pacchetti
+        id: attesa
+        if: steps.rel.outputs.pronta == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.rel.outputs.tag }}
+          DA_TAG: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          set -euo pipefail
+          attesi=(
+            Naturopata-Digitale-Windows-x64.exe
+            Naturopata-Digitale-Windows-portatile.zip
+            Naturopata-Digitale-Linux-amd64.deb
+            Naturopata-Digitale-Linux-x86_64.AppImage
+            Naturopata-Digitale-Mac-arm64.dmg
+            Naturopata-Digitale-Mac-x64.dmg
+          )
+          for tentativo in $(seq 1 10); do
+            presenti="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')"
+            mancanti=0
+            for f in "${attesi[@]}"; do
+              grep -qxF "$f" <<< "$presenti" || mancanti=$((mancanti + 1))
+            done
+            if [[ $mancanti -eq 0 ]]; then
+              echo "pronti=1" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Mancano $mancanti pacchetti, nuovo controllo tra 60 secondi."
+            sleep 60
+          done
+          if [[ "$DA_TAG" == "true" ]]; then
+            echo "::error::Pacchetti mancanti nella release $TAG: impronte non calcolate."
+            exit 1
+          fi
+          echo "::notice::Release $TAG ancora incompleta, impronte rimandate."
+          echo "pronti=0" >> "$GITHUB_OUTPUT"
+
+      - name: Calcola e allega SHA256SUMS.txt
+        if: steps.attesa.outputs.pronti == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.rel.outputs.tag }}
+        run: |
+          set -euo pipefail
+          cartella="$(mktemp -d)"
+          cd "$cartella"
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern 'Naturopata-Digitale-*' --skip-existing
+          sha256sum Naturopata-Digitale-* | sort -k2 > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          gh release upload "$TAG" SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --clobber

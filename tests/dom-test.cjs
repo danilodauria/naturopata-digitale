@@ -252,6 +252,50 @@ async function go(hash) {
   await go("#/pagina-inesistente");
   ok(/non trovata/i.test(doc.body.textContent), "404: pagina non trovata");
 
+  // Pagina di download: impronte SHA-256 lette dall'API delle release
+  const improntaA = "1f" + "a".repeat(62);
+  const improntaB = "2f" + "b".repeat(62);
+  const releaseJson = {
+    tag_name: "v1.2.0",
+    assets: [
+      { name: "Naturopata-Digitale-Windows-x64.exe", digest: "sha256:" + improntaA },
+      { name: "Naturopata-Digitale-Linux-amd64.deb", digest: "sha256:" + improntaB },
+      { name: "SHA256SUMS.txt", digest: "sha256:" + "3f" + "c".repeat(62) },
+      { name: "senza-digest.bin", digest: null }
+    ]
+  };
+  const sumsText = JSON.stringify(releaseJson);
+  const paginaScarica = fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8");
+  function sumsPage(fetchImpl) {
+    return new JSDOM(paginaScarica, {
+      url: "https://danilodauria.github.io/naturopata-digitale/scarica/",
+      runScripts: "dangerously",
+      beforeParse(window) { window.fetch = fetchImpl; }
+    });
+  }
+
+  const conImpronte = sumsPage(() => Promise.resolve({ ok: true, json: () => Promise.resolve(releaseJson) }));
+  await tick(60);
+  const sd = conImpronte.window.document;
+  const righe = sd.querySelectorAll(".sums-table tbody tr");
+  ok(righe.length === 2, "scarica: solo i pacchetti in tabella (escluso SHA256SUMS.txt)");
+  ok(!sd.querySelector(".sums-table").hidden, "scarica: tabella visibile dopo il caricamento");
+  ok(righe[0].querySelector("th").textContent === "Naturopata-Digitale-Linux-amd64.deb", "scarica: righe in ordine alfabetico");
+  ok(righe[1].querySelector("th").textContent === "Naturopata-Digitale-Windows-x64.exe", "scarica: nome del file in tabella");
+  const impronte = Array.from(righe).map((r) => r.querySelector("code").textContent);
+  ok(impronte.indexOf(improntaA) !== -1 && impronte.indexOf(improntaB) !== -1, "scarica: impronte senza prefisso sha256:");
+  ok(impronte.every((h) => /^[a-f0-9]{64}$/.test(h)), "scarica: impronte di 64 caratteri esadecimali");
+  ok(/v1\.2\.0/.test(sd.querySelector(".sums-status").textContent), "scarica: versione nello stato");
+  ok(sd.querySelectorAll(".sums-cmd").length === 4, "scarica: comandi per i tre sistemi");
+
+  const senzaImpronte = sumsPage(() => Promise.reject(new Error("offline")));
+  await tick(60);
+  const sf = senzaImpronte.window.document;
+  ok(sf.querySelector(".sums-table").hidden, "scarica: tabella nascosta se il file non arriva");
+  ok(/SHA256SUMS\.txt/.test(sf.querySelector(".sums-status").textContent), "scarica: rinvio al file delle impronte");
+  conImpronte.window.close();
+  senzaImpronte.window.close();
+
   // Errori runtime
   ok(errors.length === 0, "nessun errore JavaScript: " + errors.slice(0, 3).join(" | "));
 

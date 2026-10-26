@@ -419,6 +419,62 @@
     }
     .file-note p { margin: 0; }
 
+    /* Impronte SHA-256 ---------------------------------------------------- */
+
+    .integrity {
+      margin-top: 1.2rem;
+      padding: 1.25rem 1.35rem;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--ombra);
+    }
+    .integrity h3 { margin-bottom: .35rem; }
+    .integrity p { color: var(--text-soft); font-size: .9rem; }
+    .sums-status { font-size: .84rem; color: var(--text-faint); margin-bottom: .8rem; }
+    .sums-table { width: 100%; border-collapse: collapse; font-size: .82rem; margin-bottom: .4rem; }
+    .sums-table th, .sums-table td {
+      text-align: left;
+      padding: .5rem .55rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .sums-table thead th {
+      font-family: var(--sans);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      font-weight: 700;
+    }
+    .sums-table tbody th { font-weight: 600; overflow-wrap: anywhere; }
+    .sums-table code { font-size: .78em; overflow-wrap: anywhere; word-break: break-all; }
+    .sums-cmd { border-top: 1px solid var(--line); padding-top: .5rem; margin-top: .5rem; }
+    .sums-cmd summary {
+      cursor: pointer;
+      font-size: .84rem;
+      font-weight: 600;
+      color: var(--accent);
+      padding-block: .15rem;
+    }
+    .sums-cmd summary:hover { color: var(--verde-800); }
+    html[data-theme="dark"] .sums-cmd summary:hover { color: #b7e3c8; }
+    .sums-cmd pre {
+      margin: .55rem 0 .2rem;
+      padding: .7rem .9rem;
+      border-radius: var(--radius-sm);
+      background: var(--verde-900);
+      overflow-x: auto;
+    }
+    .sums-cmd pre code {
+      background: none;
+      border: 0;
+      padding: 0;
+      color: #f4efe1;
+      font-size: .8rem;
+      white-space: pre;
+    }
+
     /* Avvisi ------------------------------------------------------------- */
 
     .callout {
@@ -706,6 +762,40 @@
           <a href="https://github.com/danilodauria/naturopata-digitale/releases/latest">Tutte le versioni e le note →</a>
         </div>
 
+        <div class="integrity" id="integrita">
+          <h3>Verifica l'impronta SHA-256</h3>
+          <p>Ogni pacchetto ha un'impronta calcolata sulla release: se il valore del file che hai scaricato è identico, il download è completo e nessuno lo ha alterato. Le impronte cambiano a ogni versione, quindi la tabella si aggiorna da sola leggendo l'elenco della release: è l'unica richiesta che questa pagina fa a GitHub.</p>
+
+          <div data-release="https://api.github.com/repos/danilodauria/naturopata-digitale/releases/latest">
+            <p class="sums-status" role="status">Le impronte dell'ultima release sono nel file SHA256SUMS.txt, accanto ai pacchetti.</p>
+            <table class="sums-table" hidden>
+              <thead>
+                <tr><th scope="col">File</th><th scope="col">SHA-256</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <details class="sums-cmd">
+            <summary>Windows · PowerShell</summary>
+            <pre><code>Get-FileHash .\Naturopata-Digitale-Windows-x64.exe -Algorithm SHA256</code></pre>
+          </details>
+          <details class="sums-cmd">
+            <summary>Windows · prompt dei comandi</summary>
+            <pre><code>certutil -hashfile Naturopata-Digitale-Windows-x64.exe SHA256</code></pre>
+          </details>
+          <details class="sums-cmd">
+            <summary>Linux</summary>
+            <pre><code>sha256sum -c SHA256SUMS.txt</code></pre>
+          </details>
+          <details class="sums-cmd">
+            <summary>macOS</summary>
+            <pre><code>shasum -a 256 -c SHA256SUMS.txt</code></pre>
+          </details>
+
+          <p class="note">Metti <code>SHA256SUMS.txt</code> nella stessa cartella dei file scaricati: <code>sha256sum -c</code> e <code>shasum -c</code> controllano tutti i pacchetti in una volta e rispondono <em>OK</em> per ciascuno. Con un solo file, confronta la stringa ottenuta con quella in tabella: devono coincidere carattere per carattere. Le impronte sono anche nel file <a href="https://github.com/danilodauria/naturopata-digitale/releases/latest/download/SHA256SUMS.txt">SHA256SUMS.txt</a> allegato alla release.</p>
+        </div>
+
         <div class="callout warn">
           <span aria-hidden="true">🔐</span>
           <p><strong>Scarica solo da qui.</strong> I pacchetti sono generati automaticamente dal codice pubblico del repository con GitHub Actions. Se un file arriva da un altro sito o da un messaggio, non aprirlo. Il codice è MIT: puoi controllarlo e ricompilarlo da solo.</p>
@@ -860,5 +950,60 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    /* Le impronte arrivano dall'API delle release, che riporta il digest SHA-256
+       di ogni allegato: si aggiornano da sole a ogni versione. Il file
+       SHA256SUMS.txt resta per il controllo da terminale (sha256sum -c). Se la
+       richiesta non riesce, resta la tabella nascosta e il rinvio al file. */
+    (function () {
+      var box = document.querySelector("[data-release]");
+      if (!box || !window.fetch) return;
+      var status = box.querySelector(".sums-status");
+      var table = box.querySelector(".sums-table");
+      var tbody = table && table.querySelector("tbody");
+      if (!status || !tbody) return;
+
+      status.textContent = "Carico le impronte dell'ultima release…";
+      fetch(box.getAttribute("data-release"), {
+        cache: "no-store",
+        headers: { Accept: "application/vnd.github+json" }
+      })
+        .then(function (risposta) {
+          if (!risposta.ok) throw new Error("HTTP " + risposta.status);
+          return risposta.json();
+        })
+        .then(function (release) {
+          var pacchetti = (release.assets || []).filter(function (voce) {
+            var pacchetto = /^Naturopata-Digitale-.+\.(exe|zip|deb|appimage|dmg)$/i.test(voce.name || "");
+            return pacchetto && /^(sha256:)?[a-f0-9]{64}$/i.test(voce.digest || "");
+          });
+          if (!pacchetti.length) throw new Error("nessuna impronta");
+
+          pacchetti
+            .slice()
+            .sort(function (a, b) { return a.name < b.name ? -1 : 1; })
+            .forEach(function (voce) {
+              var tr = document.createElement("tr");
+              var th = document.createElement("th");
+              th.scope = "row";
+              th.textContent = voce.name;
+              var td = document.createElement("td");
+              var code = document.createElement("code");
+              code.textContent = voce.digest.replace(/^sha256:/i, "").toLowerCase();
+              td.appendChild(code);
+              tr.appendChild(th);
+              tr.appendChild(td);
+              tbody.appendChild(tr);
+            });
+
+          table.hidden = false;
+          status.textContent = "Impronte della release " + (release.tag_name || "") + ": confrontale con il file che hai scaricato.";
+        })
+        .catch(function () {
+          status.textContent = "Non riesco a leggere le impronte da qui: apri SHA256SUMS.txt nella release e confronta il valore a mano.";
+        });
+    })();
+  </script>
 </body>
 </html>

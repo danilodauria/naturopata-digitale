@@ -189,9 +189,19 @@ ok((scarica.match(/assets\/pdf\/vademecum-[a-z0-9-]+\.pdf/g) || []).length >= 3,
   "Naturopata-Digitale-Mac-x64.dmg"
 ].forEach((f) => ok(scarica.indexOf("releases/latest/download/" + f) !== -1, "scarica: manca il link a " + f));
 ok(/112/.test(scarica) && /CC BY-NC-SA 4.0/.test(scarica), "scarica: emergenza e licenza");
+ok(/data-release="https:\/\/api\.github\.com\/repos\/danilodauria\/naturopata-digitale\/releases\/latest"/.test(scarica), "scarica: impronte lette dall'API delle release");
+ok(/releases\/latest\/download\/SHA256SUMS\.txt/.test(scarica), "scarica: link al file delle impronte");
+ok(/<table class="sums-table" hidden>/.test(scarica), "scarica: tabella delle impronte");
+["Get-FileHash", "certutil -hashfile", "sha256sum -c SHA256SUMS.txt", "shasum -a 256 -c SHA256SUMS.txt"].forEach((cmd) => {
+  ok(scarica.indexOf(cmd) !== -1, "scarica: comando di verifica mancante " + cmd);
+});
 ok(scarica.indexOf("undefined") === -1, "scarica: nessun 'undefined'");
 const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
 ok(/scarica/.test(pagesWorkflow), "workflow Pages: pagina di download inclusa");
+const desktopWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8");
+ok(/sha256sum Naturopata-Digitale-\*/.test(desktopWorkflow), "workflow desktop: calcola le impronte");
+ok(/gh release upload "\$TAG" SHA256SUMS\.txt/.test(desktopWorkflow), "workflow desktop: allega SHA256SUMS.txt");
+ok(/\n  checksums:/.test(desktopWorkflow), "workflow desktop: job delle impronte");
 ok(/caches\.match\(request\)\.then\(\(cached\) => cached \|\| caches\.match\("index\.html"\)\)/.test(sw), "service worker: fallback navigazione");
 ok(/isAppShell/.test(sw), "service worker: le altre pagine non sovrascrivono la shell");
 

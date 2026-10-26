@@ -228,7 +228,10 @@ generare le informazioni di aggiornamento e va in errore (`Cannot read
 properties of null (reading 'channel')`).
 
 Non è necessario compilare tutto sul proprio computer: il workflow
-`.github/workflows/desktop.yml` esegue la build su runner nativi. Si avvia a
+`.github/workflows/desktop.yml` esegue la build su runner nativi. La build
+macOS gira su `macos-15-intel` e produce sia la versione Intel sia quella
+Apple Silicon: i runner macOS arm64 hanno code lunghe per carenza di capacità
+su GitHub. Si avvia a
 mano da **Actions → Pacchetti desktop → Run workflow**, oppure creando un tag
 `v1.2.0` (in quel caso i file vengono allegati alla release).
 

@@ -60,6 +60,8 @@ async function go(hash) {
   ok(!!doc.querySelector(".today-card"), "home: pianta del giorno");
   ok(doc.querySelector(".site-footer").textContent.indexOf("Danilo") !== -1, "footer: autore");
   ok(doc.querySelectorAll('footer a[href="come-installare.html"]').length === 1, "footer: link a Come si installa");
+  ok(doc.querySelectorAll('#moreMenu a[href="versioni.html"]').length === 1, "menu Altro: Versioni e novità");
+  ok(doc.querySelectorAll('#moreMenu a[href="scheda-rapida.html"]').length === 1, "menu Altro: Scheda rapida");
 
   // Erbario
   await go("#/erbario");

@@ -218,6 +218,13 @@ Object.keys(pagine).forEach((nome) => {
 ok(fs.existsSync(path.join(root, "assets", "css", "pagine.css")), "manca lo stile condiviso delle pagine");
 ok(/pagine\.css/.test(scarica), "scarica: usa lo stile condiviso");
 ok(/id="guide"/.test(scarica), "scarica: sezione delle guide");
+const preparaDesktop = fs.readFileSync(path.join(root, "scripts", "prepare-desktop.cjs"), "utf8");
+["come-installare.html", "scheda-rapida.html", "versioni.html"].forEach((pagina) => {
+  ok(preparaDesktop.indexOf('"' + pagina + '"') !== -1, "installer: copia " + pagina);
+  ok(sw.indexOf('"' + pagina + '"') !== -1, "service worker: " + pagina + " in cache");
+});
+ok(sw.indexOf('"assets/css/pagine.css"') !== -1, "service worker: stile delle pagine in cache");
+ok(index.indexOf('href="come-installare.html"') !== -1, "index: voce di menu alla guida");
 
 // Fogli in PDF: esistono e dichiarano la versione dell'app
 ["Naturopata-Digitale-Come-si-installa.pdf", "Naturopata-Digitale-Scheda-rapida.pdf"].forEach((f) => {

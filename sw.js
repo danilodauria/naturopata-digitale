@@ -8,8 +8,12 @@ const VERSION = "nd-v1.3.0";
 const SHELL = [
   "./",
   "index.html",
+  "come-installare.html",
+  "scheda-rapida.html",
+  "versioni.html",
   "manifest.webmanifest",
   "assets/css/styles.css",
+  "assets/css/pagine.css",
   "assets/img/icon.svg",
   "assets/img/icon-192.png",
   "assets/img/icon-512.png",

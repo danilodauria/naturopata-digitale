@@ -10,6 +10,8 @@
   const views = A.views;
   const esc = A.esc;
 
+  let micAscoltoCollegato = false;
+
   const WELCOME = '<p><strong>Ciao, sono Neura.</strong> Sono l\'assistente locale di Naturopata Digitale: leggo le schede, il manuale e le tabelle di sicurezza, e provo a risponderti con chiarezza.</p>' +
     '<p>Posso spiegarti una pianta, riassumere le avvertenze, suggerirti un tema di benessere, controllare un rimedio rispetto a farmaci e condizioni, oppure farti una domanda di quiz.</p>' +
     '<p class="muted mb-0">Non sono un medico, non invento risposte e non invio nulla in rete. In caso di sintomi importanti, rivolgiti a un professionista sanitario.</p>';
@@ -91,7 +93,7 @@
           '<div class="chat-suggestions" id="chatSuggestions">' +
             NP.neura.suggestions.slice(0, 4).map((s) => '<button class="chip" type="button" data-suggestion="' + esc(s) + '">' + esc(s) + "</button>").join("") +
           "</div>" +
-          '<div class="chat-composer"><label style="flex:1"><span class="sr-only">Scrivi a Neura</span><textarea class="textarea" id="neuraInput" rows="2" maxlength="700" placeholder="Scrivi una domanda: «a cosa serve la malva?»"></textarea></label><button class="chat-send" type="button" id="neuraSend" aria-label="Invia a Neura">' + A.ico("arrow") + "</button></div>" +
+          '<div class="chat-composer"><label style="flex:1"><span class="sr-only">Scrivi a Neura</span><textarea class="textarea" id="neuraInput" rows="2" maxlength="700" placeholder="Scrivi una domanda: «a cosa serve la malva?»"></textarea></label><button class="chat-send chat-mic" type="button" id="neuraMic" aria-label="Detta la domanda" title="Detta la domanda" hidden>' + A.ico("wave") + '</button><button class="chat-send" type="button" id="neuraSend" aria-label="Invia a Neura">' + A.ico("arrow") + "</button></div>" +
           '<p class="chat-note">Neura è un motore di conoscenza locale, non un modello generativo: risponde con i contenuti del programma e, se non sa, te lo dice. Non è un medico. <button class="btn btn-ghost btn-small" type="button" data-clear-chat style="padding:0 .2rem;font-size:.68rem">Svuota chat</button></p>' +
         "</section>" +
 
@@ -144,6 +146,26 @@
     });
     const checkBtn = document.getElementById("checkBtn");
     if (checkBtn) checkBtn.addEventListener("click", checkPanelResult);
+
+    // Dettatura: il pulsante compare solo se il browser la offre davvero.
+    const mic = document.getElementById("neuraMic");
+    if (mic && NP.voce && NP.voce.supporto().dettatura) {
+      mic.hidden = false;
+      mic.addEventListener("click", () => {
+        if (NP.voce.staAscoltando()) { NP.voce.fermaAscolto(); return; }
+        NP.voce.ascolta(
+          (testo) => { if (!testo) return; if (input) input.value = testo; send(testo); },
+          () => { if (A.toast) A.toast("Dettatura non disponibile: puoi scrivere la domanda."); }
+        );
+      });
+      if (!micAscoltoCollegato) {
+        document.addEventListener("np:voce", () => {
+          const el = document.getElementById("neuraMic");
+          if (el) el.setAttribute("data-active", NP.voce && NP.voce.staAscoltando() ? "true" : "false");
+        });
+        micAscoltoCollegato = true;
+      }
+    }
   };
 
   views.sendNeura = send;

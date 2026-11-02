@@ -41,6 +41,7 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
   }
+  A.toast = toast;
 
   /* Menu ------------------------------------------------------------------ */
 

@@ -63,6 +63,27 @@ async function go(hash) {
   ok(doc.querySelectorAll('#moreMenu a[href="versioni.html"]').length === 1, "menu Altro: Versioni e novità");
   ok(doc.querySelectorAll('#moreMenu a[href="scheda-rapida.html"]').length === 1, "menu Altro: Scheda rapida");
 
+  // Barra di stato e benvenuto di Neura
+  await tick(90);
+  ok(!!doc.getElementById("statusBar"), "barra di stato: presente");
+  ["statusBack", "statusMode", "statusOs", "statusMic", "statusStop", "statusHelp"].forEach((id) => ok(!!doc.getElementById(id), "barra di stato: " + id));
+  ok(/Nel browser/.test(doc.getElementById("statusModeText").textContent), "barra di stato: modalità browser");
+  ok(/pronta/i.test(doc.getElementById("statusAiText").textContent), "barra di stato: Neura locale pronta");
+  ok(/Windows|macOS|Linux|Sistema/.test(doc.getElementById("statusOsText").textContent), "barra di stato: sistema riconosciuto");
+  const helpChip = doc.getElementById("statusHelp");
+  helpChip.click();
+  await tick(40);
+  ok(!doc.getElementById("statusPanel").hidden && /112/.test(doc.getElementById("statusPanel").textContent), "barra di stato: Aiuto subito con il 112");
+  helpChip.click();
+  await tick(20);
+  ok(doc.getElementById("statusPanel").hidden, "barra di stato: il pannello si chiude");
+  ok(!!doc.querySelector(".welcome-panel"), "benvenuto: scheda di Neura presente");
+  ok(doc.querySelectorAll(".welcome-actions [data-welcome]").length === 3, "benvenuto: tre azioni");
+  doc.querySelector('[data-welcome="hide"]').click();
+  await tick(260);
+  ok(!doc.querySelector(".welcome-panel"), "benvenuto: chiuso con «Non mostrarmelo più»");
+  ok(!!win.localStorage.getItem("naturopata-digitale:v1:welcome-nascosto"), "benvenuto: preferenza salvata");
+
   // Erbario
   await go("#/erbario");
   ok(doc.querySelectorAll(".plant-card").length === 60, "erbario: 60 schede");

@@ -224,6 +224,16 @@ const preparaDesktop = fs.readFileSync(path.join(root, "scripts", "prepare-deskt
   ok(sw.indexOf('"' + pagina + '"') !== -1, "service worker: " + pagina + " in cache");
 });
 ok(sw.indexOf('"assets/css/pagine.css"') !== -1, "service worker: stile delle pagine in cache");
+["app-voce.js", "app-status.js", "app-welcome.js"].forEach((f) => {
+  ok(fs.existsSync(path.join(root, "assets", "js", f)), "manca assets/js/" + f);
+  ok(index.indexOf('src="assets/js/' + f + '"') !== -1, "index: carica " + f);
+  ok(sw.indexOf('"assets/js/' + f + '"') !== -1, "service worker: " + f + " in cache");
+});
+const prepDesktop = fs.readFileSync(path.join(root, "assets", "js", "app-status.js"), "utf8");
+ok(/statusHelp/.test(prepDesktop) && /statusStop/.test(prepDesktop), "barra di stato: aiuto e stop audio");
+ok(/Centri Antiveleni/.test(prepDesktop) && /112/.test(prepDesktop), "barra di stato: numeri utili");
+const benvenuto = fs.readFileSync(path.join(root, "assets", "js", "app-welcome.js"), "utf8");
+ok(/Non mostrarmelo più/.test(benvenuto) && /welcome-nascosto/.test(benvenuto), "benvenuto: chiusura definitiva salvata");
 ok(index.indexOf('href="come-installare.html"') !== -1, "index: voce di menu alla guida");
 
 // Fogli in PDF: esistono e dichiarano la versione dell'app

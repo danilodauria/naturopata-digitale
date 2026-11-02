@@ -13,3 +13,4 @@ desktop/node_modules/
 desktop/app/
 desktop/dist/
 artifacts/
+__pycache__/

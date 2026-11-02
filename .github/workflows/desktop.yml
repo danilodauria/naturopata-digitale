@@ -103,6 +103,9 @@ jobs:
       (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Individua la release
         id: rel
         env:
@@ -122,6 +125,19 @@ jobs:
           echo "pronta=1" >> "$GITHUB_OUTPUT"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "Release di riferimento: $tag"
+
+      - name: Allega il codice sorgente
+        if: steps.rel.outputs.pronta == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.rel.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # Il sorgente della versione viaggia con i pacchetti: chi vuole
+          # conservarlo o ricompilarselo non dipende dal repository online.
+          git archive --format=zip --prefix=Naturopata-Digitale/ -o Naturopata-Digitale-Sorgenti.zip HEAD
+          gh release upload "$TAG" Naturopata-Digitale-Sorgenti.zip --repo "$GITHUB_REPOSITORY" --clobber
+          echo "Sorgenti allegati: $(du -h Naturopata-Digitale-Sorgenti.zip | cut -f1)"
 
       - name: Genera SHA256SUMS.txt
         id: somme

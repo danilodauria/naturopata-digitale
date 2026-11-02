@@ -195,8 +195,8 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.2.0</p><h2>Più piante, una biblioteca, un manuale per restare vivi</h2><p class="text-small muted mb-0">Trentatré nuove schede, i Discorsi di Mattioli in pubblico dominio e la sopravvivenza in tre livelli. Il programma ora esiste anche per Windows, Linux e macOS.</p></div>' +
-        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/sopravvivenza">Sopravvivenza</a><a class="btn btn-secondary btn-small" href="#/matthioli">I Discorsi</a><a class="btn btn-ghost btn-small" href="scarica/">Scarica per computer</a></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.0</p><h2>Le istruzioni diventano un documento</h2><p class="text-small muted mb-0">Una guida all\'installazione passo per passo e una scheda rapida da stampare, in pagina e in PDF. E i link di download ora si controllano da soli, ogni giorno.</p></div>' +
+        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="come-installare.html">Come si installa</a><a class="btn btn-secondary btn-small" href="scheda-rapida.html">Scheda rapida</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 
       '<section class="section home-split">' +

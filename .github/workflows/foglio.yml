@@ -1,0 +1,72 @@
+name: Fogli di installazione
+
+# I fogli in PDF vivono nel repository, quindi sono già sul sito. Qui si
+# allegano alla versione: chi deve mandare le istruzioni per email le trova
+# dove trova i programmi, senza passare dalla pagina.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "foglio-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  allega:
+    name: Allega i fogli alla release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Un foglio vecchio è peggio di un foglio mancante: direbbe di scaricare
+      # file che non esistono più. La versione sta nei metadati del PDF.
+      - name: Controlla che i fogli siano di questa versione
+        run: |
+          set -euo pipefail
+          versione="$(node -p "require('./package.json').version")"
+          for foglio in \
+            assets/pdf/Naturopata-Digitale-Come-si-installa.pdf \
+            assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf; do
+            test -s "$foglio" || { echo "::error::Manca $foglio."; exit 1; }
+            if ! grep -aq "versione=$versione" "$foglio"; then
+              echo "::error::$foglio dichiara una versione diversa da $versione: rigeneralo con npm run fogli."
+              exit 1
+            fi
+            echo "✓ $foglio, versione $versione"
+          done
+
+      - name: Allega i PDF
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            assets/pdf/Naturopata-Digitale-Come-si-installa.pdf
+            assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf
+          overwrite_files: true
+
+      - name: Verifica che siano nella versione
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          for tentativo in $(seq 1 10); do
+            presenti="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '.assets[].name' 2>/dev/null || true)"
+            if grep -qxF "Naturopata-Digitale-Come-si-installa.pdf" <<< "$presenti" \
+              && grep -qxF "Naturopata-Digitale-Scheda-rapida.pdf" <<< "$presenti"; then
+              echo "Fogli allegati alla versione $TAG."
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "::error::I fogli non risultano allegati alla versione $TAG."
+          exit 1

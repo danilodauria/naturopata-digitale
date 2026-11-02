@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Versioni e novità · Naturopata Digitale</title>
+  <meta name="description" content="La storia delle versioni di Naturopata Digitale: cosa ha portato ogni aggiornamento, dalla prima pubblicazione alle pagine di installazione, e come arrivano le novità sul dispositivo.">
+  <meta name="author" content="Danilo D'Auria">
+  <meta name="theme-color" content="#1f4d3a">
+  <link rel="canonical" href="https://danilodauria.github.io/naturopata-digitale/versioni.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Versioni e novità · Naturopata Digitale">
+  <meta property="og:description" content="Che cosa ha portato ogni versione, e come arrivano gli aggiornamenti.">
+  <meta property="og:url" content="https://danilodauria.github.io/naturopata-digitale/versioni.html">
+  <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/pagine.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("naturopata-digitale:v1:theme");
+        if (t !== "dark" && t !== "light") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    .versione { position: relative; }
+    .versione + .versione { margin-top: 1rem; }
+    .versione .numero {
+      display: inline-flex;
+      align-items: baseline;
+      gap: .5rem;
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--text);
+      margin: 0 0 .2rem;
+    }
+    .versione .numero small {
+      font-family: var(--sans);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      font-weight: 700;
+    }
+    .versione ul { margin-bottom: 0; font-size: .92rem; color: var(--text-soft); }
+    .versione.attuale { border-color: var(--accent); box-shadow: var(--ombra-alta); }
+    .versione.attuale .numero { color: var(--accent); }
+    .badge-ora {
+      display: inline-block;
+      margin-left: .5rem;
+      padding: .1rem .55rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-family: var(--sans);
+      font-size: .66rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    @media print {
+      .site-header, .site-footer, .actions { display: none !important; }
+      body { background: #fff; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Vai al contenuto</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="./" aria-label="Naturopata Digitale, pagina iniziale">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" focusable="false">
+            <path d="M24 43c0-11 3.5-19 13-25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M24 43c0-9-3-15-11-20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+            <path d="M36 12c2 8-2 14-10 16 0-8 3-13 10-16Z" fill="currentColor" opacity=".9"/>
+            <path d="M13 18c-1 7 2 12 8 14 1-7-1-11-8-14Z" fill="currentColor" opacity=".55"/>
+            <circle cx="24" cy="10" r="3.4" fill="currentColor" opacity=".8"/>
+          </svg>
+        </span>
+        <span><strong>Naturopata</strong><em>Digitale</em></span>
+      </a>
+      <nav class="page-nav" aria-label="Pagine del sito">
+        <a href="scarica/">Download</a>
+        <a href="come-installare.html">Come si installa</a>
+        <a href="scheda-rapida.html">Scheda rapida</a>
+      </nav>
+      <a class="btn btn-primary btn-sm" href="./">Apri il programma</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Storia del progetto</p>
+        <h1>Versioni e novità</h1>
+        <p class="lead">Ogni versione ha una pagina pubblica con i file e le impronte: qui c'è il riassunto di che cosa è cambiato, in ordine di tempo. La versione in uso è scritta in fondo a ogni pagina del sito.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">File e note della versione</a>
+          <a class="btn btn-secondary" href="come-installare.html">Come si installa</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="storia">
+      <div class="wrap">
+        <article class="card versione attuale">
+          <p class="numero">1.3.0 <small>2 novembre 2026</small><span class="badge-ora">in uso</span></p>
+          <ul>
+            <li><strong>Come si installa</strong>: una pagina con tutti i passaggi per Windows, macOS, Linux, Android e iPhone, con le domande frequenti e il <strong>PDF da stampare o allegare a un'email</strong>.</li>
+            <li><strong>Scheda rapida</strong>: quattro passaggi per sistema e i controlli da fare quando il file non parte, anche in <strong>PDF</strong>.</li>
+            <li><strong>Versioni e novità</strong>: questa pagina, così il cambiamento non si scopre per caso.</li>
+            <li><strong>Link di download sotto controllo</strong>: un controllo automatico giornaliero apre una segnalazione se un file della release smette di rispondere o se un'impronta non combacia.</li>
+            <li><strong>Codice sorgente nella release</strong>: accanto ai pacchetti c'è lo ZIP dei sorgenti della versione, per chi vuole conservarli o ricompilare.</li>
+            <li>Lo stile delle pagine statiche è ora in un foglio condiviso: una modifica vale per download, installazione, scheda e versioni.</li>
+          </ul>
+        </article>
+
+        <article class="card versione">
+          <p class="numero">1.2.0 <small>26 ottobre 2026</small></p>
+          <ul>
+            <li><strong>Trentatré nuove piante</strong>: l'erbario passa a sessanta schede dalla A alla Z, ognuna con sicurezza, sosia e fonti.</li>
+            <li><strong>I <em>Discorsi</em> di Mattioli</strong>: storia, struttura dell'opera, sei edizioni cinquecentesche e link alle digitalizzazioni in pubblico dominio.</li>
+            <li><strong>Sopravvivenza in tre livelli</strong>: ventisette schede pratiche, dal kit essenziale alle tecniche avanzate.</li>
+            <li><strong>Vademecum in tre formati</strong>: A5, A4 e libricino già imposto per la stampa.</li>
+            <li><strong>Programma desktop</strong>: pacchetti per Windows, Linux e macOS generati automaticamente.</li>
+            <li><strong>Impronte SHA-256</strong> accanto ai pulsanti di download, e file <code>SHA256SUMS.txt</code> nella release.</li>
+            <li><strong>Neura più preciso</strong>: cita le schede e segnala i sintomi da valutare con un medico.</li>
+          </ul>
+        </article>
+
+        <article class="card versione">
+          <p class="numero">1.1.0 <small>ottobre 2026</small></p>
+          <ul>
+            <li><strong>Vademecum in PDF</strong>: la guida tascabile ricavata dagli stessi contenuti dell'app.</li>
+            <li><strong>Pagina Licenze</strong> ampliata: istruzioni di stampa, licenze dei testi e del codice, backup dei dati.</li>
+            <li>Correzioni di dettaglio nelle schede e nei collegamenti interni.</li>
+          </ul>
+        </article>
+
+        <article class="card versione">
+          <p class="numero">1.0.0 <small>ottobre 2026</small></p>
+          <ul>
+            <li><strong>Prima pubblicazione</strong>: erbario, manuale in cinque parti, fitoalimurgia, schede di benessere, quiz, glossario e Neura, l'assistente che resta sul dispositivo.</li>
+            <li><strong>PWA offline</strong>: si installa dal browser e funziona senza connessione.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="aggiornamenti">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Come arrivano gli aggiornamenti</h2>
+          <p>Nessun aggiornamento forzato e nessun server da raggiungere: dipende da come stai usando il programma.</p>
+        </div>
+        <div class="split">
+          <article class="card">
+            <h3>Nel browser</h3>
+            <p>La pagina si aggiorna da sé: alla prima apertura con la rete il service worker scarica la versione nuova e butta la vecchia cache. Se resta indietro, chiudi tutte le schede del sito e riaprile.</p>
+          </article>
+          <article class="card">
+            <h3>Programma installato</h3>
+            <p>Non c'è un aggiornamento automatico: scarica il pacchetto nuovo dalla pagina della versione e installalo sopra il precedente. Preferiti e progressi restano, perché sono salvati fuori dal programma.</p>
+          </article>
+        </div>
+        <div class="callout">
+          <span aria-hidden="true">🔐</span>
+          <p><strong>Ogni versione è verificabile.</strong> Nella release trovi <code>SHA256SUMS.txt</code> con le impronte dei file e, nella <a href="scarica/#integrita">pagina di download</a>, le stesse impronte accanto ai pulsanti: se il valore del file che hai scaricato coincide, il download è integro.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <p class="footer-title">Naturopata Digitale</p>
+          <p>Il sapere gentile delle piante, sul tuo dispositivo. Gratuito, senza account, senza pubblicità, anche offline.</p>
+          <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong>.</p>
+        </div>
+        <div>
+          <h2>Programma</h2>
+          <ul>
+            <li><a href="./">Apri l'app nel browser</a></li>
+            <li><a href="scarica/">Pagina di download</a></li>
+            <li><a href="come-installare.html">Come si installa</a></li>
+            <li><a href="scheda-rapida.html">Scheda rapida</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Progetto</h2>
+          <ul>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale">Codice sorgente</a></li>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale/releases">Tutte le versioni</a></li>
+            <li><a href="./#/licenze">Licenze e privacy</a></li>
+            <li><a href="https://danilodauria.github.io/professore-digitale/">Professore Digitale</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Versione 1.3.0 · novembre 2026</p>
+        <p>Codice MIT · Contenuti CC BY-NC-SA 4.0</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -196,6 +196,48 @@ ok(/<table class="sums-table" hidden>/.test(scarica), "scarica: tabella delle im
   ok(scarica.indexOf(cmd) !== -1, "scarica: comando di verifica mancante " + cmd);
 });
 ok(scarica.indexOf("undefined") === -1, "scarica: nessun 'undefined'");
+
+// Pagine statiche: guide, scheda rapida, versioni
+const versionePkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).version;
+const pagine = {
+  "come-installare.html": ["Come si installa", "SmartScreen", "xattr -dr com.apple.quarantine", "sha256sum -c", "112", "Naturopata-Digitale-Come-si-installa.pdf"],
+  "scheda-rapida.html": ["Scheda rapida", "Get-FileHash", "libfuse2t64", "Naturopata-Digitale-Scheda-rapida.pdf"],
+  "versioni.html": ["Versioni e novità", "1.3.0", "1.2.0", "Come arrivano gli aggiornamenti"]
+};
+Object.keys(pagine).forEach((nome) => {
+  const percorso = path.join(root, nome);
+  ok(fs.existsSync(percorso), "manca la pagina " + nome);
+  if (!fs.existsSync(percorso)) return;
+  const html = fs.readFileSync(percorso, "utf8");
+  ok(html.indexOf('<link rel="stylesheet" href="assets/css/pagine.css">') !== -1, nome + ": stile condiviso");
+  ok(/<html lang="it"/.test(html), nome + ": lingua italiana");
+  ok(html.indexOf("undefined") === -1, nome + ": nessun 'undefined'");
+  ok(/[Vv]ersione 1\.3\.0/.test(html), nome + ": versione 1.3.0");
+  pagine[nome].forEach((testo) => ok(html.indexOf(testo) !== -1, nome + ": manca «" + testo + "»"));
+});
+ok(fs.existsSync(path.join(root, "assets", "css", "pagine.css")), "manca lo stile condiviso delle pagine");
+ok(/pagine\.css/.test(scarica), "scarica: usa lo stile condiviso");
+ok(/id="guide"/.test(scarica), "scarica: sezione delle guide");
+
+// Fogli in PDF: esistono e dichiarano la versione dell'app
+["Naturopata-Digitale-Come-si-installa.pdf", "Naturopata-Digitale-Scheda-rapida.pdf"].forEach((f) => {
+  const percorso = path.join(root, "assets", "pdf", f);
+  ok(fs.existsSync(percorso) && fs.statSync(percorso).size > 3000, "foglio mancante o troppo piccolo: " + f);
+  if (!fs.existsSync(percorso)) return;
+  ok(fs.readFileSync(percorso).includes("versione=" + versionePkg), f + ": versione non allineata a package.json");
+});
+
+// Workflow dei fogli e del controllo link
+const foglioWf = fs.readFileSync(path.join(root, ".github", "workflows", "foglio.yml"), "utf8");
+ok(/Naturopata-Digitale-Come-si-installa\.pdf/.test(foglioWf), "workflow fogli: allega la guida");
+ok(/Naturopata-Digitale-Scheda-rapida\.pdf/.test(foglioWf), "workflow fogli: allega la scheda");
+ok(/versione=\$versione/.test(foglioWf), "workflow fogli: controlla la versione dichiarata");
+const linkWf = fs.readFileSync(path.join(root, ".github", "workflows", "link.yml"), "utf8");
+ok(/check-links\.cjs/.test(linkWf), "workflow link: esegue il controllo");
+ok(/schedule:/.test(linkWf), "workflow link: gira ogni giorno");
+ok(/issues: write/.test(linkWf), "workflow link: può aprire la segnalazione");
+ok(/Naturopata-Digitale-Sorgenti\.zip/.test(fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8")), "workflow desktop: allega i sorgenti");
+ok(/Naturopata-Digitale-Come-si-installa\.pdf/.test(fs.readFileSync(path.join(root, "scripts", "check-links.cjs"), "utf8")), "check-links: controlla anche i fogli");
 const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
 ok(/scarica/.test(pagesWorkflow), "workflow Pages: pagina di download inclusa");
 const desktopWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8");

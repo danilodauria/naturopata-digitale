@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Come si installa Naturopata Digitale · Windows, macOS, Linux e telefono</title>
+  <meta name="description" content="Guida all'installazione di Naturopata Digitale: installer per Windows, immagine disco per macOS, pacchetto .deb o AppImage per Linux, app dal browser su telefono e tablet. Con la verifica delle impronte SHA-256, le domande frequenti e il PDF da stampare.">
+  <meta name="author" content="Danilo D'Auria">
+  <meta name="theme-color" content="#1f4d3a">
+  <link rel="canonical" href="https://danilodauria.github.io/naturopata-digitale/come-installare.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Come si installa Naturopata Digitale">
+  <meta property="og:description" content="Passo per passo su Windows, macOS, Linux, Android e iPhone. Con le impronte dei file e le risposte ai blocchi più comuni.">
+  <meta property="og:url" content="https://danilodauria.github.io/naturopata-digitale/come-installare.html">
+  <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/pagine.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("naturopata-digitale:v1:theme");
+        if (t !== "dark" && t !== "light") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    details.faq {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: .9rem 1.1rem;
+      margin-bottom: .6rem;
+    }
+    details.faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--text);
+    }
+    details.faq summary:hover { color: var(--accent); }
+    details.faq p { margin: .7rem 0 0; font-size: .92rem; color: var(--text-soft); }
+    details.faq p:last-child { margin-bottom: 0; }
+    .files { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .files th, .files td { text-align: left; padding: .5rem .55rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .files thead th {
+      font-family: var(--sans);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .files code { white-space: nowrap; }
+    @media print {
+      .site-header, .site-footer, .actions, .hero::after { display: none !important; }
+      body { background: #fff; font-size: 11pt; }
+      .card, .callout, details.faq { box-shadow: none; break-inside: avoid; }
+      a { color: #173a2b; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Vai al contenuto</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="./" aria-label="Naturopata Digitale, pagina iniziale">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" focusable="false">
+            <path d="M24 43c0-11 3.5-19 13-25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M24 43c0-9-3-15-11-20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+            <path d="M36 12c2 8-2 14-10 16 0-8 3-13 10-16Z" fill="currentColor" opacity=".9"/>
+            <path d="M13 18c-1 7 2 12 8 14 1-7-1-11-8-14Z" fill="currentColor" opacity=".55"/>
+            <circle cx="24" cy="10" r="3.4" fill="currentColor" opacity=".8"/>
+          </svg>
+        </span>
+        <span><strong>Naturopata</strong><em>Digitale</em></span>
+      </a>
+
+      <nav class="page-nav" aria-label="Sezioni della pagina">
+        <a href="#windows">Windows</a>
+        <a href="#macos">macOS</a>
+        <a href="#linux">Linux</a>
+        <a href="#telefono">Telefono</a>
+        <a href="#impronte">Impronte</a>
+        <a href="#domande-frequenti">Domande</a>
+      </nav>
+
+      <a class="btn btn-primary btn-sm" href="./">Apri il programma</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Guida all'installazione · versione 1.3.0</p>
+        <h1>Come si installa</h1>
+        <p class="lead">Una strada per il computer, una per il telefono. Niente negozi di app, niente account, niente da configurare: si scarica un file, si apre, si usa. La connessione serve solo per il download.</p>
+
+        <ul class="chips">
+          <li>💻 Tre sistemi</li>
+          <li>📄 PDF da stampare</li>
+          <li>🔐 Impronte SHA-256</li>
+          <li>📴 Poi funziona offline</li>
+        </ul>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="assets/pdf/Naturopata-Digitale-Come-si-installa.pdf" download>Scarica il PDF</a>
+          <a class="btn btn-secondary" href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">Tutti i file della versione</a>
+          <a class="btn btn-ghost" href="scarica/">Pagina di download</a>
+        </div>
+
+        <ul class="hero-facts">
+          <li><strong>6</strong><span>file per il computer</span></li>
+          <li><strong>0</strong><span>account richiesti</span></li>
+          <li><strong>~70–120</strong><span>MB per pacchetto</span></li>
+          <li><strong>28</strong><span>pagine di Vademecum</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="prima">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Quale file mi serve</h2>
+          <p>Ogni versione pubblica gli stessi file, con lo stesso nome: i collegamenti qui sotto non cambiano, cambia solo il contenuto.</p>
+        </div>
+
+        <table class="files">
+          <caption class="visually-hidden" style="position:absolute;left:-9999px">File della release e a cosa servono</caption>
+          <thead>
+            <tr><th scope="col">File</th><th scope="col">A cosa serve</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Naturopata-Digitale-Windows-x64.exe</code></td><td>Installazione classica su Windows 10 e 11 a 64 bit.</td></tr>
+            <tr><td><code>Naturopata-Digitale-Windows-portatile.zip</code></td><td>La stessa app scompattata: si avvia senza installare nulla, anche da chiavetta.</td></tr>
+            <tr><td><code>Naturopata-Digitale-Mac-arm64.dmg</code></td><td>Mac con processore Apple (M1 e successivi).</td></tr>
+            <tr><td><code>Naturopata-Digitale-Mac-x64.dmg</code></td><td>Mac con processore Intel.</td></tr>
+            <tr><td><code>Naturopata-Digitale-Linux-amd64.deb</code></td><td>Debian, Ubuntu, Mint e derivate a 64 bit.</td></tr>
+            <tr><td><code>Naturopata-Digitale-Linux-x86_64.AppImage</code></td><td>Tutte le altre distribuzioni: un solo file eseguibile.</td></tr>
+            <tr><td><code>SHA256SUMS.txt</code></td><td>Le impronte dei sei file, per controllare che il download sia integro.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <span aria-hidden="true">📌</span>
+          <p><strong>Non sai se il tuo computer è a 64 bit?</strong> Praticamente tutti i computer venduti dopo il 2012 lo sono. Su Windows: Impostazioni → Sistema → Informazioni. Su Mac: menu Apple → Informazioni su questo Mac → «Chip» (Apple) o «Processore» (Intel).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="windows">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Windows 10 e 11</h2>
+          <p>L'installer non chiede permessi di amministratore e crea il collegamento nel menu Start e sul desktop.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>Quattro passaggi</h3>
+            <ol class="steps">
+              <li>Scarica <code>Naturopata-Digitale-Windows-x64.exe</code> dalla <a href="scarica/">pagina di download</a>.</li>
+              <li>Fai doppio clic sul file appena scaricato.</li>
+              <li>Se compare l'avviso di Windows, scegli <strong>Ulteriori informazioni</strong> e poi <strong>Esegui comunque</strong>.</li>
+              <li>Segui la procedura: al termine trovi «Naturopata Digitale» nel menu Start.</li>
+            </ol>
+          </article>
+
+          <article class="card">
+            <h3>Versione portatile</h3>
+            <p>Lo ZIP non installa niente: scompattalo dove vuoi, anche su una chiavetta, e avvia <code>Naturopata Digitale.exe</code> dalla cartella.</p>
+            <p class="note">Utile nei computer condivisi o scolastici, dove non si può installare. I preferiti e i progressi restano nella cartella dell'app.</p>
+          </article>
+        </div>
+
+        <div class="callout warn">
+          <span aria-hidden="true">🛡️</span>
+          <p><strong>L'avviso di SmartScreen è atteso.</strong> Il pacchetto non ha una firma commerciale, quindi Windows lo tratta come un programma «di autore sconosciuto» finché non acquista reputazione. Non è un errore e non significa che il file sia guasto: l'<a href="#impronte">impronta SHA-256</a> dice se è quello giusto.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="macos">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>macOS 10.15 o successivo</h2>
+          <p>Due immagini disco separate: una per i Mac con chip Apple, una per i Mac Intel. Scarica quella giusta, non serve altro.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>Quattro passaggi</h3>
+            <ol class="steps">
+              <li>Scarica il <code>.dmg</code> del tuo processore (Apple Silicon o Intel).</li>
+              <li>Apri il file: si apre una finestra con l'icona del programma e quella della cartella Applicazioni.</li>
+              <li>Trascina «Naturopata Digitale» nella cartella Applicazioni.</li>
+              <li>Al primo avvio fai <strong>tasto destro</strong> sull'icona → <strong>Apri</strong> → <strong>Apri</strong>.</li>
+            </ol>
+          </article>
+
+          <article class="card">
+            <h3>Se dice che l'app è danneggiata</h3>
+            <p>Non è danneggiata: macOS ha messo il file in quarantena perché arriva da Internet e non è firmato con un certificato a pagamento. Si toglie con un comando, una volta sola:</p>
+            <p class="note"><code>xattr -dr com.apple.quarantine "/Applications/Naturopata Digitale.app"</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="linux">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Linux</h2>
+          <p>Il pacchetto <code>.deb</code> per Debian e derivate, l'AppImage per tutto il resto. Entrambi sono per <code>amd64</code>.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>Pacchetto .deb</h3>
+            <p>Doppio clic sul file e «Installa», oppure dal terminale:</p>
+            <p class="note"><code>sudo apt install ./Naturopata-Digitale-Linux-amd64.deb</code></p>
+            <p class="note">La voce compare nel menu delle applicazioni come «Naturopata Digitale».</p>
+          </article>
+
+          <article class="card">
+            <h3>AppImage</h3>
+            <ol class="steps">
+              <li>Rendi eseguibile il file: <code>chmod +x Naturopata-Digitale-Linux-x86_64.AppImage</code></li>
+              <li>Avvialo con doppio clic, oppure dal terminale con <code>./Naturopata-Digitale-Linux-x86_64.AppImage</code>.</li>
+              <li>Se manca una libreria, su Ubuntu 24.04 serve <code>sudo apt install libfuse2t64</code>; sulle versioni precedenti <code>libfuse2</code>.</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="telefono">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Telefono e tablet</h2>
+          <p>Qui non si scarica niente: si apre il sito e si aggiunge alla schermata Home, come un'app. Dopo la prima apertura funziona anche senza Internet.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>🤖 Android</h3>
+            <ol class="steps">
+              <li>Apri <a href="./">Naturopata Digitale</a> con Chrome.</li>
+              <li>Tocca i tre puntini ⋮ in alto a destra.</li>
+              <li>Scegli «Installa app» o «Aggiungi a schermata Home».</li>
+              <li>Conferma: l'icona compare tra le app.</li>
+            </ol>
+          </article>
+
+          <article class="card">
+            <h3>🍏 iPhone e iPad</h3>
+            <ol class="steps">
+              <li>Apri <a href="./">Naturopata Digitale</a> con Safari.</li>
+              <li>Tocca il pulsante Condividi (il quadrato con la freccia).</li>
+              <li>Scorri e tocca «Aggiungi alla schermata Home».</li>
+              <li>Tocca «Aggiungi» in alto a destra.</li>
+            </ol>
+          </article>
+        </div>
+
+        <div class="callout">
+          <span aria-hidden="true">📴</span>
+          <p><strong>Senza connessione.</strong> La prima apertura salva l'app nella cache del browser: le successive funzionano anche in aereo o in mezzo ai boschi. Se il telefono libera spazio, la copia può sparire: basta riaprire il sito una volta, con la rete.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="impronte">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Verificare che il file sia quello giusto</h2>
+          <p>Ogni pacchetto ha un'impronta SHA-256 calcolata al caricamento. Se il valore del file scaricato è identico, il download è completo e nessuno lo ha modificato.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>Windows</h3>
+            <p>PowerShell, nella cartella dei download:</p>
+            <p class="note"><code>Get-FileHash .\Naturopata-Digitale-Windows-x64.exe -Algorithm SHA256</code></p>
+            <p class="note">Con il prompt dei comandi: <code>certutil -hashfile Naturopata-Digitale-Windows-x64.exe SHA256</code></p>
+          </article>
+
+          <article class="card">
+            <h3>Linux e macOS</h3>
+            <p>Mettendo <code>SHA256SUMS.txt</code> nella stessa cartella dei file, un solo comando controlla tutto:</p>
+            <p class="note">Linux: <code>sha256sum -c SHA256SUMS.txt</code><br>macOS: <code>shasum -a 256 -c SHA256SUMS.txt</code></p>
+            <p class="note">Ogni riga deve rispondere <em>OK</em>.</p>
+          </article>
+        </div>
+
+        <div class="file-note">
+          <p>Le impronte dell'ultima versione sono anche nella pagina di download, accanto ai pulsanti: si aggiornano da sole a ogni release.</p>
+          <a href="scarica/#integrita">Vedi le impronte →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="aggiornamenti">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Aggiornamenti e dati</h2>
+          <p>Il programma non si aggiorna da solo e non telefona a casa: gli aggiornamenti si scaricano quando vuoi tu.</p>
+        </div>
+
+        <div class="split">
+          <article class="card">
+            <h3>Come si aggiorna</h3>
+            <ul>
+              <li><strong>Nel browser:</strong> niente da fare, la pagina nuova arriva alla prima apertura con la rete.</li>
+              <li><strong>Sul computer:</strong> scarica il pacchetto nuovo dalla <a href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">pagina della versione</a> e installalo sopra il precedente.</li>
+              <li>Preferiti, capitoli letti e statistiche dei quiz restano: sono salvati a parte.</li>
+            </ul>
+            <p class="note"><a href="versioni.html">Che cosa ha portato ogni versione →</a></p>
+          </article>
+
+          <article class="card">
+            <h3>Dove stanno i dati</h3>
+            <ul>
+              <li><strong>Browser:</strong> nel deposito locale del sito (localStorage).</li>
+              <li><strong>Windows:</strong> <code>%APPDATA%\Naturopata Digitale</code></li>
+              <li><strong>macOS:</strong> <code>~/Library/Application Support/Naturopata Digitale</code></li>
+              <li><strong>Linux:</strong> <code>~/.config/Naturopata Digitale</code></li>
+            </ul>
+            <p class="note">Dalla pagina Licenze dell'app puoi esportare un backup JSON con preferiti e progressi.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="domande-frequenti">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Domande frequenti</h2>
+          <p>Non sono domande inventate: sono i punti in cui l'installazione si blocca davvero.</p>
+        </div>
+
+        <details class="faq">
+          <summary>Windows dice che il file può danneggiare il computer. È pericoloso?</summary>
+          <p>No. L'avviso compare perché il programma non ha una firma commerciale, che costa centinaia di euro all'anno. Il file è generato automaticamente dai server di GitHub a partire dal codice pubblico del repository. Puoi confrontare l'<a href="#impronte">impronta SHA-256</a> e, se vuoi, ricompilare il programma da solo: il codice è MIT.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Devo disattivare l'antivirus?</summary>
+          <p>No, mai. Se un antivirus mette il file in quarantena, ripristinalo dalla cronologia dell'antivirus. Se lo blocca di nuovo, usa la versione portatile in ZIP, che non esegue alcun installatore.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Serve la connessione per usarlo?</summary>
+          <p>Serve solo per scaricare e per la prima apertura nel browser. Dopo, tutto funziona offline: i contenuti sono nel programma, non su un server.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Serve un account o un'iscrizione?</summary>
+          <p>No. Non c'è registrazione, non c'è pubblicità, non c'è tracciamento. Il programma non manda nulla fuori dal dispositivo.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Posso tenerlo su una chiavetta USB?</summary>
+          <p>Sì, con la versione portatile di Windows: scompatta lo ZIP sulla chiavetta e avvia il programma da lì. Su Linux l'AppImage è già un file singolo; su macOS conviene invece installarlo in Applicazioni.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Quanto spazio occupa?</summary>
+          <p>I pacchetti vanno da circa 70 a 120 MB; installato, il programma occupa poco più. Il Vademecum in PDF, se lo scarichi, aggiunge meno di un megabyte.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Come si disinstalla?</summary>
+          <p><strong>Windows:</strong> Impostazioni → App → «Naturopata Digitale» → Disinstalla. <strong>macOS:</strong> trascina l'app dal cestino. <strong>Linux:</strong> <code>sudo apt remove naturopata-digitale</code>, oppure cancella l'AppImage. I dati restano nella cartella indicata sopra: cancellali a mano se vuoi ripartire da zero.</p>
+        </details>
+
+        <details class="faq">
+          <summary>Perché due file per macOS?</summary>
+          <p>I Mac recenti usano processori Apple (arm64), quelli più vecchi processori Intel (x64). Un pacchetto per architettura evita gli errori di traduzione e dimezza la dimensione del download.</p>
+        </details>
+
+        <details class="faq">
+          <summary>L'app si apre su una pagina bianca</summary>
+          <p>Succede su alcuni Linux senza accelerazione grafica. Avvia il programma da terminale con <code>--disable-gpu</code>, oppure usa la versione nel browser, che ha gli stessi contenuti.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="se-qualcosa-non-torna">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Se qualcosa non torna</h2>
+          <p>Prima di tutto riprova il download: un file interrotto è la causa più comune, e l'impronta lo dice subito.</p>
+        </div>
+        <div class="card">
+          <ul>
+            <li><strong>Il file non si scarica:</strong> riprova dalla <a href="https://github.com/danilodauria/naturopata-digitale/releases/latest" target="_blank" rel="noopener">pagina della versione</a>, che elenca tutte le varianti.</li>
+            <li><strong>L'impronta non combacia:</strong> cancella il file e scaricalo di nuovo; se continua a non combaciare, non aprirlo.</li>
+            <li><strong>Un passaggio non è chiaro:</strong> la <a href="scheda-rapida.html">Scheda rapida</a> riassume i quattro passaggi per sistema.</li>
+            <li><strong>Il problema resta:</strong> apri una segnalazione nel <a href="https://github.com/danilodauria/naturopata-digitale/issues" target="_blank" rel="noopener">repository</a>, indicando sistema, versione e messaggio esatto.</li>
+          </ul>
+        </div>
+        <div class="callout danger">
+          <span aria-hidden="true">⚕️</span>
+          <p><strong>Avvertenza sanitaria.</strong> Naturopata Digitale è un'opera divulgativa: non diagnostica, non prescrive e non sostituisce medico, farmacista o dietista. Le piante sono sostanze attive e possono interagire con i farmaci. Per un'emergenza chiama il 112.</p>
+        </div>
+        <div class="actions" style="margin-top:1.2rem">
+          <a class="btn btn-primary" href="assets/pdf/Naturopata-Digitale-Come-si-installa.pdf" download>Scarica il PDF di questa pagina</a>
+          <a class="btn btn-secondary" href="scheda-rapida.html">Scheda rapida</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <p class="footer-title">Naturopata Digitale</p>
+          <p>Il sapere gentile delle piante, sul tuo dispositivo. Gratuito, senza account, senza pubblicità, anche offline.</p>
+          <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong>.</p>
+        </div>
+        <div>
+          <h2>Programma</h2>
+          <ul>
+            <li><a href="./">Apri l'app nel browser</a></li>
+            <li><a href="scarica/">Pagina di download</a></li>
+            <li><a href="scheda-rapida.html">Scheda rapida</a></li>
+            <li><a href="versioni.html">Versioni e novità</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Progetto</h2>
+          <ul>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale">Codice sorgente</a></li>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale/releases/latest">Release e impronte</a></li>
+            <li><a href="./#/licenze">Licenze e privacy</a></li>
+            <li><a href="https://danilodauria.github.io/professore-digitale/">Professore Digitale</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Come si installa · versione 1.3.0 · novembre 2026</p>
+        <p>Codice MIT · Contenuti CC BY-NC-SA 4.0</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

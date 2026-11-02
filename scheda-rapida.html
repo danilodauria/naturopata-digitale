@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scheda rapida · Naturopata Digitale da installare in quattro passaggi</title>
+  <meta name="description" content="I quattro passaggi per installare Naturopata Digitale su Windows, macOS, Linux e telefono, i controlli da fare se il file non parte e come verificare l'impronta SHA-256. Da stampare e tenere accanto al computer.">
+  <meta name="author" content="Danilo D'Auria">
+  <meta name="theme-color" content="#1f4d3a">
+  <link rel="canonical" href="https://danilodauria.github.io/naturopata-digitale/scheda-rapida.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:title" content="Scheda rapida · Naturopata Digitale">
+  <meta property="og:description" content="Quattro passaggi per sistema, i controlli che risolvono quasi tutto, le impronte dei file.">
+  <meta property="og:url" content="https://danilodauria.github.io/naturopata-digitale/scheda-rapida.html">
+  <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/pagine.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("naturopata-digitale:v1:theme");
+        if (t !== "dark" && t !== "light") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    .quick { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .quick .card { display: flex; flex-direction: column; }
+    .quick h3 { display: flex; align-items: center; gap: .5rem; }
+    .quick .steps { margin-bottom: 0; }
+    .quick .steps li { font-size: .88rem; }
+    .checks { list-style: none; padding: 0; margin: 0; }
+    .checks li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: .5rem;
+      font-size: .9rem;
+      color: var(--text-soft);
+    }
+    .checks li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    @media print {
+      .site-header, .site-footer, .actions { display: none !important; }
+      body { background: #fff; font-size: 10.5pt; }
+      .hero { padding-top: 0; }
+      .hero::after { display: none; }
+      .section { padding: 1rem 0; }
+      .card { box-shadow: none; break-inside: avoid; }
+      .quick { grid-template-columns: 1fr 1fr; }
+      a { color: #173a2b; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Vai al contenuto</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="./" aria-label="Naturopata Digitale, pagina iniziale">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" focusable="false">
+            <path d="M24 43c0-11 3.5-19 13-25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M24 43c0-9-3-15-11-20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+            <path d="M36 12c2 8-2 14-10 16 0-8 3-13 10-16Z" fill="currentColor" opacity=".9"/>
+            <path d="M13 18c-1 7 2 12 8 14 1-7-1-11-8-14Z" fill="currentColor" opacity=".55"/>
+            <circle cx="24" cy="10" r="3.4" fill="currentColor" opacity=".8"/>
+          </svg>
+        </span>
+        <span><strong>Naturopata</strong><em>Digitale</em></span>
+      </a>
+      <nav class="page-nav" aria-label="Pagine del sito">
+        <a href="come-installare.html">Come si installa</a>
+        <a href="scarica/">Download</a>
+        <a href="versioni.html">Versioni</a>
+      </nav>
+      <a class="btn btn-primary btn-sm" href="./">Apri il programma</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Scheda rapida · versione 1.3.0</p>
+        <h1>Scheda rapida</h1>
+        <p class="lead">Quattro passaggi per sistema, i controlli che risolvono quasi tutto. Stampa questa pagina e tienila accanto al computer: le istruzioni complete stanno in <a href="come-installare.html">Come si installa</a>.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf" download>Scarica il PDF</a>
+          <a class="btn btn-secondary" href="come-installare.html">Istruzioni complete</a>
+          <a class="btn btn-ghost" href="scarica/">Pagina di download</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="passaggi">
+      <div class="wrap">
+        <div class="quick">
+          <article class="card">
+            <h3>🪟 Windows</h3>
+            <ol class="steps">
+              <li>Scarica <code>…-Windows-x64.exe</code>.</li>
+              <li>Doppio clic sul file.</li>
+              <li>Avviso di Windows → «Ulteriori informazioni» → «Esegui comunque».</li>
+              <li>Fine: l'icona è nel menu Start.</li>
+            </ol>
+            <p class="note">Lo ZIP portatile non installa nulla: si scompatta e si avvia.</p>
+          </article>
+
+          <article class="card">
+            <h3>🍎 macOS</h3>
+            <ol class="steps">
+              <li>Scarica il <code>.dmg</code> del tuo processore.</li>
+              <li>Apri l'immagine disco.</li>
+              <li>Trascina l'app in Applicazioni.</li>
+              <li>Primo avvio: tasto destro → «Apri» → «Apri».</li>
+            </ol>
+            <p class="note">Se dice «danneggiata», è la quarantena: <code>xattr -dr com.apple.quarantine "/Applications/Naturopata Digitale.app"</code></p>
+          </article>
+
+          <article class="card">
+            <h3>🐧 Linux</h3>
+            <ol class="steps">
+              <li><code>.deb</code>: <code>sudo apt install ./Naturopata-Digitale-Linux-amd64.deb</code></li>
+              <li>Oppure AppImage: <code>chmod +x</code> sul file.</li>
+              <li>Avvia l'AppImage con doppio clic.</li>
+              <li>Se manca una libreria: <code>libfuse2t64</code> (Ubuntu 24.04).</li>
+            </ol>
+          </article>
+
+          <article class="card">
+            <h3>📱 Telefono</h3>
+            <ol class="steps">
+              <li>Apri il sito con Chrome o Safari.</li>
+              <li>Menu del browser → «Installa app» oppure Condividi → «Aggiungi alla schermata Home».</li>
+              <li>Conferma.</li>
+              <li>Dopo la prima apertura funziona anche offline.</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="controlli">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Se il file non parte</h2>
+          <p>In ordine di frequenza reale: quasi sempre è il download, non il programma.</p>
+        </div>
+        <div class="split">
+          <article class="card">
+            <ul class="checks">
+              <li>Scarica di nuovo il file: un download interrotto è la causa numero uno.</li>
+              <li>Confronta l'impronta SHA-256 con quella della release.</li>
+              <li>Windows: l'avviso SmartScreen non è un errore, scegli «Esegui comunque».</li>
+              <li>macOS: togli la quarantena con il comando qui sopra, una volta sola.</li>
+              <li>Antivirus: ripristina il file dalla quarantena, non disattivarlo.</li>
+              <li>Linux senza accelerazione grafica: avvia con <code>--disable-gpu</code>.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Verifica l'impronta</h3>
+            <p>Windows (PowerShell):</p>
+            <p class="note"><code>Get-FileHash .\Naturopata-Digitale-Windows-x64.exe -Algorithm SHA256</code></p>
+            <p>Linux e macOS, con <code>SHA256SUMS.txt</code> nella stessa cartella:</p>
+            <p class="note"><code>sha256sum -c SHA256SUMS.txt</code><br><code>shasum -a 256 -c SHA256SUMS.txt</code></p>
+            <p class="note"><a href="scarica/#integrita">Le impronte dell'ultima versione →</a></p>
+          </article>
+        </div>
+
+        <div class="callout">
+          <span aria-hidden="true">🔌</span>
+          <p><strong>La connessione serve solo per scaricare.</strong> Dopo, il programma funziona offline e i dati restano sul dispositivo: nessun server li riceve. Se un passaggio non torna, le risposte sono nelle <a href="come-installare.html#domande-frequenti">domande frequenti</a>.</p>
+        </div>
+
+        <div class="callout warn">
+          <span aria-hidden="true">⚕️</span>
+          <p><strong>Cosa non fa.</strong> Naturopata Digitale è un'opera divulgativa: non diagnostica, non prescrive e non sostituisce medico, farmacista o dietista. Per un'emergenza chiama il 112.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <p class="footer-title">Naturopata Digitale</p>
+          <p>Il sapere gentile delle piante, sul tuo dispositivo. Gratuito, senza account, senza pubblicità, anche offline.</p>
+          <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong>.</p>
+        </div>
+        <div>
+          <h2>Programma</h2>
+          <ul>
+            <li><a href="./">Apri l'app nel browser</a></li>
+            <li><a href="scarica/">Pagina di download</a></li>
+            <li><a href="come-installare.html">Come si installa</a></li>
+            <li><a href="versioni.html">Versioni e novità</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Progetto</h2>
+          <ul>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale">Codice sorgente</a></li>
+            <li><a href="https://github.com/danilodauria/naturopata-digitale/releases/latest">Release e impronte</a></li>
+            <li><a href="./#/licenze">Licenze e privacy</a></li>
+            <li><a href="https://danilodauria.github.io/professore-digitale/">Professore Digitale</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Scheda rapida · versione 1.3.0 · novembre 2026</p>
+        <p>Codice MIT · Contenuti CC BY-NC-SA 4.0</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

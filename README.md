@@ -162,6 +162,40 @@ manuale funziona comunque.
 I pacchetti sono generati automaticamente da `.github/workflows/desktop.yml`
 su Windows, Linux e macOS. Vedi la sezione [Programma desktop](#programma-desktop).
 
+### Fogli in PDF
+
+Due fogli accompagnano il programma e vivono nel repository, quindi sono già
+sul sito:
+
+| File | Contenuto |
+|---|---|
+| `Naturopata-Digitale-Come-si-installa.pdf` | Guida completa: Windows, macOS, Linux, telefono, impronte, aggiornamenti, domande frequenti |
+| `Naturopata-Digitale-Scheda-rapida.pdf` | Quattro passaggi per sistema e i controlli da fare se il file non parte |
+
+Si rigenerano con `npm run fogli` (serve `reportlab`, come per il Vademecum).
+Ogni PDF dichiara nei metadati la stringa `versione=X`: il workflow
+`foglio.yml` la cerca nel file e rifiuta di allegare a una release un foglio
+rimasto indietro.
+
+### Controllo dei link
+
+`link.yml` gira ogni giorno, dopo ogni pubblicazione e quando lo si lancia a
+mano: `scripts/check-links.cjs` apre tutti gli allegati della release, controlla
+che rispondano e confronta le impronte di `SHA256SUMS.txt` con i digest
+dichiarati da GitHub. Se qualcosa non torna apre una segnalazione, la aggiorna
+ai controlli successivi e la chiude da sola quando i link tornano a posto.
+
+```bash
+npm run link                          # ultima release
+node scripts/check-links.cjs v1.3.0   # un tag preciso
+```
+
+### Sorgenti nella release
+
+Il job `checksums` allega anche `Naturopata-Digitale-Sorgenti.zip` (`git archive`
+del commit della versione): il codice di ogni release resta recuperabile anche
+se il repository cambia.
+
 ## Sviluppo locale
 
 Non serve compilare nulla. Per un'anteprima con service worker:
@@ -193,8 +227,12 @@ npm test
 I test non sono necessari per pubblicare il sito e non vengono caricati
 all'interno dell'applicazione.
 
+I test controllano anche le pagine statiche (download, guide, scheda rapida,
+versioni), i due fogli in PDF con la loro versione dichiarata e i workflow di
+pubblicazione.
+
 Quando aggiorni i contenuti, incrementa `VERSION` in `sw.js` (per esempio
-`nd-v1.2.0`): il service worker elimina la cache vecchia e serve la nuova
+`nd-v1.3.0`): il service worker elimina la cache vecchia e serve la nuova
 versione. I file `.pdf` sono esclusi dalla cache: si scaricano su richiesta e
 non occupano spazio senza un gesto esplicito.
 
@@ -258,7 +296,7 @@ macOS gira su `macos-15-intel` e produce sia la versione Intel sia quella
 Apple Silicon: i runner macOS arm64 hanno code lunghe per carenza di capacità
 su GitHub. Si avvia a
 mano da **Actions → Pacchetti desktop → Run workflow**, oppure creando un tag
-`v1.2.0` (in quel caso i file vengono allegati alla release).
+`v1.3.0` (in quel caso i file vengono allegati alla release).
 
 I pacchetti non sono firmati con certificati commerciali. Per distribuirli
 senza avvisi servono un certificato Windows (code signing) e la notarizzazione
@@ -280,7 +318,7 @@ Per pubblicare anche i pacchetti desktop, crea un tag con la stessa versione
 di `package.json` e invialo insieme al ramo:
 
 ```bash
-git tag v1.2.0
+git tag v1.3.0
 git push origin main --tags
 ```
 
@@ -296,10 +334,14 @@ relativi e funzionano anche in una sottocartella.
 ```
 index.html                 # shell dell'applicazione
 scarica/index.html         # pagina di presentazione e download
+come-installare.html       # guida all'installazione, anche in PDF
+scheda-rapida.html         # quattro passaggi per sistema, anche in PDF
+versioni.html              # storia delle versioni
 manifest.webmanifest       # PWA
 sw.js                      # cache offline
 assets/
   css/styles.css           # design system completo
+  css/pagine.css           # stile delle pagine statiche (download, guide, versioni)
   img/icon.svg             # icona vettoriale
   img/icon-192.png         # icona PWA
   img/icon-512.png         # icona PWA / maskable
@@ -319,11 +361,15 @@ assets/
 scripts/make_icons.py      # rigenera le icone PNG
 scripts/export-data.cjs    # esporta i dati dell'app in JSON
 scripts/build_vademecum.py # genera il Vademecum in PDF
+scripts/fogli_comune.py    # impaginazione comune dei due fogli
+scripts/build_come_installare_pdf.py # foglio «Come si installa»
+scripts/build_scheda_rapida_pdf.py   # foglio «Scheda rapida»
+scripts/check-links.cjs    # controlla link e impronte della release
 scripts/prepare-desktop.cjs # prepara desktop/app
-assets/pdf/                # Vademecum A5, A4 e libricino imposto
+assets/pdf/                # Vademecum A5, A4, libricino e i due fogli
 desktop/                   # contenitore Electron e build .exe/.deb/.dmg
 tests/                     # test dati e DOM
-.github/workflows/         # GitHub Pages e pacchetti desktop
+.github/workflows/         # Pages, pacchetti, fogli e controllo dei link
 ```
 
 ## Fonti e metodo
@@ -364,4 +410,4 @@ Ideato, scritto e sviluppato da **Danilo D'Auria**, autore anche del
 [Consulente Digitale](https://danilodauria.github.io/consulente-digitale/), di
 FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».
 
-Versione **1.2.0** · ottobre 2026.
+Versione **1.3.0** · novembre 2026.

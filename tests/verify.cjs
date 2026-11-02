@@ -247,6 +247,9 @@ ok(/Naturopata-Digitale-Sorgenti\.zip/.test(fs.readFileSync(path.join(root, ".gi
 ok(/Naturopata-Digitale-Come-si-installa\.pdf/.test(fs.readFileSync(path.join(root, "scripts", "check-links.cjs"), "utf8")), "check-links: controlla anche i fogli");
 const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
 ok(/scarica/.test(pagesWorkflow), "workflow Pages: pagina di download inclusa");
+["come-installare.html", "scheda-rapida.html", "versioni.html"].forEach((pagina) => {
+  ok(pagesWorkflow.indexOf(pagina) !== -1, "workflow Pages: pubblica " + pagina);
+});
 const desktopWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8");
 ok(/gh api "repos\/\$GITHUB_REPOSITORY\/releases\/tags\/\$TAG"/.test(desktopWorkflow), "workflow desktop: legge i digest dall'API");
 ok(/sub\("\^sha256:"; ""\)/.test(desktopWorkflow), "workflow desktop: toglie il prefisso sha256:");

@@ -178,7 +178,7 @@ srcs.forEach((s) => {
 const scarica = fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8");
 ok(/<html lang="it"/.test(scarica), "scarica: lingua italiana");
 ok(/Scarica Naturopata Digitale/.test(scarica), "scarica: titolo");
-ok(/href="\.\.\/"/.test(scarica), "scarica: ritorno all'app");
+ok(/href="\.\.\/index\.html"/.test(scarica), "scarica: ritorno all'app");
 ok((scarica.match(/assets\/pdf\/vademecum-[a-z0-9-]+\.pdf/g) || []).length >= 3, "scarica: tre Vademecum");
 [
   "Naturopata-Digitale-Windows-x64.exe",
@@ -275,8 +275,16 @@ ok(/generata sul tuo computer/.test(jsStatus), "pannello microfono: la voce in u
 ok(/\.status-actions\s*\{[^}]*margin:[^}]*\.45rem/.test(cssStatus), "pannello: spazio fra i pulsanti e il titolo seguente");
 ok(!/href="scarica\/"/.test(jsStatus), "pannello: il link ai download punta al file, non alla cartella");
 ok(/href="scarica\/index\.html"/.test(jsStatus), "pannello: esiste il link alla pagina dei download");
-const pagineConCartella = fs.readdirSync(root).filter((f) => f.endsWith(".html") && /href="scarica\/"/.test(fs.readFileSync(path.join(root, f), "utf8")));
-ok(pagineConCartella.length === 0, "pagine: nessun link alla cartella scarica/ (" + pagineConCartella.join(", ") + ")");
+const pagineSenzaCartelle = ["index.html", "come-installare.html", "scheda-rapida.html", "versioni.html", "scarica/index.html"];
+const linkACartelle = [];
+for (const f of pagineSenzaCartelle) {
+  const s = fs.readFileSync(path.join(root, f), "utf8");
+  for (const m of s.matchAll(/href="([^"#]*)/g)) {
+    const h = m[1];
+    if (h === "./" || h === "../" || h === "/" || /^[A-Za-z0-9._-]+\/$/.test(h)) linkACartelle.push(f + " -> " + h);
+  }
+}
+ok(linkACartelle.length === 0, "pagine: nessun link a una cartella, solo a file (" + linkACartelle.slice(0, 3).join(", ") + ")");
 ok(/did-finish-load/.test(mainDesktop) && /caricata/.test(mainDesktop), "desktop: un link che non si apre non riporta alla home");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");

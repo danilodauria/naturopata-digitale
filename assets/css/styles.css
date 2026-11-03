@@ -2037,6 +2037,17 @@ html[data-theme="dark"] .status-num b { color: var(--accent); }
   .status-help span { display: none; }
 }
 
+/* Pannello Voce della scheda Neura */
+.voice-panel h2 { margin-bottom: .45rem; }
+.voice-panel p { margin: 0 0 .55rem; }
+.voice-label { display: block; font-size: .8rem; font-weight: 600; margin: .7rem 0 .3rem; color: var(--text-soft); }
+.voice-panel .select { width: 100%; }
+.voice-ritmo .ritmo-riga { display: flex; align-items: center; gap: .7rem; }
+.voice-ritmo input[type="range"] { flex: 1 1 auto; min-width: 0; accent-color: var(--verde-700); }
+.voice-ritmo .ritmo-valore { font-variant-numeric: tabular-nums; font-size: .9rem; font-weight: 600; min-width: 3.2rem; text-align: right; }
+.chat-stop { padding: .12rem .55rem; font-size: .68rem; }
+.icon-btn[aria-pressed="true"]#voiceBtn { color: var(--verde-800); background: var(--accent-soft); }
+
 @media print {
   .status-bar, .status-panel, .welcome-panel { display: none !important; }
 }

@@ -65,6 +65,7 @@
       }
       A.state.chat.push({ role: "neura", html: html });
       renderLog(false);
+      if (NP.voce && NP.voce.letturaAttiva()) NP.voce.parla(html);
     }, 320);
   }
 
@@ -88,7 +89,7 @@
         '<p class="lead">Un assistente che lavora solo sui contenuti di questo programma. Niente cloud, niente account: le tue domande restano qui.</p></div>' +
       '<div class="neura-layout">' +
         '<section class="chat-panel" aria-label="Conversazione con Neura">' +
-          '<header class="chat-head"><span class="neura-orb" aria-hidden="true"></span><div><h2>Neura</h2><p>Conoscenza locale · nessun dato inviato</p></div><span class="chat-status">pronta</span></header>' +
+          '<header class="chat-head"><span class="neura-orb" aria-hidden="true"></span><div><h2>Neura</h2><p>Conoscenza locale · nessun dato inviato</p></div><button class="chip chat-stop" type="button" id="neuraStop" title="Zittisci la voce">Stop</button><span class="chat-status">pronta</span></header>' +
           '<div class="chat-log" id="chatLog" role="log" aria-live="polite"></div>' +
           '<div class="chat-suggestions" id="chatSuggestions">' +
             NP.neura.suggestions.slice(0, 4).map((s) => '<button class="chip" type="button" data-suggestion="' + esc(s) + '">' + esc(s) + "</button>").join("") +
@@ -121,6 +122,20 @@
             "</div>" +
             '<button class="btn btn-primary btn-small btn-block" type="button" id="checkBtn">' + A.ico("shield") + " Controlla</button>" +
             '<div class="check-result" id="checkResult" aria-live="polite"></div>' +
+          "</div>" +
+
+          '<div class="card voice-panel">' +
+            "<h2>Voce</h2>" +
+            '<p class="text-small">Il pulsante dell\'altoparlante in alto attiva o disattiva la lettura. Puoi fermarla con Stop, con «Ferma l\'audio» nella barra in alto o con Esc.</p>' +
+            '<label class="voice-label" for="voiceSelect">Voce del dispositivo</label>' +
+            '<select class="select" id="voiceSelect"><option value="">Automatica (consigliata)</option></select>' +
+            '<div class="voice-ritmo"><label class="voice-label" for="voiceRitmo">Velocità di lettura</label>' +
+              '<div class="ritmo-riga"><input type="range" id="voiceRitmo" min="0.7" max="1.4" step="0.05" value="1" aria-describedby="voiceRitmoValore"><output class="ritmo-valore" id="voiceRitmoValore" for="voiceRitmo">100%</output></div>' +
+              '<p class="text-small muted mb-0">Vale per tutte le voci del sistema.</p></div>' +
+            '<p class="text-small muted" id="voiceNote">Voci lette dal sistema: in lettura…</p>' +
+            '<div class="pill-row"><button type="button" class="chip" id="voiceRileggi" title="Rilegge l\'elenco delle voci installate">Rileggi l\'elenco</button></div>' +
+            '<p class="text-small muted">Chrome ed Edge aggiungono voci online che il programma installato non vede: qui puoi usarle, nell\'app installata restano quelle del sistema.</p>' +
+            '<p class="text-small muted mb-0">La voce usa il sintetizzatore del dispositivo: nessun audio lascia il computer. Su Windows la più naturale è quella «Natural», su macOS quella «Premium»: se non compare, si aggiunge dalle impostazioni di sistema.</p>' +
           "</div>" +
         "</aside>" +
       "</div>",
@@ -165,6 +180,79 @@
         });
         micAscoltoCollegato = true;
       }
+    }
+
+    // Pannello Voce: voce del dispositivo, velocità di lettura, rilettura.
+    const vp = NP.voce;
+    const selVoce = document.getElementById("voiceSelect");
+    const ritmoBox = document.getElementById("voiceRitmo");
+    const ritmoValore = document.getElementById("voiceRitmoValore");
+    const notaVoci = document.getElementById("voiceNote");
+
+    const contaVoci = () => {
+      const g = vp ? vp.voci() : { italiane: [], altre: [] };
+      return { n: g.italiane.length + g.altre.length, it: g.italiane.length };
+    };
+
+    const scriviNota = () => {
+      if (!notaVoci) return;
+      const c = contaVoci();
+      notaVoci.textContent = "Voci lette dal sistema: " + c.n + (c.it ? " (" + c.it + " in italiano)" : "") + ".";
+    };
+
+    const riempiVoci = () => {
+      if (!selVoce || !vp) return;
+      const g = vp.voci();
+      const opzione = (v) => '<option value="' + esc(v.name) + '">' + esc(v.name + (v.lang ? " · " + v.lang : "")) + "</option>";
+      selVoce.innerHTML = '<option value="">Automatica (consigliata)</option>' +
+        g.italiane.map(opzione).join("") + g.altre.map(opzione).join("");
+      selVoce.value = vp.nomeVoce() || "";
+      scriviNota();
+    };
+
+    if (vp) {
+      riempiVoci();
+
+      const mostraRitmo = (v) => {
+        if (ritmoValore) ritmoValore.textContent = Math.round(v * 100) + "%";
+        if (ritmoBox) ritmoBox.value = String(v);
+      };
+      mostraRitmo(vp.ritmo());
+
+      if (selVoce) selVoce.addEventListener("change", () => {
+        const scelta = vp.impostaVoce(selVoce.value);
+        if (A.toast) A.toast(selVoce.value ? "Voce impostata: " + selVoce.value + "." : (scelta ? "Torno alla voce automatica." : "Nessuna voce: Neura resta muta."));
+        vp.parla("<p>Ecco come suono. Se ti va bene, andiamo avanti.</p>");
+      });
+
+      if (ritmoBox) {
+        ritmoBox.addEventListener("input", () => mostraRitmo(vp.impostaRitmo(ritmoBox.value)));
+        ritmoBox.addEventListener("change", () => {
+          const v = vp.impostaRitmo(ritmoBox.value);
+          mostraRitmo(v);
+          if (A.toast) A.toast(v < 0.95 ? "Leggo più piano." : (v > 1.05 ? "Leggo più veloce." : "Velocità normale."));
+          vp.parla("<p>Ecco come leggo a questa velocità.</p>");
+        });
+        ritmoBox.addEventListener("dblclick", () => { mostraRitmo(vp.impostaRitmo(1)); if (A.toast) A.toast("Velocità normale."); });
+      }
+
+      const rileggi = document.getElementById("voiceRileggi");
+      if (rileggi) rileggi.addEventListener("click", () => {
+        const prima = contaVoci().n;
+        riempiVoci();
+        const dopo = contaVoci().n;
+        if (!dopo) { if (A.toast) A.toast("Nessuna voce leggibile: aggiungine una dalle impostazioni del sistema."); }
+        else if (dopo !== prima) { if (A.toast) A.toast("Ora il sistema offre " + dopo + " voci."); }
+        else { if (A.toast) A.toast("Sono sempre " + dopo + ": se ne hai appena aggiunta una, chiudi e riapri il programma."); }
+      });
+
+      document.addEventListener("np:voci", riempiVoci);
+
+      const stop = document.getElementById("neuraStop");
+      if (stop) stop.addEventListener("click", () => {
+        const fermato = vp.ferma();
+        if (A.toast) A.toast(fermato ? "Voce fermata." : "Nessuna voce in corso.");
+      });
     }
   };
 

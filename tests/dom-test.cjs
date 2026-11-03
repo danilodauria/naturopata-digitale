@@ -84,6 +84,26 @@ async function go(hash) {
   ok(!doc.querySelector(".welcome-panel"), "benvenuto: chiuso con «Non mostrarmelo più»");
   ok(!!win.localStorage.getItem("naturopata-digitale:v1:welcome-nascosto"), "benvenuto: preferenza salvata");
 
+  // Voce: pannello nella scheda Neura e altoparlante in intestazione
+  await go("#/neura");
+  ok(!!doc.getElementById("voiceSelect"), "voce: elenco delle voci del dispositivo");
+  ok(/Automatica/.test(doc.getElementById("voiceSelect").textContent), "voce: opzione automatica");
+  ok(doc.getElementById("voiceRitmo").min === "0.7" && doc.getElementById("voiceRitmo").max === "1.4", "voce: velocità da 0,7 a 1,4");
+  ok(doc.getElementById("voiceRitmoValore").textContent === "100%", "voce: velocità mostrata in percentuale");
+  ok(/Voci lette dal sistema/.test(doc.getElementById("voiceNote").textContent), "voce: conteggio delle voci");
+  doc.getElementById("voiceRileggi").click();
+  await tick(30);
+  ok(!!doc.getElementById("voiceRileggi"), "voce: rileggi l'elenco");
+  ok(!!doc.getElementById("neuraStop"), "voce: Stop nella chat");
+  const altoparlante = doc.getElementById("voiceBtn");
+  ok(!!altoparlante, "voce: altoparlante nell'intestazione");
+  altoparlante.click();
+  await tick(20);
+  ok(altoparlante.getAttribute("aria-pressed") === "true", "voce: l'altoparlante attiva la lettura");
+  altoparlante.click();
+  await tick(20);
+  ok(altoparlante.getAttribute("aria-pressed") === "false", "voce: l'altoparlante la disattiva");
+
   // Erbario
   await go("#/erbario");
   ok(doc.querySelectorAll(".plant-card").length === 60, "erbario: 60 schede");

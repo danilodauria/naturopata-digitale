@@ -234,6 +234,16 @@ ok(/statusHelp/.test(prepDesktop) && /statusStop/.test(prepDesktop), "barra di s
 ok(/Centri Antiveleni/.test(prepDesktop) && /112/.test(prepDesktop), "barra di stato: numeri utili");
 const benvenuto = fs.readFileSync(path.join(root, "assets", "js", "app-welcome.js"), "utf8");
 ok(/Non mostrarmelo più/.test(benvenuto) && /welcome-nascosto/.test(benvenuto), "benvenuto: chiusura definitiva salvata");
+const neuraVoce = fs.readFileSync(path.join(root, "assets", "js", "app-neura.js"), "utf8");
+["voiceSelect", "voiceRitmo", "voiceRitmoValore", "voiceRileggi", "voiceNote", "neuraStop"].forEach((id) => {
+  ok(neuraVoce.indexOf('id="' + id + '"') !== -1, "Neura: pannello Voce, manca " + id);
+});
+ok(/Velocità di lettura/.test(neuraVoce), "Neura: velocità di lettura nel pannello Voce");
+const voceJs = fs.readFileSync(path.join(root, "assets", "js", "app-voce.js"), "utf8");
+["voceScelta", "impostavoce", "impostaRitmo", "letturaAttiva", "nomeVoce"].forEach((fn) => {
+  ok(new RegExp(fn, "i").test(voceJs), "voce: manca " + fn);
+});
+ok(index.indexOf('id="voiceBtn"') !== -1, "index: altoparlante nell'intestazione");
 ok(index.indexOf('href="come-installare.html"') !== -1, "index: voce di menu alla guida");
 
 // Fogli in PDF: esistono e dichiarano la versione dell'app

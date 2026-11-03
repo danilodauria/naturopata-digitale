@@ -328,7 +328,7 @@
       "<li>Alla prima richiesta rispondi <em>Consenti</em>: senza permesso la dettatura non parte.</li>" +
       "</ul>" +
       '<div class="status-actions"><button type="button" class="btn btn-secondary btn-small" data-mic-attiva>Attiva adesso il microfono</button></div>' +
-      '<p class="text-small muted"><strong>Una cosa da sapere.</strong> La dettatura usa il riconoscimento vocale del browser: su Chrome ed Edge l\'audio può essere elaborato dai loro server, quindi non è detto che resti sul dispositivo. Se preferisci, scrivi.</p>';
+      '<p class="text-small muted"><strong>Una cosa da sapere.</strong> La dettatura usa il riconoscimento vocale del browser: su Chrome ed Edge l\'audio può essere elaborato dai loro server, quindi non è detto che resti sul dispositivo. Se preferisci, scrivi. La voce di Neura in uscita, invece, è generata sul tuo computer.</p>';
     return html;
   }
 

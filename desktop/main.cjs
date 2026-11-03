@@ -484,8 +484,27 @@ function createWindow() {
     }
   });
 
+  // Se la pagina non si carica (file mancante, aggiornamento a metà, renderer
+  // caduto) la finestra resterebbe del colore dello sfondo, senza dire nulla:
+  // meglio riprovare poche volte e mostrarla comunque.
+  let tentativi = 0;
+  function ricarica() {
+    if (win.isDestroyed() || tentativi >= 3) return;
+    tentativi += 1;
+    setTimeout(() => { if (!win.isDestroyed()) win.loadFile(HOME); }, 800);
+  }
+
+  win.webContents.on("did-fail-load", (evento, codice, descrizione, url, principale) => {
+    if (principale === false) return;
+    ricarica();
+  });
+  win.webContents.on("render-process-gone", ricarica);
+
   win.once("ready-to-show", () => win.show());
   win.loadFile(HOME);
+  // Rete di sicurezza: se "ready-to-show" non arriva, la finestra si mostra
+  // lo stesso dopo qualche secondo.
+  setTimeout(() => { if (!win.isDestroyed() && !win.isVisible()) win.show(); }, 4000);
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (isExternal(url)) shell.openExternal(url);

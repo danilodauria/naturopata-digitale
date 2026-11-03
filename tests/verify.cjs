@@ -270,6 +270,9 @@ ok(/Scegliere la voce/.test(jsStatus), "pannello sistema: il pulsante porta alla
 ok(/voci naturali si installano dal pannello Voce/.test(jsStatus), "pannello sistema: le voci naturali sono raccontate");
 ok(!/Neura resta muta/.test(jsStatus), "pannello sistema: non dice più che Neura resta muta");
 ok(/Aggiungi voci/.test(jsStatus) && /Gestisci voci/.test(jsStatus), "pannello sistema: istruzioni per aggiungere voci al sistema");
+ok(/did-fail-load/.test(mainDesktop) && /render-process-gone/.test(mainDesktop), "desktop: la finestra non resta vuota se la pagina non si carica");
+ok(/generata sul tuo computer/.test(jsStatus), "pannello microfono: la voce in uscita è locale");
+ok(/\.status-actions\s*\{[^}]*margin:[^}]*\.45rem/.test(cssStatus), "pannello: spazio fra i pulsanti e il titolo seguente");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");
 ok(/contextBridge/.test(ponteDesktop) && /voceNaturale/.test(ponteDesktop), "preload: espone solo il ponte");

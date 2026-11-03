@@ -288,8 +288,8 @@
 
     html += "<h3>Voci del dispositivo</h3>" +
       "<p>Voci disponibili: <strong>" + v.totali + "</strong>" + (v.italiane ? " (" + v.italiane + " in italiano)" : "") + ".</p>" +
-      '<p class="text-small muted">Le voci arrivano dal sistema operativo. Se non ce ne sono in italiano, Neura resta muta ma continua a rispondere per iscritto.</p>' +
-      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/neura" data-status-close>Scrivere a Neura</a></div>';
+      '<p class="text-small muted">Le voci naturali si installano dal pannello Voce e restano dentro il programma; le altre arrivano dal sistema operativo, e senza una voce italiana Neura tace e risponde per iscritto. Chrome ed Edge, nel browser, aggiungono voci online che il programma desktop non vede: lì restano solo quelle installate nel sistema. Per averne altre: su Windows <em>Impostazioni</em> → <em>Data e ora e lingua</em> → <em>Riconoscimento vocale</em> → <em>Aggiungi voci</em>; su macOS <em>Impostazioni di Sistema</em> → <em>Accessibilità</em> → <em>Contenuto pronunciato</em> → <em>Voce di sistema</em> → <em>Gestisci voci</em>.</p>' +
+      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/neura" data-status-close>Scegliere la voce</a></div>';
 
     html += "<h3>Se il sistema chiede conferma</h3>" +
       "<p>I pacchetti non hanno un certificato commerciale: il sistema avvisa una volta sola e poi lascia lavorare. Il consenso si dà così.</p>" +

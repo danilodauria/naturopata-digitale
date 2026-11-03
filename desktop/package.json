@@ -1,6 +1,6 @@
 {
   "name": "naturopata-digitale",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "private": true,
   "description": "Naturopata Digitale per Windows, Linux e macOS: erbario, manuale, sopravvivenza e biblioteca, anche offline.",
   "author": "Danilo D'Auria",
@@ -23,7 +23,15 @@
     "productName": "Naturopata Digitale",
     "copyright": "Copyright © 2026 Danilo D'Auria · FeniceOS",
     "artifactName": "Naturopata-Digitale-${version}-${os}-${arch}.${ext}",
-    "publish": null,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "danilodauria",
+        "repo": "naturopata-digitale",
+        "releaseType": "release"
+      }
+    ],
+    "afterPack": "after-pack.cjs",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -87,5 +95,8 @@
         "AppImage"
       ]
     }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

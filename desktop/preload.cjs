@@ -29,5 +29,17 @@ contextBridge.exposeInMainWorld("npDesktop", {
       ipcRenderer.on("voceNaturale:progresso", ascolta);
       return () => ipcRenderer.removeListener("voceNaturale:progresso", ascolta);
     }
+  },
+  // Aggiornamenti: la pagina può leggerne lo stato, chiedere un controllo e
+  // riavviare il programma quando la nuova versione è pronta.
+  aggiornamenti: {
+    stato: () => ipcRenderer.invoke("update:stato"),
+    controlla: () => ipcRenderer.invoke("update:controlla"),
+    installa: () => ipcRenderer.invoke("update:installa"),
+    on: (fn) => {
+      const ascolta = (_evento, stato) => fn(stato);
+      ipcRenderer.on("update:stato", ascolta);
+      return () => ipcRenderer.removeListener("update:stato", ascolta);
+    }
   }
 });

@@ -253,6 +253,15 @@ ok(/voceNaturale:scarica/.test(mainDesktop) && /voceNaturale:rimuoviVoce/.test(m
 ok(/preload\.cjs/.test(mainDesktop), "desktop: carica il ponte preload");
 ok(/sistema:impostazioniVoce/.test(mainDesktop), "desktop: apre le impostazioni vocali del sistema");
 ok(/rhasspy\/piper\/releases/.test(mainDesktop) && /sha256/.test(mainDesktop), "desktop: motore verificato con impronta");
+ok(/update:controlla/.test(mainDesktop) && /quitAndInstall/.test(mainDesktop), "desktop: aggiornamenti automatici");
+ok(/electron-updater/.test(mainDesktop), "desktop: usa electron-updater");
+ok(fs.existsSync(path.join(root, "desktop", "after-pack.cjs")), "manca desktop/after-pack.cjs");
+const pacchettoAgg = JSON.parse(fs.readFileSync(path.join(root, "desktop", "package.json"), "utf8"));
+ok(pacchettoAgg.build.afterPack === "after-pack.cjs", "pacchetto desktop: firma ad-hoc macOS");
+ok(Array.isArray(pacchettoAgg.build.publish) && pacchettoAgg.build.publish[0].repo === "naturopata-digitale", "pacchetto desktop: release GitHub per gli aggiornamenti");
+ok(!!(pacchettoAgg.dependencies && pacchettoAgg.dependencies["electron-updater"]), "pacchetto desktop: dipendenza electron-updater");
+ok(/latest\*\.yml/.test(fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8")), "workflow desktop: latest*.yml nella release");
+ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");
 ok(/contextBridge/.test(ponteDesktop) && /voceNaturale/.test(ponteDesktop), "preload: espone solo il ponte");
 ok(!/require\("fs"\)|nodeIntegration/.test(ponteDesktop), "preload: nessun accesso a Node dalla pagina");

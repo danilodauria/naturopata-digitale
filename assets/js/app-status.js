@@ -264,7 +264,7 @@
       "<p><strong>" + esc(m.titolo) + "</strong> · " + esc(m.dove) + "</p>" +
       "<p>" + esc(m.nota) + "</p>" +
       '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html" data-status-close>Come si installa</a>' +
-        '<a class="btn btn-ghost btn-small" href="scarica/" data-status-close>Pagina dei download</a></div>' +
+        '<a class="btn btn-ghost btn-small" href="scarica/index.html" data-status-close>Pagina dei download</a></div>' +
       "<h3>Neura, qui sul dispositivo</h3>" +
       '<p><span class="status-tag">pronta</span> Neura non è un modello scaricato da Internet: legge le schede delle piante, il manuale e le tabelle di sicurezza già presenti nel programma.</p>' +
       "<p>Risponde con quello che trova, dice quando non sa e non manda niente in rete: non c'è nulla da installare.</p>" +
@@ -295,7 +295,7 @@
       "<p>I pacchetti non hanno un certificato commerciale: il sistema avvisa una volta sola e poi lascia lavorare. Il consenso si dà così.</p>" +
       '<ul class="text-small">' + istruzioniAvvio(s.id) + "</ul>" +
       '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html" data-status-close>Passaggio per passaggio</a>' +
-        '<a class="btn btn-ghost btn-small" href="scarica/" data-status-close>Scarica</a></div>';
+        '<a class="btn btn-ghost btn-small" href="scarica/index.html" data-status-close>Scarica</a></div>';
     return html;
   }
 

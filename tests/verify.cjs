@@ -273,6 +273,9 @@ ok(/Aggiungi voci/.test(jsStatus) && /Gestisci voci/.test(jsStatus), "pannello s
 ok(/did-fail-load/.test(mainDesktop) && /render-process-gone/.test(mainDesktop), "desktop: la finestra non resta vuota se la pagina non si carica");
 ok(/generata sul tuo computer/.test(jsStatus), "pannello microfono: la voce in uscita è locale");
 ok(/\.status-actions\s*\{[^}]*margin:[^}]*\.45rem/.test(cssStatus), "pannello: spazio fra i pulsanti e il titolo seguente");
+ok(!/href="scarica\/"/.test(jsStatus), "pannello: il link ai download punta al file, non alla cartella");
+ok(/href="scarica\/index\.html"/.test(jsStatus), "pannello: esiste il link alla pagina dei download");
+ok(/did-finish-load/.test(mainDesktop) && /caricata/.test(mainDesktop), "desktop: un link che non si apre non riporta alla home");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");
 ok(/contextBridge/.test(ponteDesktop) && /voceNaturale/.test(ponteDesktop), "preload: espone solo il ponte");

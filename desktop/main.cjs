@@ -488,8 +488,12 @@ function createWindow() {
   // caduto) la finestra resterebbe del colore dello sfondo, senza dire nulla:
   // meglio riprovare poche volte e mostrarla comunque.
   let tentativi = 0;
+  let caricata = false;
+  win.webContents.on("did-finish-load", () => { caricata = true; });
   function ricarica() {
-    if (win.isDestroyed() || tentativi >= 3) return;
+    // Solo all'avvio: se la pagina era già a posto, un link che non si apre
+    // non deve riportare l'utente alla schermata iniziale.
+    if (caricata || win.isDestroyed() || tentativi >= 3) return;
     tentativi += 1;
     setTimeout(() => { if (!win.isDestroyed()) win.loadFile(HOME); }, 800);
   }

@@ -1,0 +1,33 @@
+/* ==========================================================================
+   Naturopata Digitale · ponte tra la pagina e il processo principale
+   Espone solo ciò che serve: piattaforma, impostazioni vocali del sistema e
+   voce naturale facoltativa. Nessun accesso a Node dalla pagina.
+   Licenza del codice: MIT · Danilo D'Auria
+   ========================================================================== */
+
+const { contextBridge, ipcRenderer } = require("electron");
+
+contextBridge.exposeInMainWorld("npDesktop", {
+  platform: process.platform,
+  electron: process.versions.electron,
+  // Impostazioni del sistema: aprire il pannello delle voci dal processo
+  // principale, perché la pagina non può lanciare i collegamenti di sistema.
+  sistema: {
+    impostazioniVoce: () => ipcRenderer.invoke("sistema:impostazioniVoce")
+  },
+  // Voce naturale facoltativa: si scarica una volta dal processo principale,
+  // che poi genera l'audio sul computer. La pagina riceve solo lo stato, il
+  // WAV già pronto e l'avanzamento del download.
+  voceNaturale: {
+    stato: () => ipcRenderer.invoke("voceNaturale:stato"),
+    scarica: (voce) => ipcRenderer.invoke("voceNaturale:scarica", voce),
+    pronuncia: (testo, ritmo, voce) => ipcRenderer.invoke("voceNaturale:pronuncia", testo, ritmo, voce),
+    rimuoviVoce: (voce) => ipcRenderer.invoke("voceNaturale:rimuoviVoce", voce),
+    rimuovi: () => ipcRenderer.invoke("voceNaturale:rimuovi"),
+    onProgresso: (fn) => {
+      const ascolta = (_evento, stato) => fn(stato);
+      ipcRenderer.on("voceNaturale:progresso", ascolta);
+      return () => ipcRenderer.removeListener("voceNaturale:progresso", ascolta);
+    }
+  }
+});

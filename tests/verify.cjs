@@ -244,6 +244,24 @@ const voceJs = fs.readFileSync(path.join(root, "assets", "js", "app-voce.js"), "
   ok(new RegExp(fn, "i").test(voceJs), "voce: manca " + fn);
 });
 ok(index.indexOf('id="voiceBtn"') !== -1, "index: altoparlante nell'intestazione");
+["preload.cjs", "motore.cjs"].forEach((f) => {
+  ok(fs.existsSync(path.join(root, "desktop", f)), "manca desktop/" + f);
+});
+const mainDesktop = fs.readFileSync(path.join(root, "desktop", "main.cjs"), "utf8");
+ok(/voceNaturale:stato/.test(mainDesktop) && /voceNaturale:pronuncia/.test(mainDesktop), "desktop: gestori della voce naturale");
+ok(/voceNaturale:scarica/.test(mainDesktop) && /voceNaturale:rimuoviVoce/.test(mainDesktop), "desktop: installazione e rimozione delle voci");
+ok(/preload\.cjs/.test(mainDesktop), "desktop: carica il ponte preload");
+ok(/sistema:impostazioniVoce/.test(mainDesktop), "desktop: apre le impostazioni vocali del sistema");
+ok(/rhasspy\/piper\/releases/.test(mainDesktop) && /sha256/.test(mainDesktop), "desktop: motore verificato con impronta");
+const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");
+ok(/contextBridge/.test(ponteDesktop) && /voceNaturale/.test(ponteDesktop), "preload: espone solo il ponte");
+ok(!/require\("fs"\)|nodeIntegration/.test(ponteDesktop), "preload: nessun accesso a Node dalla pagina");
+const pacchettoDesktop = JSON.parse(fs.readFileSync(path.join(root, "desktop", "package.json"), "utf8"));
+["preload.cjs", "motore.cjs"].forEach((f) => {
+  ok((pacchettoDesktop.build.files || []).indexOf(f) !== -1, "pacchetto desktop: manca " + f);
+});
+ok(/voiceNaturaleVoci/.test(neuraVoce) && /voiceImpostazioni/.test(neuraVoce), "Neura: voci naturali e impostazioni vocali");
+ok(/Confronta le voci/.test(neuraVoce) && /Rimuovi le voci naturali/.test(neuraVoce), "Neura: confronto e rimozione delle voci naturali");
 ok(index.indexOf('href="come-installare.html"') !== -1, "index: voce di menu alla guida");
 
 // Fogli in PDF: esistono e dichiarano la versione dell'app

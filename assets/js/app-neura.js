@@ -84,6 +84,9 @@
   views.neura = function () {
     if (!A.state.chat.length) A.state.chat.push({ role: "neura", html: WELCOME });
 
+    const suDesktop = !!(window.npDesktop && window.npDesktop.platform);
+    const piattaforma = (window.npDesktop && window.npDesktop.platform) || "";
+
     A.page(
       '<div class="page-head" style="margin-bottom:1.4rem"><p class="eyebrow">Neura · intelligenza locale</p><h1>Chiedi, capisci, controlla.</h1>' +
         '<p class="lead">Un assistente che lavora solo sui contenuti di questo programma. Niente cloud, niente account: le tue domande restano qui.</p></div>' +
@@ -133,7 +136,17 @@
               '<div class="ritmo-riga"><input type="range" id="voiceRitmo" min="0.7" max="1.4" step="0.05" value="1" aria-describedby="voiceRitmoValore"><output class="ritmo-valore" id="voiceRitmoValore" for="voiceRitmo">100%</output></div>' +
               '<p class="text-small muted mb-0">Vale per tutte le voci del sistema.</p></div>' +
             '<p class="text-small muted" id="voiceNote">Voci lette dal sistema: in lettura…</p>' +
-            '<div class="pill-row"><button type="button" class="chip" id="voiceRileggi" title="Rilegge l\'elenco delle voci installate">Rileggi l\'elenco</button></div>' +
+            '<div class="pill-row" id="voiceAzioni"><button type="button" class="chip" id="voiceRileggi" title="Rilegge l\'elenco delle voci installate">Rileggi l\'elenco</button>' +
+              (suDesktop && piattaforma !== "linux" ? '<button type="button" class="chip" id="voiceImpostazioni" title="Apre le impostazioni voce del sistema">Aggiungi una voce</button>' : "") +
+            "</div>" +
+            '<div class="voice-naturale" id="voiceNaturale" hidden>' +
+              '<p class="text-small muted mb-0" id="voiceNaturaleNota"></p>' +
+              '<div class="pill-row" id="voiceNaturaleVoci"></div>' +
+              '<div class="pill-row">' +
+                '<button type="button" class="chip" id="voiceNaturaleConfronta" title="Fa sentire la stessa frase con le voci installate, una dopo l\'altra" hidden>Confronta le voci</button>' +
+                '<button type="button" class="chip" id="voiceNaturaleRimuovi" title="Libera lo spazio occupato dalle voci naturali" hidden>Rimuovi le voci naturali</button>' +
+              "</div>" +
+            "</div>" +
             '<p class="text-small muted">Chrome ed Edge aggiungono voci online che il programma installato non vede: qui puoi usarle, nell\'app installata restano quelle del sistema.</p>' +
             '<p class="text-small muted mb-0">La voce usa il sintetizzatore del dispositivo: nessun audio lascia il computer. Su Windows la più naturale è quella «Natural», su macOS quella «Premium»: se non compare, si aggiunge dalle impostazioni di sistema.</p>' +
           "</div>" +
@@ -204,7 +217,12 @@
       if (!selVoce || !vp) return;
       const g = vp.voci();
       const opzione = (v) => '<option value="' + esc(v.name) + '">' + esc(v.name + (v.lang ? " · " + v.lang : "")) + "</option>";
-      selVoce.innerHTML = '<option value="">Automatica (consigliata)</option>' +
+      // Le voci naturali installate stanno in cima: sono quelle che suonano
+      // come una persona, e si riconoscono dal nome.
+      const naturali = vp.naturalePronte().map((v) =>
+        '<option value="__naturale__:' + esc(v.id) + '">Naturale · ' + esc(v.nome) + "</option>"
+      ).join("");
+      selVoce.innerHTML = '<option value="">Automatica (consigliata)</option>' + naturali +
         g.italiane.map(opzione).join("") + g.altre.map(opzione).join("");
       selVoce.value = vp.nomeVoce() || "";
       scriviNota();
@@ -220,8 +238,13 @@
       mostraRitmo(vp.ritmo());
 
       if (selVoce) selVoce.addEventListener("change", () => {
-        const scelta = vp.impostaVoce(selVoce.value);
-        if (A.toast) A.toast(selVoce.value ? "Voce impostata: " + selVoce.value + "." : (scelta ? "Torno alla voce automatica." : "Nessuna voce: Neura resta muta."));
+        const valore = selVoce.value;
+        const naturale = /^__naturale__:/.test(valore) ? valore.split(":")[1] : "";
+        const scelta = naturale ? vp.impostaNaturale(naturale) : vp.impostaVoce(valore);
+        const nome = naturale
+          ? ((vp.naturaleVoci().filter((v) => v.id === naturale)[0] || {}).nome || "naturale")
+          : valore;
+        if (A.toast) A.toast(valore ? "Voce impostata: " + nome + "." : (scelta ? "Torno alla voce automatica." : "Nessuna voce: Neura resta muta."));
         vp.parla("<p>Ecco come suono. Se ti va bene, andiamo avanti.</p>");
       });
 
@@ -246,7 +269,157 @@
         else { if (A.toast) A.toast("Sono sempre " + dopo + ": se ne hai appena aggiunta una, chiudi e riapri il programma."); }
       });
 
-      document.addEventListener("np:voci", riempiVoci);
+      // Voce naturale facoltativa: si scarica una volta e resta nel computer.
+      const scatolaNaturale = document.getElementById("voiceNaturale");
+      const notaNaturale = document.getElementById("voiceNaturaleNota");
+      const vociNaturale = document.getElementById("voiceNaturaleVoci");
+      const rimuoviNaturale = document.getElementById("voiceNaturaleRimuovi");
+      const confrontaNaturale = document.getElementById("voiceNaturaleConfronta");
+
+      const disegnaNaturale = (s) => {
+        if (!scatolaNaturale || !notaNaturale) return;
+        const stato = s || vp.naturale();
+        const voci = Array.isArray(stato.voci) ? stato.voci : vp.naturaleVoci();
+        const pronte = voci.filter((v) => v.installata);
+
+        if (vociNaturale) {
+          const scelta = vp.naturaleScelta();
+          vociNaturale.innerHTML = voci.map((v) => {
+            const attiva = v.installata && v.id === scelta;
+            const testo = v.installata
+              ? esc(v.nome) + " · " + esc(v.genere) + " · " + vp.pesoNaturale(v) + " MB" + (attiva ? " ✓" : "")
+              : "Installa " + esc(v.nome) + " · " + v.mb + " MB";
+            const pulsante = '<button type="button" class="chip' + (attiva ? " is-active" : "") + '" data-voce="' + esc(v.id) + '"' +
+              (v.installata ? ' aria-pressed="' + (attiva ? "true" : "false") + '"' : "") + ">" + testo + "</button>";
+            return v.installata
+              ? '<span class="voce-naturale-riga">' + pulsante +
+                '<button type="button" class="chip chip-togli" data-rimuovi="' + esc(v.id) +
+                '" title="Togli ' + esc(v.nome) + ' e libera ' + vp.pesoNaturale(v) + ' MB">Togli</button></span>'
+              : pulsante;
+          }).join("");
+        }
+
+        if (stato.disponibile === false) {
+          // Su Mac il motore locale non c'è (gli archivi ufficiali non
+          // contengono le librerie che servono): la voce naturale sono quelle
+          // «Premium» di Apple, che il programma usa come voci del sistema.
+          if (/^darwin/.test(String(stato.motivo || ""))) {
+            notaNaturale.innerHTML = "Su Mac la voce naturale è quella <strong>«Premium» di Apple</strong>: si scarica una volta da Impostazioni di Sistema → Accessibilità → Contenuto pronunciato → Gestisci voci, poi compare qui nell'elenco.";
+          } else {
+            notaNaturale.textContent = "La voce naturale si scarica per Windows e Linux, su processori Intel e ARM: su questo sistema restano le voci del sistema.";
+          }
+          if (vociNaturale) vociNaturale.innerHTML = "";
+          if (rimuoviNaturale) rimuoviNaturale.hidden = true;
+          if (confrontaNaturale) confrontaNaturale.hidden = true;
+          return;
+        }
+
+        if (pronte.length) {
+          notaNaturale.innerHTML = "<strong>Voci naturali pronte: " +
+            pronte.map((v) => esc(v.nome)).join(" e ") + ".</strong> " +
+            (stato.spazio ? "Occupano " + stato.spazio + " MB sul disco, motore compreso. " : "") +
+            "Sono generate sul tuo computer: nessun testo esce da qui.";
+        } else {
+          notaNaturale.textContent = "Voce naturale (facoltativa): suona come una persona, non come un robot. Si scarica una volta sola" +
+            (stato.peso ? " (circa " + stato.peso + " MB)" : "") + " e poi funziona anche senza Internet.";
+        }
+        if (rimuoviNaturale) rimuoviNaturale.hidden = pronte.length === 0;
+        if (confrontaNaturale) confrontaNaturale.hidden = pronte.length < 2;
+      };
+
+      if (vp.naturaleDisponibile()) {
+        if (scatolaNaturale) scatolaNaturale.hidden = false;
+        vp.aggiornaNaturale().then((s) => { disegnaNaturale(s); riempiVoci(); });
+
+        vp.progressoNaturale((st) => {
+          if (!notaNaturale || !st) return;
+          notaNaturale.textContent = "Scarico la voce naturale… " + (st.percentuale || 0) + "%";
+        });
+
+        if (vociNaturale) vociNaturale.addEventListener("click", (e) => {
+          const bottone = e.target && e.target.closest ? e.target.closest("[data-voce],[data-rimuovi]") : null;
+          if (!bottone) return;
+
+          if (bottone.hasAttribute("data-rimuovi")) {
+            const togli = bottone.getAttribute("data-rimuovi");
+            bottone.disabled = true;
+            vp.rimuoviNaturaleVoce(togli).then((s) => {
+              disegnaNaturale(s);
+              riempiVoci();
+              const nome = (vp.naturaleVoci().filter((v) => v.id === togli)[0] || {}).nome || togli;
+              if (A.toast) A.toast("Voce naturale rimossa: " + nome +
+                (s && s.liberati ? " · liberati " + s.liberati + " MB" : "") + ".");
+            }).catch(() => { if (A.toast) A.toast("Non sono riuscito a rimuovere quella voce."); });
+            return;
+          }
+
+          const id = bottone.getAttribute("data-voce");
+          const voce = vp.naturaleVoci().filter((v) => v.id === id)[0];
+          if (!voce) return;
+
+          if (voce.installata) {
+            vp.impostaNaturale(id);
+            disegnaNaturale();
+            riempiVoci();
+            if (A.toast) A.toast("Voce naturale: " + voce.nome + ".");
+            vp.parla("<p>Ecco come suono con questa voce.</p>");
+            return;
+          }
+
+          bottone.disabled = true;
+          if (notaNaturale) notaNaturale.textContent = "Scarico " + voce.nome + ": ci vuole un minuto e non serve altro.";
+          if (A.toast) A.toast("Scarico la voce naturale…");
+          vp.scaricaNaturale(id).then((s) => {
+            if (s && s.ok && s.installata) {
+              vp.impostaNaturale(id);
+              disegnaNaturale(s);
+              riempiVoci();
+              if (A.toast) A.toast("Voce naturale pronta: " + voce.nome + ".");
+            } else {
+              disegnaNaturale();
+              if (A.toast) A.toast("Voce naturale non installata: " + ((s && (s.errore || s.motivo)) || "riprova") + ".");
+            }
+          }).catch(() => {
+            disegnaNaturale();
+            if (A.toast) A.toast("Voce naturale non installata: controlla la connessione e riprova.");
+          });
+        });
+
+        if (rimuoviNaturale) rimuoviNaturale.addEventListener("click", () => {
+          vp.rimuoviNaturaleTutto().then((s) => {
+            disegnaNaturale(s);
+            riempiVoci();
+            if (A.toast) A.toast("Voce naturale rimossa: torno alle voci del sistema.");
+          }).catch(() => { if (A.toast) A.toast("Non sono riuscito a rimuovere la voce naturale."); });
+        });
+
+        if (confrontaNaturale) confrontaNaturale.addEventListener("click", () => {
+          if (!notaNaturale) return;
+          const avviato = vp.confrontaNaturale((voce) => {
+            if (!notaNaturale) return;
+            if (voce) {
+              notaNaturale.textContent = "Confronto: adesso parla " + voce.nome + ". La frase è la stessa per tutte e due.";
+              return;
+            }
+            vp.aggiornaNaturale().then((st) => disegnaNaturale(st));
+          });
+          if (!avviato && A.toast) A.toast("Servono due voci installate per il confronto.");
+        });
+      }
+
+      // Il pannello delle voci si apre dal processo principale: la pagina non
+      // può lanciare da sola i collegamenti di sistema.
+      const imposta = document.getElementById("voiceImpostazioni");
+      if (imposta) imposta.addEventListener("click", () => {
+        const d = window.npDesktop;
+        const apri = d && d.sistema && d.sistema.impostazioniVoce;
+        if (typeof apri !== "function") { if (A.toast) A.toast("Le impostazioni voce si aprono dal sistema."); return; }
+        Promise.resolve(apri()).then((r) => {
+          if (A.toast) A.toast(r && r.ok ? "Aperte le impostazioni voce del sistema." : "Non sono riuscito ad aprire le impostazioni: cercale nel sistema.");
+        }).catch(() => { if (A.toast) A.toast("Non sono riuscito ad aprire le impostazioni."); });
+      });
+
+      document.addEventListener("np:voci", () => { disegnaNaturale(); riempiVoci(); });
 
       const stop = document.getElementById("neuraStop");
       if (stop) stop.addEventListener("click", () => {

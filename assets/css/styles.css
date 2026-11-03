@@ -2046,6 +2046,11 @@ html[data-theme="dark"] .status-num b { color: var(--accent); }
 .voice-ritmo input[type="range"] { flex: 1 1 auto; min-width: 0; accent-color: var(--verde-700); }
 .voice-ritmo .ritmo-valore { font-variant-numeric: tabular-nums; font-size: .9rem; font-weight: 600; min-width: 3.2rem; text-align: right; }
 .chat-stop { padding: .12rem .55rem; font-size: .68rem; }
+.voice-naturale { margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--line); }
+.voice-naturale[hidden] { display: none; }
+.voice-naturale .chip.is-active { border-color: var(--verde-700); color: var(--verde-800); font-weight: 600; }
+.voice-naturale .chip-togli { font-size: .78rem; opacity: .85; }
+.voice-naturale .voce-naturale-riga { display: inline-flex; align-items: center; gap: .35rem; flex-wrap: wrap; }
 .icon-btn[aria-pressed="true"]#voiceBtn { color: var(--verde-800); background: var(--accent-soft); }
 
 @media print {

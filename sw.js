@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.3.0-3";
+const VERSION = "nd-v1.3.1-1";
 const SHELL = [
   "./",
   "index.html",

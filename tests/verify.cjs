@@ -212,7 +212,7 @@ Object.keys(pagine).forEach((nome) => {
   ok(html.indexOf('<link rel="stylesheet" href="assets/css/pagine.css">') !== -1, nome + ": stile condiviso");
   ok(/<html lang="it"/.test(html), nome + ": lingua italiana");
   ok(html.indexOf("undefined") === -1, nome + ": nessun 'undefined'");
-  ok(/[Vv]ersione 1\.3\.0/.test(html), nome + ": versione 1.3.0");
+  ok(new RegExp("[Vv]ersione " + versionePkg.replace(/\./g, "\\.")).test(html), nome + ": versione " + versionePkg);
   pagine[nome].forEach((testo) => ok(html.indexOf(testo) !== -1, nome + ": manca «" + testo + "»"));
 });
 ok(fs.existsSync(path.join(root, "assets", "css", "pagine.css")), "manca lo stile condiviso delle pagine");

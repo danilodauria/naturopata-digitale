@@ -1927,6 +1927,7 @@ html[data-theme="dark"] .skill-error { background: #352c18; color: #ecd49a; }
   white-space: nowrap;
   transition: color .16s, border-color .16s, background .16s;
 }
+.status-chip[hidden] { display: none !important; }
 .status-chip:hover { color: var(--text); border-color: var(--bordo-forte); }
 .status-chip svg {
   width: 15px; height: 15px;

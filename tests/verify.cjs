@@ -261,6 +261,11 @@ ok(pacchettoAgg.build.afterPack === "after-pack.cjs", "pacchetto desktop: firma 
 ok(Array.isArray(pacchettoAgg.build.publish) && pacchettoAgg.build.publish[0].repo === "naturopata-digitale", "pacchetto desktop: release GitHub per gli aggiornamenti");
 ok(!!(pacchettoAgg.dependencies && pacchettoAgg.dependencies["electron-updater"]), "pacchetto desktop: dipendenza electron-updater");
 ok(/latest\*\.yml/.test(fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8")), "workflow desktop: latest*.yml nella release");
+const cssStatus = fs.readFileSync(path.join(root, "assets", "css", "styles.css"), "utf8");
+ok(/\.status-chip\[hidden\]\s*\{\s*display:\s*none/.test(cssStatus), "barra: il chip dell'aggiornamento può sparire");
+const jsStatus = fs.readFileSync(path.join(root, "assets", "js", "app-status.js"), "utf8");
+ok(/:\s*"Aggiornamento";/.test(jsStatus), "barra: nessuna etichetta a metà per l'aggiornamento");
+ok(!/non si aggiorna da solo/.test(fs.readFileSync(path.join(root, "come-installare.html"), "utf8")), "guida: gli aggiornamenti automatici sono raccontati");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");
 ok(/contextBridge/.test(ponteDesktop) && /voceNaturale/.test(ponteDesktop), "preload: espone solo il ponte");

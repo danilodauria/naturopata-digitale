@@ -40,7 +40,8 @@
     if (testo) {
       testo.textContent = fase === "pronto" ? "Riavvia per aggiornare"
         : fase === "scaricamento" ? "Nuova versione " + (statoUpdate.percentuale || 0) + "%"
-        : "Nuova versione " + (statoUpdate.versione || "");
+        : fase === "disponibile" ? "Nuova versione " + (statoUpdate.versione || "")
+        : "Aggiornamento";
     }
     const dot = document.getElementById("statusUpdateDot");
     if (dot) dot.setAttribute("data-state", fase === "pronto" ? "ok" : "attesa");

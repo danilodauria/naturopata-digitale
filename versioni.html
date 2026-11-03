@@ -110,7 +110,16 @@
     <section class="section" id="storia">
       <div class="wrap">
         <article class="card versione attuale">
-          <p class="numero">1.3.3 <small>3 novembre 2026</small><span class="badge-ora">in uso</span></p>
+          <p class="numero">1.3.4 <small>3 novembre 2026</small><span class="badge-ora">in uso</span></p>
+          <ul>
+            <li><strong>Il pulsante dell'aggiornamento ora sparisce davvero</strong> quando non c'è niente da fare: prima restava nella barra di stato e mostrava la scritta «Nuova versione» anche a programma già aggiornato, perché lo stile del pulsante vinceva sull'attributo che lo nasconde.</li>
+            <li><strong>Nessuna etichetta a metà:</strong> senza un numero di versione il pulsante dice «Aggiornamento», e compare solo quando c'è qualcosa da scaricare o da installare.</li>
+            <li>Le guide raccontano il comportamento vero: il programma installato controlla le nuove versioni da solo, e il download manuale serve solo su macOS o quando l'aggiornamento non riesce.</li>
+          </ul>
+        </article>
+
+        <article class="card versione">
+          <p class="numero">1.3.3 <small>3 novembre 2026</small></p>
           <ul>
             <li><strong>Aggiornamenti automatici</strong> nel programma installato: la nuova versione si scarica in sottofondo dalle release GitHub e si installa alla chiusura. Il pannello nella barra di stato dice quando è pronta, con <em>Riavvia e aggiorna</em>.</li>
             <li><strong>Firma ad-hoc dei pacchetti macOS</strong>: su Apple Silicon il sistema non rifiuta più l'app come «danneggiata», perché il pacchetto arriva firmato. Gatekeeper chiede conferma la prima volta, come per gli altri sistemi.</li>
@@ -198,7 +207,7 @@
           </article>
           <article class="card">
             <h3>Programma installato</h3>
-            <p>Non c'è un aggiornamento automatico: scarica il pacchetto nuovo dalla pagina della versione e installalo sopra il precedente. Preferiti e progressi restano, perché sono salvati fuori dal programma.</p>
+            <p>Il programma controlla da solo, poco dopo l'avvio, se esiste una versione nuova: la scarica in sottofondo e la installa alla chiusura. Il pulsante <em>Nuova versione</em> compare solo quando c'è qualcosa da installare. Preferiti e progressi restano, perché sono salvati fuori dal programma. Se il controllo non riesce, il pacchetto si scarica a mano dalla pagina della versione.</p>
           </article>
         </div>
         <div class="callout">
@@ -237,7 +246,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>Versione 1.3.3 · novembre 2026</p>
+        <p>Versione 1.3.4 · novembre 2026</p>
         <p>Codice MIT · Contenuti CC BY-NC-SA 4.0</p>
       </div>
     </div>

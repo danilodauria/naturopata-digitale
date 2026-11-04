@@ -285,6 +285,10 @@ for (const f of pagineSenzaCartelle) {
   }
 }
 ok(linkACartelle.length === 0, "pagine: nessun link a una cartella, solo a file (" + linkACartelle.slice(0, 3).join(", ") + ")");
+
+ok(/function sezioneGuida\(id\)/.test(jsStatus) && /id === "win32"\) return "windows"/.test(jsStatus), "pannello Sistema: Windows porta alla sezione Windows della guida");
+ok(/id === "macos"\) return "macos"/.test(jsStatus) && /id === "linux"\) return "linux"/.test(jsStatus), "pannello Sistema: macOS e Linux portano alla propria sezione");
+ok(/come-installare\.html' \+\s*\(sezione \? "#" \+ sezione : ""\)/.test(jsStatus), "pannello Sistema: «Passaggio per passaggio» apre la guida alla sezione del sistema");
 ok(/did-finish-load/.test(mainDesktop) && /caricata/.test(mainDesktop), "desktop: un link che non si apre non riporta alla home");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");

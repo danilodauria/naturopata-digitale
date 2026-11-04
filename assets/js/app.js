@@ -196,7 +196,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.9</p><h2>Le istruzioni diventano un documento</h2><p class="text-small muted mb-0">Una guida all\'installazione passo per passo e una scheda rapida da stampare, in pagina e in PDF. E i link di download ora si controllano da soli, ogni giorno.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.10</p><h2>Le istruzioni diventano un documento</h2><p class="text-small muted mb-0">Una guida all\'installazione passo per passo e una scheda rapida da stampare, in pagina e in PDF. E i link di download ora si controllano da soli, ogni giorno.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="come-installare.html">Come si installa</a><a class="btn btn-secondary btn-small" href="scheda-rapida.html">Scheda rapida</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

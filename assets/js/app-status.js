@@ -253,6 +253,14 @@
     return "<li><strong>Telefono o tablet</strong> — qui il programma si installa come app dal browser: non ci sono avvisi di questo tipo da superare.</li>";
   }
 
+  function sezioneGuida(id) {
+    if (id === "win32") return "windows";
+    if (id === "macos") return "macos";
+    if (id === "linux") return "linux";
+    if (id === "android" || id === "ios") return "telefono";
+    return "";
+  }
+
   /* Pannelli --------------------------------------------------------------- */
 
   function contenutoModo() {
@@ -279,6 +287,7 @@
   function contenutoSistema() {
     const s = sistemaOperativo();
     const v = vociDisponibili();
+    const sezione = sezioneGuida(s.id);
 
     let html = "<h3>Sistema in uso</h3>" +
       "<p><strong>" + esc(s.nome) + "</strong> · " + esc(modo().titolo) + "</p>" +
@@ -294,7 +303,8 @@
     html += "<h3>Se il sistema chiede conferma</h3>" +
       "<p>I pacchetti non hanno un certificato commerciale: il sistema avvisa una volta sola e poi lascia lavorare. Il consenso si dà così.</p>" +
       '<ul class="text-small">' + istruzioniAvvio(s.id) + "</ul>" +
-      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html" data-status-close>Passaggio per passaggio</a>' +
+      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html' +
+        (sezione ? "#" + sezione : "") + '" data-status-close>Passaggio per passaggio</a>' +
         '<a class="btn btn-ghost btn-small" href="scarica/index.html" data-status-close>Scarica</a></div>';
     return html;
   }

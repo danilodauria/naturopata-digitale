@@ -23,7 +23,8 @@
     "fogli": "sh -c '[ -x .venv/bin/python ] && P=.venv/bin/python || P=python3; $P scripts/build_come_installare_pdf.py && $P scripts/build_scheda_rapida_pdf.py'",
     "link": "node scripts/check-links.cjs",
     "desktop:prepare": "node scripts/prepare-desktop.cjs",
-    "test": "node tests/verify.cjs && node tests/dom-test.cjs",
+    "test": "node tests/verify.cjs && node tests/dom-test.cjs && node tests/interfacce.cjs",
+    "test:interfacce": "node tests/interfacce.cjs",
     "test:data": "node tests/verify.cjs",
     "test:dom": "node tests/dom-test.cjs"
   },

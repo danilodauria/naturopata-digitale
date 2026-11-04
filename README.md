@@ -223,9 +223,11 @@ npm test
 
 - `npm run test:data` — integrità dei contenuti e logica di Neura (senza browser).
 - `npm run test:dom` — rendering e interazioni con jsdom.
+- `npm run test:interfacce` — apre ogni vista, segue ogni collegamento e preme ogni pulsante: un link a un file o a un'ancora che non esiste ferma la pubblicazione.
 
-I test non sono necessari per pubblicare il sito e non vengono caricati
-all'interno dell'applicazione.
+Il workflow di pubblicazione esegue `npm test` prima di caricare il sito e
+prima di costruire i pacchetti desktop: un controllo rosso blocca l'uscita.
+I test non vengono caricati all'interno dell'applicazione.
 
 I test controllano anche le pagine statiche (download, guide, scheda rapida,
 versioni), i due fogli in PDF con la loro versione dichiarata e i workflow di

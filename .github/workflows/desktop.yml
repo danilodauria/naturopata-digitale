@@ -43,6 +43,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
+
+      # Un pacchetto si costruisce solo da un sito che funziona: dati, viste,
+      # link e pulsanti vengono controllati prima di impacchettare.
+      - name: Installa le dipendenze di test
+        run: npm ci --no-audit --no-fund
+
+      - name: Verifica dati, rendering, link e pulsanti
+        run: npm test
 
       - name: Prepara il contenuto dell'app
         run: node scripts/prepare-desktop.cjs

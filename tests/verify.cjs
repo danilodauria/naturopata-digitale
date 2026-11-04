@@ -336,6 +336,18 @@ ok(/if: startsWith\(github\.ref, 'refs\/tags\/v'\) \|\| github\.event_name == 'w
 ok(/caches\.match\(request\)\.then\(\(cached\) => cached \|\| caches\.match\("index\.html"\)\)/.test(sw), "service worker: fallback navigazione");
 ok(/isAppShell/.test(sw), "service worker: le altre pagine non sovrascrivono la shell");
 
+// Il controllo di link e pulsanti deve restare agganciato alla pubblicazione:
+// se qualcuno lo toglie, ce ne accorgiamo qui e non con un link rotto.
+const pacchettoRadice = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+ok(fs.existsSync(path.join(root, "tests", "interfacce.cjs")), "esiste tests/interfacce.cjs");
+ok(/tests\/interfacce\.cjs/.test(pacchettoRadice.scripts.test), "npm test esegue il controllo di link e pulsanti");
+const pagesControlli = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
+ok(/npm test/.test(pagesControlli), "workflow Pages: i controlli girano prima di pubblicare");
+ok(pagesControlli.indexOf("npm test") < pagesControlli.indexOf("Prepara il sito"), "workflow Pages: i controlli precedono la preparazione del sito");
+const desktopControlli = fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8");
+ok(/npm test/.test(desktopControlli), "workflow desktop: i controlli girano prima dei pacchetti");
+ok(desktopControlli.indexOf("npm test") < desktopControlli.indexOf("prepare-desktop.cjs"), "workflow desktop: i controlli precedono la preparazione dei pacchetti");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

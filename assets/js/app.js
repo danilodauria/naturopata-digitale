@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.18</p><h2>I riferimenti restano vivi</h2><p class="text-small muted mb-0">Il controllo automatico del sito ora segue anche i collegamenti esterni — EMA, EFSA, NCCIH, MSD Manual, spezierie e riviste — e segnala i siti di riferimento che spariscono. Dieci indirizzi non più raggiungibili sono stati sostituiti da pagine verificate.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.19</p><h2>Installare, senza uscire dal programma</h2><p class="text-small muted mb-0">Il pannello Sistema ora elenca i passaggi di installazione del tuo sistema — Windows, macOS, Linux, Android o iPhone — con il file giusto e gli avvisi da superare. La guida completa resta a un tocco, ma per installare non serve più aprire un\'altra pagina.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

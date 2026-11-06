@@ -393,6 +393,11 @@ ok(linkACartelle.length === 0, "pagine: nessun link a una cartella, solo a file 
 ok(/function sezioneGuida\(id\)/.test(jsStatus) && /id === "win32"\) return "windows"/.test(jsStatus), "pannello Sistema: Windows porta alla sezione Windows della guida");
 ok(/id === "macos"\) return "macos"/.test(jsStatus) && /id === "linux"\) return "linux"/.test(jsStatus), "pannello Sistema: macOS e Linux portano alla propria sezione");
 ok(/come-installare\.html' \+\s*\(sezione \? "#" \+ sezione : ""\)/.test(jsStatus), "pannello Sistema: «Passaggio per passaggio» apre la guida alla sezione del sistema");
+ok(/function passiInstallazione\(id\)/.test(jsStatus), "pannello Sistema: i passaggi di installazione sono nel pannello");
+ok(/Installazione passo per passo/.test(jsStatus), "pannello Sistema: mostra i passaggi senza aprire la guida");
+ok(/Naturopata-Digitale-Windows-x64\.exe/.test(jsStatus) && /Naturopata-Digitale-Linux-amd64\.deb/.test(jsStatus), "pannello Sistema: indica il file giusto per Windows e Linux");
+ok(/Aggiungi alla schermata Home/.test(jsStatus), "pannello Sistema: istruzioni per telefono e tablet");
+ok(/ol\.status-steps/.test(cssStatus), "pannello Sistema: elenco numerato leggibile");
 ok(/did-finish-load/.test(mainDesktop) && /caricata/.test(mainDesktop), "desktop: un link che non si apre non riporta alla home");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");

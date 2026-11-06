@@ -1960,6 +1960,8 @@ html[data-theme="dark"] .skill-error { background: #352c18; color: #ecd49a; }
 .status-panel h3 { font-size: 1rem; margin: .25rem 0 0; }
 .status-panel p { margin: 0; color: var(--text-soft); }
 .status-panel ul { margin: 0; padding-left: 1.1rem; color: var(--text-soft); font-size: .84rem; }
+.status-panel ol.status-steps { margin: 0; padding-left: 1.3rem; color: var(--text-soft); font-size: .84rem; display: grid; gap: .35rem; }
+.status-panel ol.status-steps code { font-size: .8rem; }
 .status-actions { display: flex; flex-wrap: wrap; gap: .45rem; margin: .25rem 0 .45rem; }
 
 .status-tag {

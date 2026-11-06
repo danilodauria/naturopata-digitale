@@ -240,17 +240,84 @@
     } catch (e) { return { totali: 0, italiane: 0 }; }
   }
 
-  function istruzioniAvvio(id) {
+  // Gli stessi passaggi della guida, scritti qui dentro: dal pannello Sistema
+  // si installa senza aprire un'altra pagina.
+  function passiInstallazione(id) {
     if (id === "win32") {
-      return "<li><strong>Windows</strong> — se compare <em>Windows ha protetto il PC</em>: <em>Altro informazioni</em> → <em>Esegui comunque</em>. Se il file resta bloccato, tasto destro → <em>Proprietà</em> → <em>Sblocca</em> → <em>OK</em>.</li>";
+      return {
+        titolo: "Windows 10 e 11",
+        file: "Naturopata-Digitale-Windows-x64.exe",
+        anche: "Naturopata-Digitale-Windows-portatile.zip",
+        passi: [
+          "Scarica <code>Naturopata-Digitale-Windows-x64.exe</code> dalla pagina dei download.",
+          "Fai doppio clic sul file appena scaricato.",
+          "Se compare «Windows ha protetto il PC», scegli <em>Ulteriori informazioni</em> e poi <em>Esegui comunque</em>: manca una firma commerciale, non è un errore. Se il file resta bloccato: tasto destro → <em>Proprietà</em> → <em>Sblocca</em> → <em>OK</em>.",
+          "Segui la procedura: al termine «Naturopata Digitale» compare nel menu Start."
+        ],
+        nota: "La versione portatile ZIP non installa niente: si scompatta dove vuoi, anche su una chiavetta, e si avvia da lì."
+      };
     }
     if (id === "macos") {
-      return "<li><strong>macOS</strong> — doppio clic sull'app, poi <em>Fine</em>; <em>Impostazioni di Sistema</em> → <em>Privacy e sicurezza</em>, in fondo alla sezione <em>Sicurezza</em> trovi <em>Apri comunque</em>: conferma con password o Touch ID.</li>";
+      return {
+        titolo: "macOS 10.15 o successivo",
+        file: "Naturopata-Digitale-Mac-arm64.dmg",
+        anche: "Naturopata-Digitale-Mac-x64.dmg",
+        passi: [
+          "Scarica il <code>.dmg</code> giusto per il processore: <code>arm64</code> per i Mac con chip Apple, <code>x64</code> per i Mac Intel.",
+          "Apri il file: compare la finestra con l'icona del programma e quella della cartella Applicazioni.",
+          "Trascina «Naturopata Digitale» nella cartella Applicazioni.",
+          "Al primo avvio fai tasto destro sull'icona → <em>Apri</em> → <em>Apri</em>. Se macOS dice che l'app è danneggiata è la quarantena: <code>xattr -dr com.apple.quarantine \"/Applications/Naturopata Digitale.app\"</code>, una volta sola."
+        ],
+        nota: "Nel programma installato l'aggiornamento arriva da solo; se macOS lo blocca, si scarica il pacchetto nuovo e si installa sopra il precedente."
+      };
     }
     if (id === "linux") {
-      return "<li><strong>Linux</strong> — <code>.deb</code>: doppio clic e installa; <code>.AppImage</code>: <em>Proprietà</em> → <em>Consenti l'esecuzione</em>, oppure <code>chmod +x</code>.</li>";
+      return {
+        titolo: "Linux · amd64",
+        file: "Naturopata-Digitale-Linux-amd64.deb",
+        anche: "Naturopata-Digitale-Linux-x86_64.AppImage",
+        passi: [
+          "<code>.deb</code> (Debian, Ubuntu, Mint): doppio clic e <em>Installa</em>, oppure <code>sudo apt install ./Naturopata-Digitale-Linux-amd64.deb</code>.",
+          "<code>.AppImage</code> (tutte le altre distribuzioni): rendilo eseguibile con <code>chmod +x Naturopata-Digitale-Linux-x86_64.AppImage</code>.",
+          "Avvia l'AppImage con doppio clic, oppure da terminale con <code>./Naturopata-Digitale-Linux-x86_64.AppImage</code>.",
+          "Se manca una libreria: su Ubuntu 24.04 <code>sudo apt install libfuse2t64</code>, sulle versioni precedenti <code>libfuse2</code>."
+        ],
+        nota: "Con il pacchetto .deb la voce compare nel menu delle applicazioni come «Naturopata Digitale»."
+      };
     }
-    return "<li><strong>Telefono o tablet</strong> — qui il programma si installa come app dal browser: non ci sono avvisi di questo tipo da superare.</li>";
+    if (id === "android") {
+      return {
+        titolo: "Android",
+        passi: [
+          "Apri questo programma con Chrome (va bene anche Edge).",
+          "Tocca i tre puntini ⋮ in alto a destra.",
+          "Scegli «Installa app» o «Aggiungi a schermata Home».",
+          "Conferma: l'icona compare tra le app e il programma si apre anche senza rete."
+        ],
+        nota: "Non si scarica nessun pacchetto: l'app è questa pagina, salvata dal browser."
+      };
+    }
+    if (id === "ios") {
+      return {
+        titolo: "iPhone e iPad",
+        passi: [
+          "Apri questa pagina con Safari.",
+          "Tocca il pulsante Condividi, il quadrato con la freccia.",
+          "Scorri e tocca «Aggiungi alla schermata Home».",
+          "Tocca «Aggiungi» in alto a destra: l'icona compare tra le app."
+        ],
+        nota: "La prima apertura salva i contenuti: dopo funziona anche in aereo o in mezzo ai boschi."
+      };
+    }
+    return {
+      titolo: "sistema non riconosciuto",
+      passi: [
+        "Il programma funziona lo stesso nel browser, e dopo la prima apertura anche senza rete.",
+        "Per installarlo sul computer, scarica dalla pagina dei download il pacchetto adatto al tuo sistema.",
+        "Su telefono o tablet si aggiunge alla schermata Home dal menu del browser."
+      ],
+      nota: "Il riconoscimento del sistema è una deduzione del browser: se sbaglia, la guida completa elenca tutti i casi."
+    };
   }
 
   function sezioneGuida(id) {
@@ -300,11 +367,16 @@
       '<p class="text-small muted">Le voci naturali si installano dal pannello Voce e restano dentro il programma; le altre arrivano dal sistema operativo, e senza una voce italiana Neura tace e risponde per iscritto. Chrome ed Edge, nel browser, aggiungono voci online che il programma desktop non vede: lì restano solo quelle installate nel sistema. Per averne altre: su Windows <em>Impostazioni</em> → <em>Data e ora e lingua</em> → <em>Riconoscimento vocale</em> → <em>Aggiungi voci</em>; su macOS <em>Impostazioni di Sistema</em> → <em>Accessibilità</em> → <em>Contenuto pronunciato</em> → <em>Voce di sistema</em> → <em>Gestisci voci</em>.</p>' +
       '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/neura" data-status-close>Scegliere la voce</a></div>';
 
-    html += "<h3>Se il sistema chiede conferma</h3>" +
-      "<p>I pacchetti non hanno un certificato commerciale: il sistema avvisa una volta sola e poi lascia lavorare. Il consenso si dà così.</p>" +
-      '<ul class="text-small">' + istruzioniAvvio(s.id) + "</ul>" +
+    const guida = passiInstallazione(s.id);
+    html += "<h3>Installazione passo per passo · " + esc(guida.titolo) + "</h3>" +
+      (guida.file
+        ? "<p>File da scaricare: <code>" + esc(guida.file) + "</code>" + (guida.anche ? " oppure <code>" + esc(guida.anche) + "</code>" : "") + ".</p>"
+        : "") +
+      '<ol class="status-steps">' + guida.passi.map(function (p) { return "<li>" + p + "</li>"; }).join("") + "</ol>" +
+      (guida.nota ? '<p class="text-small muted">' + guida.nota + "</p>" : "") +
+      '<p class="text-small muted">Sono gli stessi passaggi della guida, scritti qui: per installare non devi uscire dal programma.</p>' +
       '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html' +
-        (sezione ? "#" + sezione : "") + '" data-status-close>Passaggio per passaggio</a>' +
+        (sezione ? "#" + sezione : "") + '" data-status-close>Guida completa</a>' +
         '<a class="btn btn-ghost btn-small" href="scarica/index.html" data-status-close>Scarica</a></div>';
     return html;
   }

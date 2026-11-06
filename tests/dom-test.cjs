@@ -77,6 +77,14 @@ async function go(hash) {
   helpChip.click();
   await tick(20);
   ok(doc.getElementById("statusPanel").hidden, "barra di stato: il pannello si chiude");
+  const osChip = doc.getElementById("statusOs");
+  osChip.click();
+  await tick(40);
+  const pannelloSistema = doc.getElementById("statusPanel");
+  ok(!pannelloSistema.hidden && /Installazione passo per passo/.test(pannelloSistema.textContent), "pannello Sistema: i passaggi di installazione sono nel pannello");
+  ok(pannelloSistema.querySelectorAll(".status-steps li").length >= 3, "pannello Sistema: elenco numerato dei passaggi");
+  osChip.click();
+  await tick(20);
   ok(!!doc.querySelector(".welcome-panel"), "benvenuto: scheda di Neura presente");
   ok(doc.querySelectorAll(".welcome-actions [data-welcome]").length === 3, "benvenuto: tre azioni");
   doc.querySelector('[data-welcome="hide"]').click();

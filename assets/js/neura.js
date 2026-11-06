@@ -508,8 +508,44 @@ NP.neura = (function () {
     };
   }
 
+  /* Ingredienti degli amari → schede dell’erbario -------------------------
+     Un ingrediente è una pianta solo se il nome corrisponde davvero a una
+     scheda: niente collegamenti inventati per «erbe amaricanti» o «spezie». */
+
+  function piantaIngrediente(nome) {
+    const trovate = findPlants(nome);
+    if (trovate.length === 1) return trovate[0];
+    const n = norm(nome);
+    const esatte = (NP.plants || []).filter((p) =>
+      [p.nome, p.id].concat(p.nomi || []).some((x) => norm(x) === n));
+    return esatte.length === 1 ? esatte[0] : null;
+  }
+
+  function piantaNellaDomanda(n) {
+    const trovate = (NP.plants || []).filter((p) =>
+      [p.nome, p.id].concat(p.nomi || []).some((x) => {
+        const nx = norm(x);
+        return nx.length >= 5 && (" " + n + " ").indexOf(" " + nx + " ") !== -1;
+      }));
+    return trovate.length === 1 ? trovate[0] : null;
+  }
+
+  function amariConPianta(p) {
+    return (NP.amari || []).filter((a) =>
+      (a.ingredienti || []).some((i) => {
+        const pianta = piantaIngrediente(i);
+        return pianta && pianta.id === p.id;
+      }));
+  }
+
+  function schedaPiantaBreve(p) {
+    return "<p><strong>" + escapeHtml(p.nome) + "</strong> <em>(" + escapeHtml(p.latino) + ")</em> — " + escapeHtml(p.sintesi) + "</p>" +
+      "<p>" + safetyLine(p) + ' · <a href="#/pianta/' + p.id + '">Apri la scheda completa</a></p>';
+  }
+
   function amariAnswer(q) {
     const n = norm(q);
+    const pianta = piantaNellaDomanda(n);
     const trovato = (NP.amari || []).find((a) => {
       const nome = norm(a.nome);
       if (n.indexOf(nome) !== -1) return true;
@@ -517,14 +553,40 @@ NP.neura = (function () {
       return corto.length > 3 && n.indexOf(corto) !== -1;
     });
     if (trovato) {
+      const collegamenti = [];
+      const ingredienti = (trovato.ingredienti || []).map((x) => {
+        const p = piantaIngrediente(x);
+        if (!p) return escapeHtml(x);
+        collegamenti.push(p);
+        return '<a href="#/pianta/' + p.id + '">' + escapeHtml(x) + "</a>";
+      });
+      const usaLaPianta = pianta && (trovato.ingredienti || []).some((i) => {
+        const p = piantaIngrediente(i);
+        return p && p.id === pianta.id;
+      });
       return {
-        html: "<p><strong>" + escapeHtml(trovato.nome) + "</strong> — " + escapeHtml(trovato.origine) + "</p>" +
-          "<p><strong>Ingredienti dichiarati:</strong> " + escapeHtml((trovato.ingredienti || []).join(", ")) + "</p>" +
+        html: (usaLaPianta
+            ? schedaPiantaBreve(pianta) + "<p>È uno degli ingredienti dichiarati di <strong>" + escapeHtml(trovato.nome) + "</strong>.</p>"
+            : "") +
+          "<p><strong>" + escapeHtml(trovato.nome) + "</strong> — " + escapeHtml(trovato.origine) + "</p>" +
+          "<p><strong>Ingredienti dichiarati:</strong> " + ingredienti.join(", ") + "</p>" +
+          (collegamenti.length ? '<p class="muted">I nomi collegati aprono la scheda dell’erbario: parti usate, cautele e sosia. Gli elenchi sono quelli dichiarati dalla casa e raramente sono completi.</p>' : "") +
           "<p>" + escapeHtml(trovato.storia) + "</p>" +
           '<div class="callout warn" style="margin:.6rem 0"><span aria-hidden="true">⚠️</span><p class="mb-0">' + escapeHtml(trovato.nota) + "</p></div>" +
           '<p class="muted">È una bevanda alcolica: non adatta a bambini, gravidanza e allattamento, e da evitare con gastrite, ulcera o farmaci senza parere.</p>' +
-          '<p><a href="#/amari">Atlante degli amari</a></p>'
+          '<p><a href="#/amari">Atlante degli amari</a>' + (collegamenti.length ? " · <a href=\"#/pianta/" + collegamenti[0].id + "\">Scheda di " + escapeHtml(collegamenti[0].nome) + "</a>" : "") + "</p>"
       };
+    }
+    if (pianta) {
+      const usato = amariConPianta(pianta);
+      if (usato.length) {
+        return {
+          html: schedaPiantaBreve(pianta) +
+            "<p><strong>Negli amari:</strong> " + usato.map((a) => escapeHtml(a.nome)).join(", ") + ". Nell’atlante trovi ingredienti, storia e cautele di ciascuno.</p>" +
+            '<div class="callout warn" style="margin:.6rem 0"><span aria-hidden="true">⚠️</span><p class="mb-0">Negli amari questa pianta arriva dentro una bevanda alcolica: l’infuso amaro non è una terapia e non sostituisce un farmaco.</p></div>' +
+            '<p><a href="#/amari">Atlante degli amari →</a> · <a href="#/pianta/' + pianta.id + '">Scheda di ' + escapeHtml(pianta.nome) + "</a></p>"
+        };
+      }
     }
     return {
       html: "<p><strong>Un amaro non è una cura</strong>: è una bevanda alcolica con erbe e zuccheri. Nell’atlante trovi " + (NP.amari || []).length + " amari divisi in categorie (monastici, amaricanti classici, alpini, bitter), con ingredienti, storia e cautele.</p>" +

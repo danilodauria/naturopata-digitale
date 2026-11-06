@@ -210,6 +210,10 @@ ok(/#\/spezierie/.test(answer("parlami delle spezierie")), "Neura rimanda alle s
 ok(/Santa Maria Novella/i.test(answer("santa maria novella")), "Neura riconosce Santa Maria Novella");
 ok(/alcol|alcolic/i.test(answer("parlami degli amari")), "Neura avverte che gli amari sono alcolici");
 ok(/#\/amari/.test(answer("che cos'è un amaro d'abbazia?")), "Neura rimanda all'atlante degli amari");
+ok(/#\/pianta\/genziana/.test(answer("quali amari contengono la genziana?")), "Neura collega l'ingrediente genziana alla sua scheda");
+ok(/#\/pianta\/china/.test(answer("che cosa contiene la tintura imperiale?")), "Neura collega gli ingredienti dell'amaro alle schede");
+ok(/Scheda completa/.test(answer("a cosa serve la genziana nell'amaro?")), "Neura propone la scheda della pianta citata in un amaro");
+ok(answer("che cosa contiene la tintura imperiale?").indexOf('#/pianta/erbe') === -1, "Neura non collega ingredienti generici a piante inesistenti");
 ok(/ossalat/i.test(answer("il chaga è sicuro?")), "Neura cita gli ossalati del chaga");
 ok(/112|Centro Antiveleni|micologo/i.test(answer("come si raccolgono i funghi?")), "Neura mette la sicurezza davanti ai funghi");
 ok(/#\/estrazioni/.test(answer("come si fa un oleolito?")), "Neura spiega gli oleoliti");

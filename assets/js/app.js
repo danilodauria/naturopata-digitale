@@ -196,7 +196,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.15</p><h2>Le liquorerie, appena apri Neura</h2><p class="text-small muted mb-0">Due domande nuove in cima alla chat portano alle nove spezierie: «Quali liquori nascono dalle spezierie storiche?» e «Che cosa racconta il liquore Strega?». Le risposte elencano le officine e ricordano che sono bevande alcoliche, non rimedi.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.16</p><h2>Dall\'amaro alla pianta, in un clic</h2><p class="text-small muted mb-0">Chiedendo di un ingrediente — «quali amari contengono la genziana?» — Neura apre la scheda dell\'erbario con sintesi, cautele e sosia. Anche nell\'atlante degli amari i nomi delle piante sono collegamenti, mentre «erbe amaricanti» e «spezie» restano parole.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

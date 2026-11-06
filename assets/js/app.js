@@ -196,7 +196,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.14</p><h2>Nove spezierie, da Benevento a Torino</h2><p class="text-small muted mb-0">Arrivano sei liquorerie storiche — Strega, Fernet-Branca, Montenegro, Lucano, Averna e Carpano — con storia, cautele e sito ufficiale verificato uno per uno. Neura le conosce e risponde anche quando chiedi di un liquore per nome.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.15</p><h2>Le liquorerie, appena apri Neura</h2><p class="text-small muted mb-0">Due domande nuove in cima alla chat portano alle nove spezierie: «Quali liquori nascono dalle spezierie storiche?» e «Che cosa racconta il liquore Strega?». Le risposte elencano le officine e ricordano che sono bevande alcoliche, non rimedi.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

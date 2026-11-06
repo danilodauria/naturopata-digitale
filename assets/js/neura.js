@@ -829,6 +829,8 @@ NP.neura = (function () {
     findCondition: findCondition,
     suggestions: [
       "Che cosa sono le spezierie d’abbazia?",
+      "Quali liquori nascono dalle spezierie storiche?",
+      "Che cosa racconta il liquore Strega?",
       "Il chaga è sicuro?",
       "A cosa serve la malva?",
       "Posso prendere iperico con la pillola?",

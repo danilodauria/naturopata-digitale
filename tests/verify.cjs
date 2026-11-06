@@ -220,6 +220,10 @@ ok(/vietata|autorizzazion/i.test(answer("la distillazione in casa è legale?")),
 ok(/giugno/i.test(answer("qual è il tempo balsamico di giugno?")), "Neura risponde sul tempo balsamico");
 ok(/ossalat/i.test((NP.neura.check("chaga", {}) || { items: [] }).items.map((i) => i.testo).join(" ")), "il controllo di sicurezza considera i funghi");
 ok(NP.neura.search("reishi", 6).some((r) => r.doc.type === "fungo"), "la ricerca di Neura trova i funghi");
+ok(NP.neura.suggestions.slice(0, 4).some((s) => /liquor/i.test(s)), "le domande iniziali di Neura includono le liquorerie");
+ok(NP.neura.suggestions.length >= 8 && new Set(NP.neura.suggestions).size === NP.neura.suggestions.length, "domande iniziali di Neura senza duplicati");
+ok(/Strega/.test(answer("quali liquori nascono dalle spezierie storiche?")), "Neura elenca le liquorerie partendo dalle spezierie");
+ok(/Carpano/.test(answer("che liquori si producono nelle antiche spezierie?")), "Neura ricorda Carpano fra le spezierie");
 
 const c1 = NP.neura.check("iperico e pillola", { farmaci: true });
 ok(c1.level === "alto", "controllo iperico + contraccettivi = alto");

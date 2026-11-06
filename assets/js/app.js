@@ -44,6 +44,37 @@ NP.app = (function () {
     return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
 
+  /* Nomi delle piante → collegamenti all'erbario --------------------------
+     Serve a tempo balsamico e fitoalimurgia: collega solo i nomi che hanno
+     davvero una scheda, in un solo passaggio, senza annidare collegamenti. */
+  function escapeRe(s) {
+    return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  let mappaPiante = null;
+  function piantePerNome() {
+    if (mappaPiante) return mappaPiante;
+    const mappa = {};
+    (NP.plants || []).forEach((p) => {
+      [p.nome, p.id].concat(p.nomi || []).forEach((x) => {
+        if (x && String(x).length >= 4) mappa[String(x).toLowerCase()] = p.id;
+      });
+    });
+    mappaPiante = mappa;
+    return mappa;
+  }
+
+  function collegaPiante(testo) {
+    const mappa = piantePerNome();
+    const nomi = Object.keys(mappa).sort((a, b) => b.length - a.length);
+    if (!nomi.length) return esc(testo);
+    const re = new RegExp("(^|[^A-Za-zÀ-ÿ])(" + nomi.map(escapeRe).join("|") + ")(?![A-Za-zÀ-ÿ])", "gi");
+    return esc(testo).replace(re, (m, prima, nome) => {
+      const id = mappa[nome.toLowerCase()];
+      return prima + (id ? '<a href="#/pianta/' + id + '">' + nome + "</a>" : nome);
+    });
+  }
+
   function monthLabel(months, short) {
     if (!months || !months.length || months.length === 12) return "tutto l'anno";
     return months.map((m) => (short ? MONTHS_SHORT[m] : MONTHS[m])).join(" · ");
@@ -196,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.16</p><h2>Dall\'amaro alla pianta, in un clic</h2><p class="text-small muted mb-0">Chiedendo di un ingrediente — «quali amari contengono la genziana?» — Neura apre la scheda dell\'erbario con sintesi, cautele e sosia. Anche nell\'atlante degli amari i nomi delle piante sono collegamenti, mentre «erbe amaricanti» e «spezie» restano parole.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.17</p><h2>Ogni pianta, la sua scheda</h2><p class="text-small muted mb-0">Nel tempo balsamico e nella fitoalimurgia i nomi delle piante sono collegamenti: ortica, iperico, sambuco, tarassaco, calendula aprono la scheda con parti usate, stagione e avvertenze. «Foglie tenere» e «fiori» restano parole, senza schede inventate.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 
@@ -524,7 +555,7 @@ NP.app = (function () {
   }
 
   return {
-    app, page, render, goNeura, ico, esc, monthLabel, MONTHS, MONTHS_SHORT, SAFETY,
+    app, page, render, goNeura, ico, esc, collegaPiante, monthLabel, MONTHS, MONTHS_SHORT, SAFETY,
     state, views, saveFavs, saveRead, saveQuizStats, readJSON, writeJSON, PREFIX
   };
 })();

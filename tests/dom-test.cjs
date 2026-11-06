@@ -305,6 +305,15 @@ async function go(hash) {
   doc.querySelector('.month-tab[data-month="6"]').click();
   await tick(70);
   ok(/sole nel barattolo/i.test(doc.querySelector(".panel h2").textContent), "tempo balsamico: giugno");
+  ok(doc.querySelectorAll('.pill a[href^="#/pianta/"]').length >= 4, "tempo balsamico: le piante raccolte rimandano all'erbario");
+  ok(doc.querySelector('.pill a[href="#/pianta/iperico"]') !== null, "tempo balsamico: l'iperico ha la sua scheda");
+  ok(doc.querySelectorAll('.panel ul a[href^="#/pianta/"]').length >= 1, "tempo balsamico: anche le preparazioni citano le schede");
+
+  await go("#/fitoalimurgia");
+  ok(doc.querySelectorAll('.prep a[href^="#/pianta/"]').length >= 3, "fitoalimurgia: le piante citate rimandano all'erbario");
+  ok(doc.querySelector('.prep a[href="#/pianta/ortica"]') !== null, "fitoalimurgia: l'ortica ha la sua scheda");
+  ok(doc.querySelector('.prep a[href="#/pianta/sambuco"]') !== null, "fitoalimurgia: il sambuco ha la sua scheda");
+  ok(doc.querySelector('.prep a[href="#/pianta/tarassaco"]') !== null, "fitoalimurgia: il tarassaco ha la sua scheda");
 
   await go("#/funghi");
   ok(doc.querySelectorAll(".toxic-card").length === win.NP.funghi.length, "funghi: una scheda per specie");

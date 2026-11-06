@@ -197,9 +197,9 @@
         '<div class="panel">' +
           '<p class="eyebrow">' + esc(A.MONTHS[mese.mese]) + (mese.mese === corrente ? " · mese corrente" : "") + "</p>" +
           "<h2>" + esc(mese.titolo) + "</h2>" +
-          "<p><strong>Il momento:</strong> " + esc(mese.momento) + "</p>" +
-          "<h3>Si raccoglie</h3><div class=\"pill-list\">" + (mese.raccogli || []).map((x) => '<span class="pill">' + esc(x) + "</span>").join("") + "</div>" +
-          "<h3>Si prepara</h3><ul>" + (mese.prepara || []).map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>" +
+          "<p><strong>Il momento:</strong> " + A.collegaPiante(mese.momento) + "</p>" +
+          "<h3>Si raccoglie</h3><div class=\"pill-list\">" + (mese.raccogli || []).map((x) => '<span class="pill">' + A.collegaPiante(x) + "</span>").join("") + "</div>" +
+          "<h3>Si prepara</h3><ul>" + (mese.prepara || []).map((x) => "<li>" + A.collegaPiante(x) + "</li>").join("") + "</ul>" +
           '<div class="callout mb-0"><span aria-hidden="true">✋</span><p class="mb-0">' + esc(mese.nota) + "</p></div>" +
         "</div>" +
         '<div class="panel panel-soft">' +

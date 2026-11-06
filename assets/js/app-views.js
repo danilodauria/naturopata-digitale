@@ -142,9 +142,9 @@
       '<section class="section"><div class="panel">' +
         "<h2>Tre preparazioni per iniziare</h2>" +
         '<div class="prep-list">' +
-          '<div class="prep"><h3>Risotto alle ortiche</h3><p>Sbollenta le foglie di ortica, strizzale e tritale. Prepara un risotto con cipolla e brodo, aggiungi l\'ortica a metà cottura e manteca con formaggio.</p><p class="dose">L\'ortica cotta perde l\'effetto urticante.</p></div>' +
-          '<div class="prep"><h3>Insalata di tarassaco</h3><p>Usa solo foglie tenere, lavale bene e condisci con olio, limone e un pizzico di sale. Un breve ammollo attenua l\'amaro.</p><p class="dose">Ottima con mela o uovo sodo.</p></div>' +
-          '<div class="prep"><h3>Sciroppo di sambuco</h3><p>Infondi i fiori in acqua con zucchero e limone, filtra e imbottiglia. Conserva in frigorifero e consuma in tempi brevi.</p><p class="dose">Usa solo fiori identificati con certezza e mai crudi.</p></div>' +
+          '<div class="prep"><h3>' + A.collegaPiante("Risotto alle ortiche") + '</h3><p>' + A.collegaPiante("Sbollenta le foglie di ortica, strizzale e tritale. Prepara un risotto con cipolla e brodo, aggiungi l'ortica a metà cottura e manteca con formaggio.") + '</p><p class="dose">' + A.collegaPiante("L'ortica cotta perde l'effetto urticante.") + '</p></div>' +
+          '<div class="prep"><h3>' + A.collegaPiante("Insalata di tarassaco") + '</h3><p>' + A.collegaPiante("Usa solo foglie tenere, lavale bene e condisci con olio, limone e un pizzico di sale. Un breve ammollo attenua l'amaro.") + '</p><p class="dose">Ottima con mela o uovo sodo.</p></div>' +
+          '<div class="prep"><h3>' + A.collegaPiante("Sciroppo di sambuco") + '</h3><p>' + A.collegaPiante("Infondi i fiori di sambuco in acqua con zucchero e limone, filtra e imbottiglia. Conserva in frigorifero e consuma in tempi brevi.") + '</p><p class="dose">Usa solo fiori identificati con certezza e mai crudi.</p></div>' +
         "</div>" +
         '<p class="mt-2"><button class="btn btn-secondary btn-small" type="button" data-ask="' + esc("Quali piante selvatiche posso raccogliere in sicurezza?") + '">Chiedi a Neura ' + A.ico("brain") + "</button></p>" +
       "</div></section>",
@@ -378,7 +378,7 @@
       "</section>" +
 
       '<section class="section"><div class="home-split"><div class="panel"><h2>Che cosa c\'è dentro</h2><div class="mini-stats"><div class="mini-stat"><strong>' + (NP.plants || []).length + "</strong><span>schede</span></div><div class=\"mini-stat\"><strong>" + (NP.manual || []).length + "</strong><span>capitoli</span></div><div class=\"mini-stat\"><strong>" + (NP.quiz || []).length + "</strong><span>domande</span></div></div><p class=\"text-small muted mt-2 mb-0\">Tecnologia: HTML, CSS e JavaScript senza dipendenze esterne; PWA con service worker; tutti i contenuti sono locali.</p></div>" +
-        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.16 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
+        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.17 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
       "</section>" +
 
       '<div class="callout warn"><span aria-hidden="true">⚕️</span><p class="mb-0"><strong>Avvertenza sanitaria.</strong> Naturopata Digitale è un\'opera divulgativa. Non fornisce diagnosi, prescrizioni o trattamenti. Le informazioni sulle piante non sostituiscono il parere di medico, farmacista, dietista o altro professionista sanitario. In caso di sintomi importanti, rivolgiti alle strutture sanitarie.</p></div>',

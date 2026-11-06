@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.3.10-1";
+const VERSION = "nd-v1.3.11-1";
 const SHELL = [
   "./",
   "index.html",
@@ -34,9 +34,11 @@ const SHELL = [
   "assets/js/data-quiz-2.js",
   "assets/js/data-quiz-3.js",
   "assets/js/data-library.js",
+  "assets/js/data-saperi.js",
   "assets/js/neura.js",
   "assets/js/app.js",
   "assets/js/app-views.js",
+  "assets/js/app-saperi.js",
   "assets/js/app-library.js",
   "assets/js/app-quiz.js",
   "assets/js/app-neura.js",

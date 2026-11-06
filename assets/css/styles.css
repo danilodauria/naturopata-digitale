@@ -2057,3 +2057,6 @@ html[data-theme="dark"] .status-num b { color: var(--accent); }
 @media print {
   .status-bar, .status-panel, .welcome-panel { display: none !important; }
 }
+
+/* I filtri per categoria devono poter nascondere una sezione intera */
+.section[hidden] { display: none; }

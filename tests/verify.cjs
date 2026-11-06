@@ -8,7 +8,7 @@ const files = [
   "data-plants", "data-plants-2", "data-plants-3", "data-plants-4", "data-plants-5",
   "data-manual", "data-manual-2", "data-manual-3",
   "data-manual-4", "data-manual-5", "data-extra", "data-extra-2", "data-extra-3",
-  "data-quiz", "data-quiz-2", "data-quiz-3", "data-library", "neura"
+  "data-quiz", "data-quiz-2", "data-quiz-3", "data-library", "data-saperi", "neura"
 ];
 files.forEach((f) => require(path.join(__dirname, "..", "assets", "js", f + ".js")));
 
@@ -103,6 +103,46 @@ NP.survival.livelli.forEach((l) => {
 ok(NP.survival.errori.length >= 8, "sopravvivenza: errori da evitare");
 ok(NP.survival.fonti.every((f) => /^https:\/\//.test(f.u)), "sopravvivenza: fonti https");
 
+// Saperi antichi
+ok(Array.isArray(NP.spezierie) && NP.spezierie.length >= 3, "spezierie: almeno tre luoghi");
+NP.spezierie.forEach((s) => {
+  ["id", "nome", "luogo", "epoca", "storia", "perche", "visita", "attenzione"].forEach((k) => ok(!!s[k], "spezieria " + s.id + ": manca " + k));
+  ok((s.link || []).length > 0 && s.link.every((l) => /^https:\/\//.test(l.u)), "spezieria " + s.id + ": collegamenti https");
+});
+ok(NP.spezierieGuida.passi.length >= 4, "spezierie: come si legge una spezieria");
+const amaroCats = new Set(NP.amariCategorie.map((c) => c.id));
+ok(NP.amariCategorie.length >= 3, "amari: categorie");
+ok(NP.amari.length >= 8, "amari: almeno otto schede (" + NP.amari.length + ")");
+NP.amari.forEach((a) => {
+  ok(amaroCats.has(a.categoria), "amaro " + a.id + ": categoria inesistente");
+  ok((a.ingredienti || []).length >= 3, "amaro " + a.id + ": ingredienti insufficienti");
+  ok(!!(a.storia && a.nota), "amaro " + a.id + ": storia o nota mancante");
+});
+ok(NP.amariIngredienti.length >= 6, "amari: ingredienti spiegati");
+ok(NP.amariPrezzi.link.every((l) => /^https:\/\//.test(l.u)), "amari: negozi https");
+ok(NP.balsamico.length === 12, "tempo balsamico: dodici mesi");
+ok(NP.balsamico.map((m) => m.mese).join(",") === "1,2,3,4,5,6,7,8,9,10,11,12", "tempo balsamico: mesi in ordine");
+NP.balsamico.forEach((m) => {
+  ok(!!(m.titolo && m.momento && m.nota), "tempo balsamico: mese " + m.mese + " incompleto");
+  ok((m.raccogli || []).length >= 2, "tempo balsamico: mese " + m.mese + " senza raccolte");
+  ok((m.prepara || []).length >= 1, "tempo balsamico: mese " + m.mese + " senza preparazioni");
+});
+ok(NP.funghi.length >= 6, "funghi: almeno sei schede");
+NP.funghi.forEach((f) => {
+  ["id", "nome", "latino", "uso", "tradizione", "evidenza", "sicurezza", "livello", "nota"].forEach((k) => ok(!!f[k], "fungo " + f.id + ": manca " + k));
+  ok(["verde", "giallo", "rosso"].indexOf(f.livello) !== -1, "fungo " + f.id + ": livello non valido");
+});
+ok(NP.micologia.regole.length >= 8, "micologia: otto regole");
+ok(NP.micologia.fonti.every((f) => /^https:\/\//.test(f.url)), "micologia: fonti https");
+ok(/112|Centro Antiveleni/i.test(NP.micologia.regole.map((r) => r.d).join(" ")), "micologia: numeri utili nelle regole");
+ok(NP.estrazioni.length >= 5, "estrazioni: almeno cinque preparazioni");
+NP.estrazioni.forEach((e) => {
+  ok((e.passi || []).length >= 4, "estrazione " + e.id + ": passi insufficienti");
+  ok(!!(e.sicurezza && e.conservazione), "estrazione " + e.id + ": sicurezza o conservazione mancante");
+});
+ok(/vietata/i.test((NP.estrazioni.find((e) => e.id === "distillazione") || {}).sicurezza || ""), "distillazione: avviso di legge");
+ok(NP.saperiFonti.every((f) => /^https:\/\//.test(f.url)), "saperi antichi: fonti https");
+
 // Collegamenti interni
 const all = JSON.stringify({ plants, manual, quiz, conditions: NP.conditions, extra: [NP.toxic, NP.glossary, NP.faq] });
 const linkRe = /#\/(pianta|capitolo|benessere)\/([a-z0-9-]+)/g;
@@ -173,6 +213,18 @@ srcs.forEach((s) => {
   const f = s.replace(/.*src="/, "").replace(/"/, "");
   ok(fs.existsSync(path.join(root, f)), "index: script mancante " + f);
 });
+
+// Saperi antichi: rotta, menu, vista, script e cache devono restare allineati
+const appJs = fs.readFileSync(path.join(root, "assets", "js", "app.js"), "utf8");
+const appSaperi = fs.readFileSync(path.join(root, "assets", "js", "app-saperi.js"), "utf8");
+["spezierie", "amari", "balsamico", "funghi", "estrazioni"].forEach((r) => {
+  ok(new RegExp("\\b" + r + ": \\(\\)").test(appJs), "router: manca la rotta " + r);
+  ok(index.indexOf('href="#/' + r + '"') !== -1, "index: manca il collegamento a " + r);
+  ok(new RegExp("views\\." + r + " = function").test(appSaperi), "vista mancante: " + r);
+});
+ok(index.indexOf('src="assets/js/app-saperi.js"') !== -1, "index: carica app-saperi.js");
+ok(index.indexOf('src="assets/js/data-saperi.js"') !== -1, "index: carica data-saperi.js");
+ok(sw.indexOf('"assets/js/app-saperi.js"') !== -1 && sw.indexOf('"assets/js/data-saperi.js"') !== -1, "service worker: saperi antichi in cache");
 
 // Pagina di download
 const scarica = fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8");

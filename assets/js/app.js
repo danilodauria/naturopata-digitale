@@ -97,7 +97,7 @@ NP.app = (function () {
       else a.removeAttribute("aria-current");
     });
     const more = document.getElementById("moreBtn");
-    if (more) more.classList.toggle("is-active", ["sopravvivenza", "matthioli", "calendario", "glossario", "sicurezza", "licenze"].indexOf(active) !== -1);
+    if (more) more.classList.toggle("is-active", ["sopravvivenza", "matthioli", "calendario", "glossario", "sicurezza", "licenze", "spezierie", "amari", "balsamico", "funghi", "estrazioni"].indexOf(active) !== -1);
   }
 
   function safetyBadge(level, long) {
@@ -196,9 +196,39 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.10</p><h2>Le istruzioni diventano un documento</h2><p class="text-small muted mb-0">Una guida all\'installazione passo per passo e una scheda rapida da stampare, in pagina e in PDF. E i link di download ora si controllano da soli, ogni giorno.</p></div>' +
-        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="come-installare.html">Come si installa</a><a class="btn btn-secondary btn-small" href="scheda-rapida.html">Scheda rapida</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.11</p><h2>I saperi antichi entrano in casa</h2><p class="text-small muted mb-0">Cinque nuove sezioni: spezierie storiche, amari d’abbazia, tempo balsamico, funghi e oleoliti. E ora link e pulsanti si controllano da soli prima di ogni pubblicazione.</p></div>' +
+        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-secondary btn-small" href="#/amari">Atlante degli amari</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
+
+      '<section class="section">' +
+        '<div class="section-head"><div><p class="eyebrow">Saperi antichi</p><h2>Spezierie, amari, funghi, alambicchi</h2><p>Cinque percorsi fra storia e pratica: che cosa resta delle antiche farmacie, come si legge un amaro, quando si raccoglie, che cosa non fare mai.</p></div></div>' +
+        '<div class="info-grid">' +
+          [
+            { href: "#/spezierie", t: "Antiche spezierie", d: "Farmacie d’abbazia e liquorerie storiche, con i siti ufficiali e i criteri per riconoscere una spezieria vera." },
+            { href: "#/amari", t: "Atlante degli amari", d: "Otto amari fra monasteri e botteghe: ingredienti, storia, cautele e come verificare i prezzi." },
+            { href: "#/balsamico", t: "Tempo balsamico", d: "Dodici mesi di raccolta: il momento giusto pianta per pianta, e che cosa si prepara." },
+            { href: "#/funghi", t: "Funghi e foraging", d: "Reishi, chaga, shiitake: evidenza reale, sicurezza e le otto regole del bosco." },
+            { href: "#/estrazioni", t: "Oleoliti e distillati", d: "Macerazioni, tinture, idrolati: tempi veri, errori da evitare e limiti di legge." }
+          ].map((x) =>
+            '<a class="info-card" href="' + x.href + '"><h3>' + x.t + "</h3><p>" + x.d + '</p><p class="mb-0"><strong>Apri →</strong></p></a>'
+          ).join("") +
+        "</div>" +
+      "</section>" +
+
+      '<section class="section">' +
+        '<div class="section-head"><div><p class="eyebrow">Saperi antichi</p><h2>Spezierie, amari, funghi, alambicchi</h2><p>Cinque percorsi fra storia e pratica: che cosa resta delle antiche farmacie, come si legge un amaro, quando si raccoglie, che cosa non fare mai.</p></div></div>' +
+        '<div class="info-grid">' +
+          [
+            { href: "#/spezierie", t: "Antiche spezierie", d: "Farmacie d’abbazia e liquorerie storiche, con i siti ufficiali e i criteri per riconoscere una spezieria vera." },
+            { href: "#/amari", t: "Atlante degli amari", d: "Otto amari fra monasteri e botteghe: ingredienti, storia, cautele e come verificare i prezzi." },
+            { href: "#/balsamico", t: "Tempo balsamico", d: "Dodici mesi di raccolta: il momento giusto pianta per pianta, e che cosa si prepara." },
+            { href: "#/funghi", t: "Funghi e foraging", d: "Reishi, chaga, shiitake: evidenza reale, sicurezza e le otto regole del bosco." },
+            { href: "#/estrazioni", t: "Oleoliti e distillati", d: "Macerazioni, tinture, idrolati: tempi veri, errori da evitare e limiti di legge." }
+          ].map((x) =>
+            '<a class="info-card" href="' + x.href + '"><h3>' + x.t + "</h3><p>" + x.d + '</p><p class="mb-0"><strong>Apri →</strong></p></a>'
+          ).join("") +
+        "</div>" +
+      "</section>" +
 
       '<section class="section home-split">' +
         '<div class="panel">' +
@@ -434,11 +464,16 @@ NP.app = (function () {
     calendario: () => (views.calendario ? views.calendario() : view404()),
     glossario: () => (views.glossario ? views.glossario() : view404()),
     sicurezza: () => (views.sicurezza ? views.sicurezza() : view404()),
-    licenze: () => (views.licenze ? views.licenze() : view404())
+    licenze: () => (views.licenze ? views.licenze() : view404()),
+    spezierie: () => (views.spezierie ? views.spezierie() : view404()),
+    amari: () => (views.amari ? views.amari() : view404()),
+    balsamico: () => (views.balsamico ? views.balsamico() : view404()),
+    funghi: () => (views.funghi ? views.funghi() : view404()),
+    estrazioni: () => (views.estrazioni ? views.estrazioni() : view404())
   };
 
   function updateTitle(r) {
-    const labels = { home: "Piante, benessere e natura", erbario: "Erbario", manuale: "Manuale interattivo", fitoalimurgia: "Fitoalimurgia", benessere: "Benessere", sopravvivenza: "Sopravvivenza", matthioli: "I Discorsi di Mattioli", quiz: "Quiz", neura: "Neura", calendario: "Calendario di raccolta", glossario: "Glossario", sicurezza: "Sicurezza e fonti", licenze: "Licenze e progetto" };
+    const labels = { home: "Piante, benessere e natura", erbario: "Erbario", manuale: "Manuale interattivo", fitoalimurgia: "Fitoalimurgia", benessere: "Benessere", sopravvivenza: "Sopravvivenza", matthioli: "I Discorsi di Mattioli", quiz: "Quiz", neura: "Neura", calendario: "Calendario di raccolta", glossario: "Glossario", sicurezza: "Sicurezza e fonti", licenze: "Licenze e progetto", spezierie: "Antiche spezierie", amari: "Atlante degli amari", balsamico: "Tempo balsamico", funghi: "Funghi e foraging", estrazioni: "Oleoliti e distillati" };
     let label = labels[r.name] || "";
     if (r.name === "pianta") {
       const p = (NP.plants || []).find((x) => x.id === r.params[0]);

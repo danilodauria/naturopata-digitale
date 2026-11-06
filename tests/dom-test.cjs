@@ -272,6 +272,35 @@ async function go(hash) {
   ok(!doc.querySelector('[data-survival-panel="esperto"]').hidden, "sopravvivenza: link diretto al livello esperto");
   ok(/112/.test(doc.body.textContent), "sopravvivenza: numero di emergenza");
 
+  // Saperi antichi
+  await go("#/spezierie");
+  ok(doc.querySelectorAll(".info-card").length === win.NP.spezierie.length, "spezierie: una scheda per luogo");
+  ok(/Casamari/.test(doc.body.textContent), "spezierie: l’abbazia di Casamari");
+  ok(doc.querySelectorAll('.info-card a[target="_blank"]').length >= 2, "spezierie: collegamenti ufficiali");
+
+  await go("#/amari");
+  ok(doc.querySelectorAll("[data-amaro-cat]").length === win.NP.amariCategorie.length + 1, "amari: filtri per categoria");
+  ok(doc.querySelectorAll(".toxic-card").length === win.NP.amari.length, "amari: una scheda per amaro");
+  doc.querySelector('[data-amaro-cat="monastici"]').click();
+  await tick(30);
+  ok(doc.querySelectorAll("[data-amaro-group]:not([hidden])").length === 1, "amari: filtro per categoria");
+  ok(/Prezzi e disponibilità/.test(doc.body.textContent), "amari: come verificare i prezzi");
+
+  await go("#/balsamico");
+  ok(doc.querySelectorAll(".month-tab").length === 12, "tempo balsamico: dodici mesi");
+  doc.querySelector('.month-tab[data-month="6"]').click();
+  await tick(70);
+  ok(/sole nel barattolo/i.test(doc.querySelector(".panel h2").textContent), "tempo balsamico: giugno");
+
+  await go("#/funghi");
+  ok(doc.querySelectorAll(".toxic-card").length === win.NP.funghi.length, "funghi: una scheda per specie");
+  ok(doc.querySelectorAll(".rule").length === 8, "funghi: otto regole del bosco");
+  ok(/112/.test(doc.body.textContent), "funghi: numero di emergenza");
+
+  await go("#/estrazioni");
+  ok(doc.querySelectorAll(".prep").length === win.NP.estrazioni.length, "estrazioni: una preparazione per scheda");
+  ok(/vietata/i.test(doc.body.textContent), "estrazioni: la distillazione in casa è raccontata come vietata");
+
   // Licenze e FAQ
   await go("#/licenze");
   ok(doc.querySelectorAll("details.glossary-item").length === 8, "licenze: 8 FAQ");

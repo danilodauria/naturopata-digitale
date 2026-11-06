@@ -196,7 +196,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.12</p><h2>Neura impara i saperi antichi</h2><p class="text-small muted mb-0">Ora risponde su spezierie, amari, funghi e preparazioni, con le cautele al posto giusto: ossalati del chaga, alcol e gravidanza, distillazione e autorizzazioni. E il controllo dei funghi è entrato anche nel pannello di sicurezza.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.13</p><h2>Ogni pianta citata ha la sua scheda</h2><p class="text-small muted mb-0">Negli amari e nelle preparazioni i nomi delle piante ora portano all’erbario con un tocco: genziana, china, angelica, mirra e cardo santo hanno la loro scheda completa, con parti usate, cautele e sosia da non confondere.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

@@ -476,6 +476,229 @@ NP.plants = NP.plants.concat([
       { t: "NCCIH · Ginger", u: "https://www.nccih.nih.gov/health/ginger" },
       { t: "PubMed · Zingiber officinale nausea", u: "https://pubmed.ncbi.nlm.nih.gov/?term=ginger+nausea+randomized" }
     ]
+  },
+
+  {
+    id: "genziana",
+    nome: "Genziana maggiore",
+    latino: "Gentiana lutea",
+    famiglia: "Gentianaceae",
+    nomi: ["Genziana", "Genziana gialla", "Gentiana lutea"],
+    tono: 2,
+    categorie: ["Officinale", "Protetta"],
+    sintesi: "L'amaro di montagna: apre lo stomaco, e la tradizione ne ha fatto il cuore di tanti digestivi.",
+    descrizione: "Pianta perenne con grandi fiori gialli a stella e una radice carnosa e amarissima, che cresce nei pascoli alpini e appenninici. Il sapore amaro si percepisce a diluizioni estreme ed è il suo principio d'uso: stimola la secrezione digestiva e la sensazione di appetito. È una specie in calo e protetta in molte regioni, dove la raccolta è vietata o contingentata.",
+    parti: ["Radice", "Rizoma"],
+    habitat: "Pascoli e prati alpini e appenninici, suoli calcarei, da 800 a 2.200 m.",
+    raccolta: { mesi: [9, 10], nota: "Si estrae la radice in autunno da piante adulte, con l'autorizzazione prevista dalla regione: in molti territori la raccolta è vietata." },
+    proprieta: ["Amaro tonico", "Digestiva", "Stimolante dell'appetito", "Coleretica lieve"],
+    usi: [
+      "Inappetenza e digestione lenta",
+      "Senso di pesantezza dopo i pasti",
+      "Aromatizzante amaricante di liquori e aperitivi"
+    ],
+    preparazioni: [
+      { nome: "Infuso amaro", ricetta: "1–2 g di radice essiccata e sminuzzata in 200 ml di acqua a 90 °C, coperto per 10 minuti, poi filtrare.", dose: "Una tazza 15–20 minuti prima dei pasti, per non più di due settimane di seguito." },
+      { nome: "Decotto", ricetta: "2 g di radice in 250 ml di acqua fredda, portare a bollore e lasciare sobbollire 10 minuti.", dose: "Una tazza prima del pasto principale; il sapore è molto amaro." }
+    ],
+    sicurezza: {
+      livello: "giallo",
+      gravidanza: "Da evitare: stimola le secrezioni digestive e non ci sono dati rassicuranti sull'uso in gravidanza.",
+      allattamento: "Da evitare, per assenza di dati e perché il sapore amaro passa nel latte.",
+      bambini: "Non prima dell'adolescenza. Per l'inappetenza di un bambino serve il pediatra, non un amaro.",
+      controindicazioni: ["Ulcera peptica", "Gastrite erosiva", "Reflusso gastroesofageo grave", "Iperacidità", "Ostruzione delle vie biliari"],
+      interazioni: ["Antiacidi e inibitori di pompa: l'amaro può perdere senso o peggiorare il reflusso", "Ipoglicemizzanti: cautela teorica"],
+      nota: "Specie protetta: non raccoglierla senza autorizzazione. L'effetto è legato al gusto amaro, non alla dose: aumentarla non serve."
+    },
+    sosia: [
+      { nome: "Genzianelle e genziane a fiori blu", rischio: "Specie affini protette e di identificazione non banale: la raccolta richiede competenza e permessi." }
+    ],
+    fito: { commestibile: false, parti: "Radice", stagione: "Autunno", cucina: "Amaricante per liquori e aperitivi: non è un alimento.", nota: "Radice amarissima: si usa in piccole quantità e solo dopo identificazione certa." },
+    evidenza: "L'uso come amaro digestivo è tradizionale e plausibile per il riflesso amaro; le prove cliniche sono scarse e spesso su estratti combinati.",
+    curiosita: "L'amarogentina, uno dei suoi principi amari, si percepisce ancora a diluizioni di una parte su decine di migliaia.",
+    fonti: [
+      { t: "EMA · Herbal medicines", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
+      { t: "PubMed · Gentiana lutea", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Gentiana+lutea+bitter" }
+    ]
+  },
+
+  {
+    id: "china",
+    nome: "China (Cinchona)",
+    latino: "Cinchona pubescens, C. calisaya",
+    famiglia: "Rubiaceae",
+    nomi: ["China", "Corteccia di china", "China rossa", "Cinchona"],
+    tono: 3,
+    categorie: ["Officinale", "Protetta"],
+    sintesi: "La corteccia che ha cambiato la storia della malaria, e che ancora dà il chinino: potente, quindi da maneggiare con rispetto.",
+    descrizione: "Alberi andini la cui corteccia contiene alcaloidi chininici, tra cui il chinino. Dalla corteccia dei Gesuiti è nata la prima terapia efficace contro la malaria, e da lì l'acqua tonica. Oggi la china resta un amaricante per liquori e aperitivi, mentre il chinino è un farmaco con margini stretti: dosi sbagliate provocano cinconismo, disturbi della coagulazione e aritmie.",
+    parti: ["Corteccia"],
+    habitat: "Foreste umide andine fra 1.500 e 3.000 m; oggi coltivata anche in Asia e Africa.",
+    raccolta: { mesi: [3, 9], nota: "Nelle piantagioni la corteccia si stacca dopo almeno otto anni di crescita; non è una raccolta domestica e le specie sono protette." },
+    proprieta: ["Amaro tonico", "Astringente", "Stimolante dell'appetito", "Antimalarica (chinino, farmaco)"],
+    usi: [
+      "Aromatizzante di amari e acqua tonica",
+      "Inappetenza e dispepsia, per tradizione",
+      "Il chinino come antimalarico è terapia medica e non autocura"
+    ],
+    preparazioni: [
+      { nome: "Decotto tradizionale", ricetta: "1 g di corteccia in 250 ml di acqua, sobbollire 10 minuti e filtrare.", dose: "Solo su indicazione di un erborista o di un medico: il margine di sicurezza è stretto." },
+      { nome: "Amaro aromatizzato", ricetta: "Piccole quantità di corteccia in macerazione alcolica, come aromatizzante, mai come rimedio.", dose: "Un bicchierino occasionale, evitando del tutto gravidanza, allattamento e terapia anticoagulante." }
+    ],
+    sicurezza: {
+      livello: "rosso",
+      gravidanza: "Da evitare: chinino e chinidina attraversano la placenta e possono agire sul feto e sull'utero.",
+      allattamento: "Da evitare: passa nel latte e può dare effetti al lattante.",
+      bambini: "Da evitare. La febbre di un bambino è una questione medica, non da amaro casalingo.",
+      controindicazioni: ["Gravidanza e allattamento", "Trombocitopenia e disturbi della coagulazione", "Aritmie e disturbi della conduzione cardiaca", "Deficit di G6PD", "Ipersensibilità ai chininici", "Ulcera e gastrite"],
+      interazioni: ["Warfarin e anticoagulanti: aumento marcato del rischio emorragico", "Digossina: aumento dei livelli e rischio di tossicità", "Farmaci che allungano il QT: rischio di aritmie", "Antiacidi: ridotto assorbimento"],
+      nota: "Il chinino è un farmaco: dosi eccessive causano ronzii, cefalea, nausea e disturbi visivi, fino ad aritmie. L'acqua tonica ne contiene poco, ma non è una terapia e va evitata in gravidanza."
+    },
+    sosia: [
+      { nome: "Altre cortecce vendute come «china»", rischio: "Sostituzioni e adulterazioni sono documentate: acquistare solo da fornitori tracciati." }
+    ],
+    fito: { commestibile: false, parti: "Corteccia", stagione: "Stagione secca", cucina: "Aromatizzante dell'acqua tonica e degli amari.", nota: "Non è un alimento né un rimedio domestico." },
+    evidenza: "Il chinino è stato un antimalarico decisivo e resta un farmaco di riferimento in contesti specifici; per la dispepsia l'evidenza è solo tradizionale. Gli effetti avversi sono ben documentati.",
+    curiosita: "Il gin tonic nasce come medicina coloniale: il chinino dell'acqua tonica serviva a rendere tollerabile la dose amara antimalarica.",
+    fonti: [
+      { t: "EMA · Herbal medicines", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
+      { t: "PubMed · Cinchona bark", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Cinchona+bark+quinine" },
+      { t: "WHO · Malaria", u: "https://www.who.int/health-topics/malaria" }
+    ]
+  },
+
+  {
+    id: "angelica",
+    nome: "Angelica",
+    latino: "Angelica archangelica",
+    famiglia: "Apiaceae",
+    nomi: ["Angelica", "Arcangelica", "Angelica domestica"],
+    tono: 2,
+    categorie: ["Officinale", "Aromatica"],
+    sintesi: "Radice dolce e resina: scalda la digestione e il petto, in una famiglia botanica che chiede molta attenzione.",
+    descrizione: "Pianta biennale o triennale delle ombrellifere, con fusti cavi e ombrelle verde-giallastre. La radice è aromatica e dolce, con note di resina e agrumi: entra nei digestivi e in molti liquori monastici. Appartiene però a una famiglia che comprende specie mortali, quindi l'identificazione è la prima regola d'uso.",
+    parti: ["Radice", "Semi", "Foglie"],
+    habitat: "Terreni freschi e umidi, rive e boschi del Nord Europa e delle Alpi; coltivata negli orti.",
+    raccolta: { mesi: [8, 9, 10], nota: "Radice in autunno del secondo anno, semi a maturazione in agosto. Solo con identificazione certa: nella stessa famiglia crescono specie velenose." },
+    proprieta: ["Carminativa", "Digestiva", "Spasmolitica", "Espettorante", "Amaro-aromatica"],
+    usi: [
+      "Gonfiore e digestione lenta",
+      "Tosse con catarro, per tradizione",
+      "Aromatizzante di liquori e amari"
+    ],
+    preparazioni: [
+      { nome: "Infuso di radice", ricetta: "1–2 g di radice essiccata in 200 ml di acqua a 90 °C, coperto 10 minuti.", dose: "Una tazza dopo i pasti, per pochi giorni." },
+      { nome: "Decotto", ricetta: "2 g di radice in 250 ml di acqua, sobbollire 10 minuti e filtrare.", dose: "Una tazza al giorno, lontano dai farmaci anticoagulanti." }
+    ],
+    sicurezza: {
+      livello: "giallo",
+      gravidanza: "Da evitare: è tradizionalmente considerata emmenagoga e i dati sono insufficienti.",
+      allattamento: "Da evitare per assenza di dati.",
+      bambini: "Niente oli essenziali né dosi medicamentose; un infuso occasionale solo dopo parere del pediatra.",
+      controindicazioni: ["Gravidanza e allattamento", "Allergia alle Apiaceae", "Fotosensibilità", "Diabete, per i preparati zuccherati"],
+      interazioni: ["Anticoagulanti: possibile potenziamento per il contenuto di cumarine", "Farmaci fotosensibilizzanti: rischio additivo", "Ipoglicemizzanti: cautela"],
+      nota: "Non raccoglierla se non sai distinguerla dalla cicuta maggiore: nella famiglia delle ombrellifere un errore può essere fatale. Preferisci la pianta coltivata."
+    },
+    sosia: [
+      { nome: "Cicuta maggiore (Conium maculatum)", rischio: "Mortale: fusto macchiato di rosso, odore sgradevole, ombrelle più piccole. La confusione in questa famiglia può uccidere." },
+      { nome: "Levistico e altre ombrellifere aromatiche", rischio: "Somiglianze forti fra aromatiche: riconoscere foglie, guaina e odore prima di ogni uso." }
+    ],
+    fito: { commestibile: true, parti: "Fusti canditi, foglie giovani, semi", stagione: "Primavera–estate", cucina: "Fusti canditi, aromatizzante di dolci e liquori; foglie in piccole quantità.", nota: "Solo da coltivazione o con identificazione esperta: la famiglia include specie velenose." },
+    evidenza: "Tradizione consolidata come carminativo ed espettorante; gli studi clinici sono limitati e spesso su miscele.",
+    curiosita: "Il nome leggendario rimanda all'arcangelo Raffaele, che secondo la tradizione indicò la pianta contro la peste.",
+    fonti: [
+      { t: "EMA · Herbal medicines", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
+      { t: "PubMed · Angelica archangelica", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Angelica+archangelica" }
+    ]
+  },
+
+  {
+    id: "mirra",
+    nome: "Mirra",
+    latino: "Commiphora myrrha",
+    famiglia: "Burseraceae",
+    nomi: ["Mirra", "Commiphora", "Mirra vera"],
+    tono: 3,
+    categorie: ["Officinale"],
+    sintesi: "La resina amara dei templi: astringente per bocca e gola, da usare in piccole quantità e mai ingerita.",
+    descrizione: "Arbusto spinoso del Corno d'Africa e della penisola arabica, che produce una resina giallo-bruna dal profumo resinoso e dal sapore amaro. La mirra è stata incenso, unguento e collutorio per millenni; oggi entra in tinture e prodotti per il cavo orale per la sua azione astringente e lenitiva delle gengive.",
+    parti: ["Resina (oleo-gommoresina)"],
+    habitat: "Arbusteti aridi del Corno d'Africa e dell'Arabia; raccolta da comunità locali.",
+    raccolta: { mesi: [1, 2, 3, 11, 12], nota: "La resina si raccoglie nella stagione secca incidendo la corteccia; non è una raccolta italiana." },
+    proprieta: ["Astringente", "Antisettica locale", "Antinfiammatoria del cavo orale", "Espettorante", "Amaro"],
+    usi: [
+      "Gengiviti, afte e mal di gola come collutorio",
+      "Tosse con catarro, per tradizione",
+      "Aromatizzante di tinture e incensi"
+    ],
+    preparazioni: [
+      { nome: "Collutorio alla mirra", ricetta: "10–15 gocce di tintura madre in mezzo bicchiere d'acqua tiepida, risciacquare e sputare.", dose: "Due o tre volte al giorno, senza deglutire." },
+      { nome: "Tintura", ricetta: "Resina in alcol a 60–70° per tre settimane, filtro accurato e conservazione in vetro scuro.", dose: "Solo diluita e per uso locale: la resina pura non si ingerisce." }
+    ],
+    sicurezza: {
+      livello: "giallo",
+      gravidanza: "Da evitare: è tradizionalmente considerata stimolante dell'utero.",
+      allattamento: "Da evitare, per assenza di dati.",
+      bambini: "Collutori solo dopo i 6 anni, senza deglutire; niente oli essenziali.",
+      controindicazioni: ["Gravidanza e allattamento", "Menorragia e metrorragia", "Nefrite e disturbi renali", "Allergia alle Burseraceae"],
+      interazioni: ["Anticoagulanti: cautela teorica", "Ipoglicemizzanti: possibile effetto additivo", "Farmaci per la tiroide: dati insufficienti"],
+      nota: "I collutori si sputano. Gli oli essenziali di mirra sono fotosensibilizzanti e non vanno usati puri sulla pelle."
+    },
+    sosia: [
+      { nome: "Altre resine vendute come mirra (bdellio, guggul)", rischio: "Resine simili e nomi commerciali sovrapposti: acquistare solo da fornitori tracciati." }
+    ],
+    fito: { commestibile: false, parti: "Resina", stagione: "Stagione secca", cucina: "Aromatizzante di liquori e incensi: non è un alimento.", nota: "Uso interno solo su indicazione, con prodotti titolati." },
+    evidenza: "Uso tradizionale nel cavo orale, con piccoli studi su gengivite dai risultati incoraggianti ma limitati.",
+    curiosita: "La mirra era tra i doni dei Magi ed entrava nel kyphi, l'unguento sacro dell'Egitto antico.",
+    fonti: [
+      { t: "EMA · Herbal medicines", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
+      { t: "PubMed · Commiphora myrrha", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Commiphora+myrrha" }
+    ]
+  },
+
+  {
+    id: "cardo-santo",
+    nome: "Cardo santo",
+    latino: "Cnicus benedictus (Centaurea benedicta)",
+    famiglia: "Asteraceae",
+    nomi: ["Cardo santo", "Cardo benedetto", "Cnicus benedictus", "Centaurea benedicta"],
+    tono: 2,
+    categorie: ["Officinale"],
+    sintesi: "L'amaro dei monasteri: la pianta «benedetta» che dà carattere a digestivi e bevande amare.",
+    descrizione: "Pianta annuale spinosa con foglie lanceolate e capolini gialli, diffusa negli incolti del Mediterraneo. Gli orti monastici la coltivavano come amaro digestivo e febbrifugo, e da lì è passata nei liquori d'abbazia. Ha un sapore molto amaro, che si cerca in piccole quantità.",
+    parti: ["Sommità fiorite", "Foglie"],
+    habitat: "Incolti, bordi strada e terreni aridi del Mediterraneo, da 0 a 1.000 m.",
+    raccolta: { mesi: [6, 7, 8], nota: "Si tagliano le sommità fiorite all'inizio della fioritura, con guanti per le spine, e si essiccano all'ombra." },
+    proprieta: ["Amaro tonico", "Digestiva", "Stimolante dell'appetito", "Diaforetica", "Febbrifuga per tradizione"],
+    usi: [
+      "Inappetenza e digestione lenta",
+      "Dispepsia atonica",
+      "Base amaricante di aperitivi e amari"
+    ],
+    preparazioni: [
+      { nome: "Infuso amaro", ricetta: "1–2 g di sommità fiorite essiccate in 200 ml di acqua a 90 °C, coperto 8–10 minuti.", dose: "Una tazza prima dei pasti, per non più di due settimane." },
+      { nome: "Decotto", ricetta: "2 g di sommità in 250 ml di acqua, sobbollire 8 minuti e filtrare.", dose: "Una tazza al giorno, lontano dai pasti se si cerca l'effetto aperitivo." }
+    ],
+    sicurezza: {
+      livello: "giallo",
+      gravidanza: "Da evitare: è tradizionalmente considerato emmenagogo e i dati sono insufficienti.",
+      allattamento: "Da evitare per assenza di dati.",
+      bambini: "Non usare come amaro prima dell'adolescenza; per l'inappetenza infantile serve il pediatra.",
+      controindicazioni: ["Ulcera peptica", "Gastrite", "Ostruzione delle vie biliari", "Allergia alle Asteraceae", "Gravidanza"],
+      interazioni: ["Antiacidi e inibitori di pompa: possibile perdita di effetto o peggioramento del reflusso", "Ipoglicemizzanti: cautela teorica"],
+      nota: "Le spine rendono la raccolta sgradevole: usa i guanti. L'amaro è già percepibile in dose piccola, aumentarla non migliora il risultato."
+    },
+    sosia: [
+      { nome: "Cardo mariano (Silybum marianum)", rischio: "Pianta diversa, con semi usati per il fegato: le due specie non sono intercambiabili." },
+      { nome: "Altri cardi spinosi", rischio: "Identificazione incerta fra cardi: sommità fiorite e spine sono i caratteri da controllare." }
+    ],
+    fito: { commestibile: false, parti: "Sommità fiorite", stagione: "Estate", cucina: "Amaricante per liquori: non è un alimento.", nota: "Sapore molto amaro: si usa in piccole quantità e solo con identificazione certa." },
+    evidenza: "Tradizione monastica solida come amaro digestivo; l'evidenza clinica è scarsa e datata.",
+    curiosita: "L'epiteto benedictus richiama la «grazia» attribuita alla pianta dai monaci, che la coltivavano negli orti dei conventi.",
+    fonti: [
+      { t: "EMA · Herbal medicines", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
+      { t: "PubMed · Cnicus benedictus", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Cnicus+benedictus" }
+    ]
   }
 
 ]);

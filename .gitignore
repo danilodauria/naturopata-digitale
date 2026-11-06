@@ -14,3 +14,6 @@ desktop/app/
 desktop/dist/
 artifacts/
 __pycache__/
+
+# chiavi SSH temporanee di pubblicazione
+.deploy/

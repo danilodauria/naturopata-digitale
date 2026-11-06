@@ -11,6 +11,36 @@
   const esc = A.esc;
 
   // Il badge di sicurezza usa le etichette e i colori già presenti nelle schede.
+  function normalizza(testo) {
+    return String(testo || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  function pianteCitate(testo) {
+    const frase = " " + normalizza(testo) + " ";
+    return (NP.plants || []).filter((p) => {
+      const nomi = [p.nome, p.id].concat(p.nomi || []);
+      return nomi.some((nome) => {
+        const n = normalizza(nome);
+        return n.length >= 4 && frase.indexOf(" " + n + " ") !== -1;
+      });
+    });
+  }
+
+  function conScheda(testo) {
+    const trovate = pianteCitate(testo);
+    if (trovate.length !== 1) return esc(testo);
+    return '<a href="#/pianta/' + encodeURIComponent(trovate[0].id) + '">' + esc(testo) + "</a>";
+  }
+
+  function listaConSchede(lista) {
+    return (lista || []).map(conScheda).join(", ");
+  }
+
   function badge(level) {
     const s = A.SAFETY[level] || A.SAFETY.verde;
     return '<span class="badge-dot safety-' + level + '" title="' + esc(s.long) + '">' + s.label + "</span>";
@@ -96,7 +126,7 @@
               '<article class="toxic-card">' +
                 "<h3>" + esc(a.nome) + "</h3>" +
                 '<p class="latin">' + esc(a.origine) + "</p>" +
-                '<p><strong>Ingredienti dichiarati:</strong> ' + esc((a.ingredienti || []).join(", ")) + "</p>" +
+                '<p><strong>Ingredienti dichiarati:</strong> ' + listaConSchede(a.ingredienti) + "</p>" +
                 "<p>" + esc(a.storia) + "</p>" +
                 '<p class="text-small"><strong>Da sapere:</strong> ' + esc(a.nota) + "</p>" +
               "</article>"
@@ -107,7 +137,7 @@
 
       '<section class="section"><div class="section-head"><div><h2>Gli ingredienti che fanno l’amaro</h2><p>Le stesse piante delle schede di sicurezza, viste dal lato del bicchiere.</p></div><a class="section-link" href="#/sicurezza">Interazioni e sicurezza →</a></div>' +
         '<div class="table-wrap"><table class="data-table"><thead><tr><th>Ingrediente</th><th>Parte usata</th><th>Che cosa fa</th></tr></thead><tbody>' +
-          (NP.amariIngredienti || []).map((i) => "<tr><td><strong>" + esc(i.nome) + "</strong></td><td>" + esc(i.parte) + "</td><td>" + esc(i.nota) + "</td></tr>").join("") +
+          (NP.amariIngredienti || []).map((i) => "<tr><td><strong>" + conScheda(i.nome) + "</strong></td><td>" + esc(i.parte) + "</td><td>" + esc(i.nota) + "</td></tr>").join("") +
         "</tbody></table></div>" +
       "</section>" +
 
@@ -292,7 +322,7 @@
             '<div class="prep" id="' + esc(p.id) + '">' +
               "<h3>" + esc(p.titolo) + "</h3>" +
               '<p class="dose">' + esc(p.tipo) + " · " + esc(p.tempo) + "</p>" +
-              '<p><strong>Serve:</strong> ' + esc((p.ingredienti || []).join(", ")) + "</p>" +
+              '<p><strong>Serve:</strong> ' + listaConSchede(p.ingredienti) + "</p>" +
               "<ol>" + (p.passi || []).map((x) => "<li>" + esc(x) + "</li>").join("") + "</ol>" +
               '<div class="callout mb-0"><span aria-hidden="true">⚠️</span><p class="mb-0"><strong>Sicurezza:</strong> ' + esc(p.sicurezza) + "</p></div>" +
               '<p class="text-small muted mt-2 mb-0"><strong>Conservazione:</strong> ' + esc(p.conservazione) + "</p>" +

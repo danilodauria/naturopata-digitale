@@ -106,7 +106,7 @@ async function go(hash) {
 
   // Erbario
   await go("#/erbario");
-  ok(doc.querySelectorAll(".plant-card").length === 60, "erbario: 60 schede");
+  ok(doc.querySelectorAll(".plant-card").length === 65, "erbario: 65 schede");
   const input = doc.querySelector("#plantSearch");
   input.value = "malva selvatica";
   input.dispatchEvent(new win.Event("input", { bubbles: true }));
@@ -119,7 +119,7 @@ async function go(hash) {
   ok(!!doc.querySelector(".empty-state"), "erbario: stato vuoto");
   doc.querySelector("[data-reset-filters]").click();
   await tick(60);
-  ok(doc.querySelectorAll(".plant-card").length === 60, "erbario: reset filtri");
+  ok(doc.querySelectorAll(".plant-card").length === 65, "erbario: reset filtri");
 
   // Dettaglio pianta
   await go("#/pianta/camomilla");
@@ -291,6 +291,10 @@ async function go(hash) {
   await tick(30);
   ok(doc.querySelectorAll("[data-amaro-group]:not([hidden])").length === 1, "amari: filtro per categoria");
   ok(/Prezzi e disponibilità/.test(doc.body.textContent), "amari: come verificare i prezzi");
+  ok(doc.querySelectorAll('.toxic-card a[href^="#/pianta/"]').length >= 8, "amari: le piante citate rimandano all’erbario");
+  ok(doc.querySelector('.data-table a[href="#/pianta/genziana"]') !== null, "amari: la genziana ha la sua scheda");
+  ok(doc.querySelector('.data-table a[href="#/pianta/cardo-santo"]') !== null, "amari: il cardo santo non si confonde con il cardo mariano");
+  ok(doc.querySelector('.data-table a[href="#/pianta/cardo-mariano"]') === null, "amari: nessun collegamento sbagliato al cardo mariano");
 
   await go("#/balsamico");
   ok(doc.querySelectorAll(".month-tab").length === 12, "tempo balsamico: dodici mesi");
@@ -306,6 +310,9 @@ async function go(hash) {
   await go("#/estrazioni");
   ok(doc.querySelectorAll(".prep").length === win.NP.estrazioni.length, "estrazioni: una preparazione per scheda");
   ok(/vietata/i.test(doc.body.textContent), "estrazioni: la distillazione in casa è raccontata come vietata");
+  ok(doc.querySelectorAll('.prep a[href^="#/pianta/"]').length >= 4, "estrazioni: le piante rimandano all’erbario");
+  ok(doc.querySelector('.prep a[href="#/pianta/iperico"]') !== null, "estrazioni: l’iperico ha la sua scheda");
+  ok(doc.querySelector('.prep a[href="#/pianta/sambuco"]') !== null, "estrazioni: il sambuco ha la sua scheda");
 
   // Licenze e FAQ
   await go("#/licenze");

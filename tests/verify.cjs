@@ -28,7 +28,7 @@ const parts = NP.manualParts;
 
 console.log("Dati: " + plants.length + " piante, " + manual.length + " capitoli, " + quiz.length + " domande.");
 
-ok(plants.length === 60, "ci sono 60 piante");
+ok(plants.length === 65, "ci sono 65 piante");
 ok(manual.length === 18, "ci sono 18 capitoli");
 ok(quiz.length >= 80, "almeno 80 domande (" + quiz.length + ")");
 ok(NP.conditions.length === 8, "8 schede di benessere");
@@ -119,6 +119,17 @@ NP.amari.forEach((a) => {
   ok(!!(a.storia && a.nota), "amaro " + a.id + ": storia o nota mancante");
 });
 ok(NP.amariIngredienti.length >= 6, "amari: ingredienti spiegati");
+const normalizzaTesto = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const piantaCitata = (testo) => {
+  const frase = " " + normalizzaTesto(testo) + " ";
+  return plants.filter((p) => [p.nome, p.id].concat(p.nomi || []).some((n) => {
+    const nome = normalizzaTesto(n);
+    return nome.length >= 4 && frase.indexOf(" " + nome + " ") !== -1;
+  }));
+};
+["genziana", "china", "angelica", "mirra", "cardo-santo"].forEach((id) => ok(plants.some((p) => p.id === id), "erbario: c'è la scheda di " + id));
+NP.amariIngredienti.forEach((i) => ok(piantaCitata(i.nome).length === 1, "amari: " + i.nome + " rimanda a una sola scheda"));
+NP.amari.forEach((a) => (a.ingredienti || []).forEach((x) => ok(piantaCitata(x).length <= 1, "amari: citazione senza ambiguità («" + x + "»)")));
 ok(NP.amariPrezzi.link.every((l) => /^https:\/\//.test(l.u)), "amari: negozi https");
 ok(NP.balsamico.length === 12, "tempo balsamico: dodici mesi");
 ok(NP.balsamico.map((m) => m.mese).join(",") === "1,2,3,4,5,6,7,8,9,10,11,12", "tempo balsamico: mesi in ordine");

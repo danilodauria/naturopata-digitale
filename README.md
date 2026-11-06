@@ -145,6 +145,15 @@ valori non possono divergere, e non serve riscaricare centinaia di megabyte.
 Il job gira anche sui push su `main` (dove le build sono saltate): così una
 release già pubblicata riceve il file senza rifare i pacchetti.
 
+Il job `completa` chiude la release e la dichiara pubblicata solo con tutti i
+file: confronta gli allegati con l'elenco atteso (due `.dmg`, `.exe`, portatile
+ZIP, `.deb`, AppImage, i due PDF, `Sorgenti.zip`, `SHA256SUMS.txt`) e, se manca
+qualcosa, fallisce indicando il nome. Serve perché un job macOS annullato
+mentre aspettava il runner lasciava una release a metà e il resto del workflow
+sembrava concluso: la 1.3.19 uscì senza i due `.dmg` proprio così. Per la stessa
+ragione i tag non vengono annullati da un nuovo push (`cancel-in-progress` è
+falso su `refs/tags/*`).
+
 La pagina `scarica/` mostra nome e impronta di ogni pacchetto accanto ai
 pulsanti, con i comandi per PowerShell, prompt dei comandi, Linux e macOS. I
 valori non sono scritti nella pagina: arrivano dall'API delle release

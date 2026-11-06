@@ -110,6 +110,24 @@ NP.spezierie.forEach((s) => {
   ok((s.link || []).length > 0 && s.link.every((l) => /^https:\/\//.test(l.u)), "spezieria " + s.id + ": collegamenti https");
 });
 ok(NP.spezierieGuida.passi.length >= 4, "spezierie: come si legge una spezieria");
+ok(NP.spezierie.length === 9, "spezierie e liquorerie: nove luoghi (" + NP.spezierie.length + ")");
+const hostsSpezierie = {
+  casamari: "abbaziadicasamari.it",
+  "santa-maria-novella": "smnovella.com",
+  camaldoli: "camaldoli.it",
+  strega: "strega.it",
+  "fernet-branca": "fernetbranca.com",
+  montenegro: "amaromontenegro.com",
+  "amaro-lucano": "amarolucano.it",
+  averna: "amaroaverna.com",
+  carpano: "carpano.com"
+};
+Object.keys(hostsSpezierie).forEach((id) => {
+  const s = NP.spezierie.find((x) => x.id === id);
+  ok(!!s, "spezieria " + id + ": scheda presente");
+  if (s) ok((s.link || []).some((l) => l.u.indexOf(hostsSpezierie[id]) !== -1), "spezieria " + id + ": sito ufficiale " + hostsSpezierie[id]);
+});
+ok(NP.spezierie.every((s) => (s.link || []).every((l) => l.u.indexOf("http://") !== 0)), "spezierie: nessun collegamento non cifrato");
 const amaroCats = new Set(NP.amariCategorie.map((c) => c.id));
 ok(NP.amariCategorie.length >= 3, "amari: categorie");
 ok(NP.amari.length >= 8, "amari: almeno otto schede (" + NP.amari.length + ")");
@@ -195,6 +213,9 @@ ok(/#\/amari/.test(answer("che cos'è un amaro d'abbazia?")), "Neura rimanda all
 ok(/ossalat/i.test(answer("il chaga è sicuro?")), "Neura cita gli ossalati del chaga");
 ok(/112|Centro Antiveleni|micologo/i.test(answer("come si raccolgono i funghi?")), "Neura mette la sicurezza davanti ai funghi");
 ok(/#\/estrazioni/.test(answer("come si fa un oleolito?")), "Neura spiega gli oleoliti");
+ok(/Strega/.test(answer("parlami del liquore Strega")), "Neura conosce la Strega di Benevento");
+ok(/Fernet/.test(answer("che cosa è il Fernet-Branca?")), "Neura conosce il Fernet-Branca");
+ok(/Averna/.test(answer("l'amaro Averna")), "Neura conosce l'Averna");
 ok(/vietata|autorizzazion/i.test(answer("la distillazione in casa è legale?")), "Neura dice che la distillazione richiede autorizzazioni");
 ok(/giugno/i.test(answer("qual è il tempo balsamico di giugno?")), "Neura risponde sul tempo balsamico");
 ok(/ossalat/i.test((NP.neura.check("chaga", {}) || { items: [] }).items.map((i) => i.testo).join(" ")), "il controllo di sicurezza considera i funghi");

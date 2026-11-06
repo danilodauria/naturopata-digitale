@@ -56,6 +56,78 @@ window.NP = window.NP || {};
       link: [{ t: "Sito di Camaldoli", u: "https://www.camaldoli.it/" }],
       visita: "Eremo e monastero si visitano con rispetto dei luoghi di preghiera; la foresteria accoglie ospiti.",
       attenzione: "Gli amari d’abbazia sono alcolici e amaricanti: sconsigliati a chi ha gastrite, ulcera o reflusso senza parere medico."
+    },
+    {
+      id: "strega",
+      nome: "Liquore Strega · Strega Alberti Benevento",
+      luogo: "Benevento, via Vittorio Emanuele",
+      epoca: "1860, dalla bottega di Giuseppe Alberti",
+      cosa: ["Liquore Strega", "bitters e liquori d’erbe", "archivio e museo aziendale"],
+      storia: "Giuseppe Alberti apre nel 1860 a Benevento una distilleria e mette a punto un liquore giallo con decine di erbe e zafferano. Il nome viene dalla leggenda delle streghe che si radunavano sul fiume Sabato, la stessa a cui la città deve il soprannome. La ricetta resta custodita e la casa, oggi Strega Alberti Benevento, la produce ancora nello stesso territorio.",
+      perche: "È il caso di un liquore nato in bottega nell’Ottocento e diventato simbolo di una città: mostra come una ricetta d’erbe costruisca un’identità locale, senza smettere di essere una bevanda alcolica.",
+      link: [{ t: "Sito ufficiale Strega Alberti Benevento", u: "https://www.strega.it/" }],
+      visita: "La sede storica è a Benevento; il sito ufficiale indica prodotti, punti vendita e informazioni per visite e acquisti.",
+      attenzione: "Liquore alcolico e zuccherato: non adatto a bambini e adolescenti, da evitare in gravidanza e allattamento, con cautela in caso di diabete o terapia farmacologica."
+    },
+    {
+      id: "fernet-branca",
+      nome: "Fernet-Branca",
+      luogo: "Milano, dall’Ottocento",
+      epoca: "1845, Bernardino Branca",
+      cosa: ["Fernet-Branca", "bitters amaricanti", "museo e archivio aziendale"],
+      storia: "Bernardino Branca prepara a Milano nel 1845 un amaro con mirra, rabarbaro, camomilla, zafferano e altre erbe, pensato come rimedio da viaggio e da tavola. La ricetta resta segreta e la produzione si allarga al mondo, con lo stabilimento milanese e un museo che racconta l’impresa di famiglia.",
+      perche: "È l’archetipo dell’amaro «farmaceutico» ottocentesco: nasce come medicamento urbano, vive di segretezza della formula e diventa un prodotto internazionale. Utile per spiegare perché «ricetta custodita» non significa «ricetta sicura per tutti».",
+      link: [{ t: "Sito ufficiale Fernet-Branca", u: "https://www.fernetbranca.com/" }],
+      visita: "Il sito ufficiale raccoglie storia, prodotti e informazioni su visite e acquisti; la casa ha sede a Milano.",
+      attenzione: "Gradazione alta e profilo molto amaro: da evitare con gastrite, ulcera, reflusso e in gravidanza; non è un digestivo da usare come terapia."
+    },
+    {
+      id: "montenegro",
+      nome: "Amaro Montenegro",
+      luogo: "Bologna",
+      epoca: "1885, Stanislao Cobianchi",
+      cosa: ["Amaro Montenegro", "bitters d’erbe e spezie", "storia della casa bolognese"],
+      storia: "Stanislao Cobianchi, giovane speziale bolognese, crea nel 1885 un amaro con tredici erbe e spezie e lo intitola alla principessa Elena del Montenegro. La casa resta a Bologna e il prodotto, con il suo profilo dolce-amaro, diventa uno degli amari italiani più diffusi.",
+      perche: "Nasce da un banco di speziale e dichiara un numero preciso di botaniche: è un buon esempio per leggere le etichette senza credere che il numero da solo dica qualcosa sulla qualità.",
+      link: [{ t: "Sito ufficiale Amaro Montenegro", u: "https://www.amaromontenegro.com/" }],
+      visita: "Il sito ufficiale racconta la storia e i prodotti; la produzione fa capo alla casa bolognese.",
+      attenzione: "Alcolico e zuccherato: fuori dall’uso occasionale di un adulto; niente in gravidanza, allattamento e per i minori."
+    },
+    {
+      id: "amaro-lucano",
+      nome: "Amaro Lucano",
+      luogo: "Pisticci (MT), Basilicata",
+      epoca: "1894, Pasquale Vena",
+      cosa: ["Amaro Lucano", "Amaro Lucano Riserva", "i biscotti Sospiri della stessa casa"],
+      storia: "Nel 1894 Pasquale Vena, pasticciere a Pisticci, mette a punto un amaro con erbe, radici e aromi e lo vende nella propria bottega. La ricetta passa di generazione in generazione e la casa, rimasta legata al paese, affianca al liquore i biscotti Sospiri.",
+      perche: "Racconta una liquoreria del Sud nata dentro una bottega di paese e cresciuta senza perdere la sede: la filiera corta delle erbe e la famiglia sono parte del prodotto.",
+      link: [{ t: "Sito ufficiale Amaro Lucano", u: "https://www.amarolucano.it/" }],
+      visita: "Il sito ufficiale indica storia, prodotti e informazioni su visite e acquisti; la sede è a Pisticci.",
+      attenzione: "Alcolico: da evitare in gravidanza e allattamento, per i minori e con terapie farmacologiche senza parere medico."
+    },
+    {
+      id: "averna",
+      nome: "Amaro Averna",
+      luogo: "Caltanissetta, Sicilia",
+      epoca: "1868, Salvatore Averna",
+      cosa: ["Amaro Averna", "Amaro Averna Riserva", "la storia dell’abbazia di Santo Spirito"],
+      storia: "La ricetta arriva dai frati dell’abbazia di Santo Spirito a Caltanissetta, che la donano a Salvatore Averna nel 1868. La famiglia la produce e la diffonde in Sicilia e poi nel resto d’Italia; oggi il marchio appartiene a un grande gruppo, ma la storia resta quella di un convento e di una famiglia.",
+      perche: "È il filo diretto fra spezieria monastica e liquoreria industriale: la ricetta dei frati diventa un prodotto di massa, con tutto il guadagno e tutta la perdita di contesto che questo comporta.",
+      link: [{ t: "Sito ufficiale Amaro Averna", u: "https://www.amaroaverna.com/it/" }],
+      visita: "Il sito ufficiale raccoglie storia e prodotti; la tradizione della casa è legata a Caltanissetta.",
+      attenzione: "Alcolico e zuccherato: non è un digestivo terapeutico; da evitare in gravidanza, allattamento e per i minori."
+    },
+    {
+      id: "carpano",
+      nome: "Carpano · Antica Formula e Punt e Mes",
+      luogo: "Torino",
+      epoca: "1786, Antonio Benedetto Carpano",
+      cosa: ["Punt e Mes", "Antica Formula", "vermouth e aromatizzati al vino"],
+      storia: "Nel 1786 Antonio Benedetto Carpano apre a Torino una bottega e mette a punto un vino aromatizzato con erbe e spezie, il vermouth, che diventa presto un rito cittadino. Dalla stessa tradizione arrivano il Punt e Mes e l’Antica Formula, ancora oggi prodotti con il nome Carpano.",
+      perche: "Mostra l’altro modo in cui la spezieria entra nel bicchiere: non l’alcol puro degli amari, ma il vino medicato con erbe, nato come ricostituente e diventato aperitivo.",
+      link: [{ t: "Sito ufficiale Carpano", u: "https://carpano.com/it/" }],
+      visita: "Il sito ufficiale racconta la storia dal 1786 e i prodotti; la tradizione è legata a Torino.",
+      attenzione: "Il vermouth è alcolico e zuccherato: un aperitivo, non una cura. Attenzione a diabete, gravidanza e associazione con farmaci."
     }
   ];
 

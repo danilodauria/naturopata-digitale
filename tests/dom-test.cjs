@@ -283,6 +283,10 @@ async function go(hash) {
   ok(doc.querySelectorAll(".info-card").length === win.NP.spezierie.length, "spezierie: una scheda per luogo");
   ok(/Casamari/.test(doc.body.textContent), "spezierie: l’abbazia di Casamari");
   ok(doc.querySelectorAll('.info-card a[target="_blank"]').length >= 2, "spezierie: collegamenti ufficiali");
+  ok(doc.querySelectorAll(".info-card").length === 9, "spezierie: nove schede");
+  ok(/Strega/.test(doc.body.textContent), "spezierie: la liquoreria di Benevento");
+  ok(doc.querySelector('.info-card a[href="https://www.strega.it/"]') !== null, "spezierie: sito ufficiale Strega");
+  ok(/Carpano/.test(doc.body.textContent), "spezierie: il vermouth di Torino");
 
   await go("#/amari");
   ok(doc.querySelectorAll("[data-amaro-cat]").length === win.NP.amariCategorie.length + 1, "amari: filtri per categoria");

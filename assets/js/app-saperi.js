@@ -64,7 +64,7 @@
 
       '<div class="callout warn"><span aria-hidden="true">🧭</span><div><p><strong>Che cosa trovi qui.</strong> Luoghi reali, visitabili o con un negozio ufficiale: nessun elenco comprato e nessun link sponsorizzato. I prezzi non sono indicati perché cambiano: si controllano sul sito del venditore.</p><p class="mb-0">Le schede raccontano la storia del luogo, non promettono effetti terapeutici.</p></div></div>' +
 
-      '<section class="section"><div class="section-head"><div><h2>' + lista.length + ' spezierie da conoscere</h2><p>Dalla Ciociaria a Firenze, dal Casentino alle Alpi: ogni officina ha la sua pianta simbolo.</p></div></div>' +
+      '<section class="section"><div class="section-head"><div><h2>' + lista.length + ' spezierie e liquorerie da conoscere</h2><p>Dalla Ciociaria a Firenze, dal Casentino a Benevento, Milano, Bologna, Pisticci, Caltanissetta e Torino: ogni officina ha la sua pianta simbolo, ogni liquore la sua ricetta custodita.</p></div></div>' +
         '<div class="info-grid">' +
           lista.map((s) =>
             '<article class="info-card" id="' + esc(s.id) + '">' +

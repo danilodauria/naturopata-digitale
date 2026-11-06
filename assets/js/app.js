@@ -196,7 +196,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.13</p><h2>Ogni pianta citata ha la sua scheda</h2><p class="text-small muted mb-0">Negli amari e nelle preparazioni i nomi delle piante ora portano all’erbario con un tocco: genziana, china, angelica, mirra e cardo santo hanno la loro scheda completa, con parti usate, cautele e sosia da non confondere.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.14</p><h2>Nove spezierie, da Benevento a Torino</h2><p class="text-small muted mb-0">Arrivano sei liquorerie storiche — Strega, Fernet-Branca, Montenegro, Lucano, Averna e Carpano — con storia, cautele e sito ufficiale verificato uno per uno. Neura le conosce e risponde anche quando chiedi di un liquore per nome.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

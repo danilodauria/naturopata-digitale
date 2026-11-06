@@ -482,7 +482,13 @@ NP.neura = (function () {
     const chiavi = {
       casamari: /casamari|casa mari/,
       "santa-maria-novella": /santa maria novella|officina profumo/,
-      camaldoli: /camaldoli/
+      camaldoli: /camaldoli/,
+      strega: /strega|alberti/,
+      "fernet-branca": /fernet|branca/,
+      montenegro: /montenegro/,
+      "amaro-lucano": /lucano/,
+      averna: /averna/,
+      carpano: /carpano|punt e mes|antica formula/
     };
     const trovata = (NP.spezierie || []).find((s) => chiavi[s.id] && chiavi[s.id].test(n));
     if (trovata) {
@@ -647,7 +653,7 @@ NP.neura = (function () {
     const cond = findCondition(clean);
     if (cond) return conditionAnswer(cond, clean);
 
-    if (/(spezieria|spezierie|liquoreria|farmacia storica|liquori monastici|casamari|santa maria novella|camaldoli)/.test(n)) return spezierieAnswer(clean);
+    if (/(spezieria|spezierie|liquoreria|farmacia storica|liquori monastici|casamari|santa maria novella|camaldoli|strega|fernet|montenegro|lucano|averna|carpano)/.test(n)) return spezierieAnswer(clean);
     if (/(amaro|amari|fernet|ramazzotti|averna|montenegro|china martini|tintura imperiale|elisir sett|digestivo)/.test(n)) return amariAnswer(clean);
     if (/(fungo|funghi|reishi|chaga|shiitake|maitake|cordyceps|pleuroto|micolog|foraging|porcini)/.test(n)) return funghiAnswer(clean);
     if (/(oleolito|tintura madre|idrolato|distillazion|alambicc|macerazion|sciroppo di sambuco|estrazion)/.test(n)) return estrazioniAnswer(clean);

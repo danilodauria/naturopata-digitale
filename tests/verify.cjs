@@ -444,6 +444,22 @@ const desktopControlli = fs.readFileSync(path.join(root, ".github", "workflows",
 ok(/npm test/.test(desktopControlli), "workflow desktop: i controlli girano prima dei pacchetti");
 ok(desktopControlli.indexOf("npm test") < desktopControlli.indexOf("prepare-desktop.cjs"), "workflow desktop: i controlli precedono la preparazione dei pacchetti");
 
+// Il backup datato deve restare un comando del progetto, non una procedura a
+// memoria: se sparisce lo script o il collegamento npm, ce ne accorgiamo qui.
+const backupScript = path.join(root, "scripts", "backup.cjs");
+ok(fs.existsSync(backupScript), "esiste scripts/backup.cjs");
+ok(pacchettoRadice.scripts.backup === "node scripts/backup.cjs", "npm run backup chiama lo script di backup");
+ok(/npm run backup/.test(pacchettoRadice.scripts.rilascio || ""), "npm run rilascio crea anche il backup");
+if (fs.existsSync(backupScript)) {
+  const sorgenteBackup = fs.readFileSync(backupScript, "utf8");
+  ok(/LEGGIMI-BACKUP\.txt/.test(sorgenteBackup), "il backup scrive il LEGGIMI passo passo");
+  ok(/INDICE-BACKUP\.txt/.test(sorgenteBackup), "il backup aggiorna l'indice storico");
+  ok(/SHA256SUMS\.txt/.test(sorgenteBackup), "il backup genera il checksum dell'archivio");
+  ok(/git", a|git archive|"archive"/.test(sorgenteBackup), "il backup archivia i file versionati");
+  ok(/while \(fs\.existsSync\(path\.join\(DEST, nomeCartella\)\)\)/.test(sorgenteBackup), "il backup non sovrascrive i salvataggi precedenti");
+}
+ok(/^\/backup\/$/m.test(fs.readFileSync(path.join(root, ".gitignore"), "utf8")), "la cartella dei backup resta fuori dal repository");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

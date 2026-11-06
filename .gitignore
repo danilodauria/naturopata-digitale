@@ -17,3 +17,6 @@ __pycache__/
 
 # chiavi SSH temporanee di pubblicazione
 .deploy/
+
+# backup locali datati: archivio storico, non versionato
+/backup/

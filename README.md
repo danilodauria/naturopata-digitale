@@ -238,6 +238,30 @@ Quando aggiorni i contenuti, incrementa `VERSION` in `sw.js` (per esempio
 versione. I file `.pdf` sono esclusi dalla cache: si scaricano su richiesta e
 non occupano spazio senza un gesto esplicito.
 
+## Backup locale
+
+Ogni salvataggio importante può lasciare una copia datata del progetto, senza
+dipendere dal servizio di hosting o dal repository remoto:
+
+```bash
+npm run backup            # crea backup/Naturopata-Digitale-AAAA-MM-GG/
+npm run backup -- --dry-run   # mostra che cosa farebbe, senza scrivere
+npm run backup -- --nota "prima della pubblicazione"
+```
+
+Dentro la cartella trovi l'archivio zip del commit, l'elenco dei file con le
+dimensioni, il checksum SHA-256, un `LEGGIMI-BACKUP.txt` passo passo e un
+`backup.json`. I backup non si sovrascrivono: due nello stesso giorno diventano
+`…-2`, `…-3`. Lo storico completo è in `backup/INDICE-BACKUP.txt`.
+
+L'archivio contiene solo i file versionati: niente `node_modules`, niente
+`desktop/app` o `desktop/dist`, niente chiavi o file `.env`. La cartella
+`backup/` resta fuori dal repository (è in `.gitignore`), così i backup non
+finiscono online e non gonfiano la storia Git.
+
+`npm run rilascio` incatena test, PDF, pacchetto desktop, test finale e backup:
+è la sequenza usata per ogni pubblicazione.
+
 ## Vademecum in PDF
 
 La guida tascabile è generata in tre versioni, tutte scaricabili dalla pagina

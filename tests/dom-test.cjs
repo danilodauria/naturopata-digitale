@@ -228,6 +228,12 @@ async function go(hash) {
   await tick(500);
   ok(/Malva/i.test(doc.querySelector("#chatLog").textContent), "neura: risposta sulla malva");
 
+  ni.value = "parlami delle spezierie d'abbazia";
+  doc.querySelector("#neuraSend").click();
+  await tick(500);
+  ok(/Casamari/i.test(doc.querySelector("#chatLog").textContent), "neura: risponde sulle spezierie");
+  ok(doc.querySelector('#chatLog a[href="#/spezierie"]') !== null, "neura: collega la mappa delle spezierie");
+
   ni.value = "fammi una domanda di quiz";
   doc.querySelector("#neuraSend").click();
   await tick(500);

@@ -134,6 +134,46 @@ NP.neura = (function () {
     (NP.interactions || []).forEach((it, i) => {
       addDoc({ type: "interaction", id: "int-" + i, title: it.pianta, text: it.farmaci + " " + it.effetto, weight: 1.3 });
     });
+    // Saperi antichi: anche spezierie, amari, funghi, estrazioni e mesi entrano
+    // nella ricerca, così una domanda libera trova la scheda giusta.
+    (NP.spezierie || []).forEach((s) => {
+      addDoc({
+        type: "spezieria", id: s.id, title: s.nome, meta: s.luogo,
+        text: [s.luogo, s.epoca, (s.cosa || []).join(" "), s.storia, s.perche, s.visita, s.attenzione].join(" "),
+        weight: 1.5
+      });
+    });
+    (NP.amari || []).forEach((a) => {
+      addDoc({
+        type: "amaro", id: a.id, title: a.nome, meta: a.origine,
+        text: [a.origine, (a.ingredienti || []).join(" "), a.storia, a.nota].join(" "),
+        weight: 1.4
+      });
+    });
+    (NP.funghi || []).forEach((f) => {
+      addDoc({
+        type: "fungo", id: f.id, title: f.nome, meta: f.latino,
+        text: [f.latino, f.uso, f.tradizione, f.evidenza, f.sicurezza, f.nota].join(" "),
+        weight: 1.6
+      });
+    });
+    (NP.estrazioni || []).forEach((e) => {
+      addDoc({
+        type: "estrazione", id: e.id, title: e.titolo, meta: e.tipo,
+        text: [e.tipo, (e.ingredienti || []).join(" "), (e.passi || []).join(" "), e.sicurezza, e.conservazione].join(" "),
+        weight: 1.3
+      });
+    });
+    (NP.balsamico || []).forEach((m) => {
+      addDoc({
+        type: "balsamico", id: "mese-" + m.mese, title: "Tempo balsamico · " + monthNames([m.mese]),
+        text: [m.titolo, m.momento, (m.raccogli || []).join(" "), (m.prepara || []).join(" "), m.nota].join(" "),
+        weight: 1.2
+      });
+    });
+    ((NP.micologia && NP.micologia.regole) || []).forEach((r, i) => {
+      addDoc({ type: "micologia", id: "regola-" + i, title: r.t, text: r.d, weight: 1.2 });
+    });
     built = true;
   }
 
@@ -423,10 +463,132 @@ NP.neura = (function () {
       else if (d.type === "glossary") href = "#/glossario";
       else if (d.type === "toxic") href = "#/sicurezza";
       else if (d.type === "interaction") href = "#/sicurezza";
+      else if (d.type === "spezieria") href = "#/spezierie";
+      else if (d.type === "amaro") href = "#/amari";
+      else if (d.type === "fungo" || d.type === "micologia") href = "#/funghi";
+      else if (d.type === "estrazione") href = "#/estrazioni";
+      else if (d.type === "balsamico") href = "#/balsamico";
       return '<li><a href="' + href + '"><strong>' + escapeHtml(d.title) + "</strong></a>" + (d.meta ? ' <span class="muted">' + escapeHtml(d.meta) + "</span>" : "") + "</li>";
     }).join("");
     return {
       html: "<p>Ecco i contenuti più pertinenti:</p><ul>" + items + "</ul><p class=\"muted\">Se cercavi un consiglio personale, specifica la pianta, il disturbo e le condizioni rilevanti (farmaci, gravidanza, età).</p>"
+    };
+  }
+
+  /* Saperi antichi ------------------------------------------------------- */
+
+  function spezierieAnswer(q) {
+    const n = norm(q);
+    const chiavi = {
+      casamari: /casamari|casa mari/,
+      "santa-maria-novella": /santa maria novella|officina profumo/,
+      camaldoli: /camaldoli/
+    };
+    const trovata = (NP.spezierie || []).find((s) => chiavi[s.id] && chiavi[s.id].test(n));
+    if (trovata) {
+      return {
+        html: "<p><strong>" + escapeHtml(trovata.nome) + "</strong> — " + escapeHtml(trovata.luogo) + " · " + escapeHtml(trovata.epoca) + "</p>" +
+          "<p>" + escapeHtml(trovata.storia) + "</p>" +
+          "<p><strong>Che cosa si trova:</strong> " + escapeHtml((trovata.cosa || []).join(", ")) + "</p>" +
+          '<div class="callout warn" style="margin:.6rem 0"><span aria-hidden="true">⚠️</span><p class="mb-0"><strong>Da sapere:</strong> ' + escapeHtml(trovata.attenzione) + "</p></div>" +
+          '<p class="muted">' + escapeHtml(trovata.visita) + "</p>" +
+          '<p><a href="#/spezierie">Tutte le spezierie storiche</a> · <a href="#/amari">Atlante degli amari</a></p>'
+      };
+    }
+    return {
+      html: "<p>Le <strong>antiche spezierie</strong> sono farmacie d’abbazia e officine storiche dove erbe e liquori nascono dalle stesse mani. In questa edizione ne trovi " + (NP.spezierie || []).length + ": " + escapeHtml((NP.spezierie || []).map((s) => s.nome).join("; ")) + ".</p>" +
+        '<p>Nessun prezzo è indicato: i listini cambiano e si verificano sul negozio ufficiale del produttore.</p>' +
+        '<p><a href="#/spezierie">Mappa delle spezierie storiche →</a></p>'
+    };
+  }
+
+  function amariAnswer(q) {
+    const n = norm(q);
+    const trovato = (NP.amari || []).find((a) => {
+      const nome = norm(a.nome);
+      if (n.indexOf(nome) !== -1) return true;
+      const corto = nome.split(" ").filter((w) => w.length > 3).pop() || "";
+      return corto.length > 3 && n.indexOf(corto) !== -1;
+    });
+    if (trovato) {
+      return {
+        html: "<p><strong>" + escapeHtml(trovato.nome) + "</strong> — " + escapeHtml(trovato.origine) + "</p>" +
+          "<p><strong>Ingredienti dichiarati:</strong> " + escapeHtml((trovato.ingredienti || []).join(", ")) + "</p>" +
+          "<p>" + escapeHtml(trovato.storia) + "</p>" +
+          '<div class="callout warn" style="margin:.6rem 0"><span aria-hidden="true">⚠️</span><p class="mb-0">' + escapeHtml(trovato.nota) + "</p></div>" +
+          '<p class="muted">È una bevanda alcolica: non adatta a bambini, gravidanza e allattamento, e da evitare con gastrite, ulcera o farmaci senza parere.</p>' +
+          '<p><a href="#/amari">Atlante degli amari</a></p>'
+      };
+    }
+    return {
+      html: "<p><strong>Un amaro non è una cura</strong>: è una bevanda alcolica con erbe e zuccheri. Nell’atlante trovi " + (NP.amari || []).length + " amari divisi in categorie (monastici, amaricanti classici, alpini, bitter), con ingredienti, storia e cautele.</p>" +
+        '<div class="callout warn" style="margin:.6rem 0"><span aria-hidden="true">⚠️</span><p class="mb-0">Gradazione alta e zuccheri: un bicchierino può contenere più alcol di un bicchiere di vino. Sconsigliato in gravidanza, ai bambini e con gastrite, ulcera o reflusso. La china contiene chinino.</p></div>' +
+        '<p><a href="#/amari">Atlante degli amari →</a> · <a href="#/spezierie">Le spezierie d’abbazia</a></p>'
+    };
+  }
+
+  function funghiAnswer(q) {
+    const n = norm(q);
+    const trovato = (NP.funghi || []).find((f) => n.indexOf(norm(f.nome)) !== -1 || n.indexOf(norm(f.latino)) !== -1);
+    if (trovato) {
+      return {
+        html: "<p><strong>" + escapeHtml(trovato.nome) + "</strong> <em>(" + escapeHtml(trovato.latino) + ")</em></p>" +
+          "<p><strong>Uso:</strong> " + escapeHtml(trovato.uso) + "</p>" +
+          "<p><strong>Tradizione:</strong> " + escapeHtml(trovato.tradizione) + "</p>" +
+          "<p><strong>Evidenza:</strong> " + escapeHtml(trovato.evidenza) + "</p>" +
+          '<div class="callout danger" style="margin:.6rem 0"><span aria-hidden="true">☠️</span><p class="mb-0"><strong>Sicurezza:</strong> ' + escapeHtml(trovato.sicurezza) + "</p></div>" +
+          '<p class="muted">' + escapeHtml(trovato.nota) + "</p>" +
+          '<p><a href="#/funghi">Funghi e foraging: schede e regole →</a></p>'
+      };
+    }
+    const regole = (NP.micologia && NP.micologia.regole) || [];
+    return {
+      html: "<p>In <strong>funghi e foraging</strong> trovi " + (NP.funghi || []).length + " schede (" + escapeHtml((NP.funghi || []).map((f) => f.nome).join(", ")) + ") e le otto regole del bosco.</p>" +
+        (regole.length ? "<ul>" + regole.slice(0, 3).map((r) => "<li><strong>" + escapeHtml(r.t) + ":</strong> " + escapeHtml(r.d) + "</li>").join("") + "</ul>" : "") +
+        '<div class="callout danger" style="margin:.6rem 0"><span aria-hidden="true">☠️</span><p class="mb-0"><strong>Nessuna app riconosce un fungo.</strong> Fai controllare la raccolta da un micologo. In caso di ingestione sospetta chiama il 112 o un Centro Antiveleni: non indurre il vomito e conserva i resti.</p></div>' +
+        '<p><a href="#/funghi">Funghi e foraging →</a></p>'
+    };
+  }
+
+  function estrazioniAnswer(q) {
+    const n = norm(q);
+    const distillazione = (NP.estrazioni || []).find((e) => e.id === "distillazione");
+    const oleoliti = (NP.estrazioni || []).filter((e) => /oleolito/.test(e.id));
+    let trovata = (NP.estrazioni || []).find((e) => n.indexOf(norm(e.titolo)) !== -1);
+    if (!trovata && /distillazion|alambicc|legale|autorizzazion/.test(n)) trovata = distillazione;
+    if (!trovata && /oleolito/.test(n)) trovata = oleoliti[0];
+    if (trovata) {
+      return {
+        html: "<p><strong>" + escapeHtml(trovata.titolo) + "</strong> — " + escapeHtml(trovata.tipo) + " · " + escapeHtml(trovata.tempo) + "</p>" +
+          "<p><strong>Serve:</strong> " + escapeHtml((trovata.ingredienti || []).join(", ")) + "</p>" +
+          "<ol>" + (trovata.passi || []).map((x) => "<li>" + escapeHtml(x) + "</li>").join("") + "</ol>" +
+          '<div class="callout danger" style="margin:.6rem 0"><span aria-hidden="true">⚠️</span><p class="mb-0"><strong>Sicurezza:</strong> ' + escapeHtml(trovata.sicurezza) + "</p></div>" +
+          '<p class="muted"><strong>Conservazione:</strong> ' + escapeHtml(trovata.conservazione) + "</p>" +
+          '<p><a href="#/estrazioni">Tutte le preparazioni →</a></p>'
+      };
+    }
+    return {
+      html: "<p>Nel ricettario trovi " + (NP.estrazioni || []).length + " preparazioni passo per passo: " + escapeHtml((NP.estrazioni || []).map((e) => e.titolo).join(", ")) + ".</p>" +
+        '<div class="callout danger" style="margin:.6rem 0"><span aria-hidden="true">🔥</span><p class="mb-0"><strong>La distillazione di alcol in casa è vietata</strong> senza autorizzazioni specifiche: non è un’attività domestica. Gli oli essenziali non si usano mai puri sulla pelle.</p></div>' +
+        '<p><a href="#/estrazioni">Oleoliti e distillati →</a></p>'
+    };
+  }
+
+  function balsamicoAnswer(q) {
+    const n = norm(q);
+    const nomi = ["", "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"];
+    let mese = 0;
+    for (let i = 1; i <= 12; i++) { if (n.indexOf(nomi[i]) !== -1) { mese = i; break; } }
+    if (!mese) mese = new Date().getMonth() + 1;
+    const m = (NP.balsamico || []).find((x) => x.mese === mese) || (NP.balsamico || [])[0];
+    if (!m) return { html: "<p>Il tempo balsamico non è disponibile in questa copia.</p>" };
+    return {
+      html: "<p><strong>" + escapeHtml(nomi[m.mese].charAt(0).toUpperCase() + nomi[m.mese].slice(1)) + " · " + escapeHtml(m.titolo) + "</strong></p>" +
+        "<p>" + escapeHtml(m.momento) + "</p>" +
+        "<p><strong>Si raccoglie:</strong> " + escapeHtml((m.raccogli || []).join(", ")) + "</p>" +
+        "<p><strong>Si prepara:</strong> " + escapeHtml((m.prepara || []).join(", ")) + "</p>" +
+        '<p class="muted">' + escapeHtml(m.nota) + "</p>" +
+        '<p><a href="#/balsamico">Tempo balsamico, mese per mese →</a></p>'
     };
   }
 
@@ -484,6 +646,12 @@ NP.neura = (function () {
 
     const cond = findCondition(clean);
     if (cond) return conditionAnswer(cond, clean);
+
+    if (/(spezieria|spezierie|liquoreria|farmacia storica|liquori monastici|casamari|santa maria novella|camaldoli)/.test(n)) return spezierieAnswer(clean);
+    if (/(amaro|amari|fernet|ramazzotti|averna|montenegro|china martini|tintura imperiale|elisir sett|digestivo)/.test(n)) return amariAnswer(clean);
+    if (/(fungo|funghi|reishi|chaga|shiitake|maitake|cordyceps|pleuroto|micolog|foraging|porcini)/.test(n)) return funghiAnswer(clean);
+    if (/(oleolito|tintura madre|idrolato|distillazion|alambicc|macerazion|sciroppo di sambuco|estrazion)/.test(n)) return estrazioniAnswer(clean);
+    if (/(tempo balsamico|momento balsamico|calendario di raccolta|stagione balsamica|quando si raccoglie)/.test(n)) return balsamicoAnswer(clean);
 
     if (/(controlla|posso prendere|posso usare|è sicuro|e sicuro|interazion)/.test(n)) {
       return { html: "<p>Per un controllo di sicurezza completo usa il pannello <strong>«Controlla un rimedio»</strong> qui accanto: indica pianta, farmaci e condizioni (gravidanza, età, fegato, reni). Restituirò un elenco di avvertenze con i livelli di rischio.</p><p class=\"muted\">Se stai assumendo un farmaco, porta sempre l'elenco completo al medico o al farmacista.</p>" };
@@ -571,10 +739,11 @@ NP.neura = (function () {
 
     const plants = findPlants(text);
     result.plants = plants;
+    const mushrooms = (NP.funghi || []).filter((f) => norm(text).indexOf(norm(f.nome)) !== -1 || norm(text).indexOf(norm(f.latino)) !== -1);
 
     const drugs = DRUGS.filter((d) => norm(text).indexOf(d.key) !== -1).map((d) => d.label);
 
-    if (!plants.length) {
+    if (!plants.length && !mushrooms.length) {
       result.items.push({
         level: "basso",
         titolo: "Nessuna pianta riconosciuta",
@@ -610,6 +779,14 @@ NP.neura = (function () {
       }
     });
 
+    mushrooms.forEach((f) => {
+      result.items.push({
+        level: f.livello === "rosso" ? "alto" : f.livello === "giallo" ? "medio" : "basso",
+        titolo: f.nome + " · fungo",
+        testo: f.sicurezza + " (" + f.nota + ")"
+      });
+    });
+
     if (drugs.length) {
       result.items.push({ level: "medio", titolo: "Farmaci rilevati", testo: "Hai indicato: " + drugs.join(", ") + ". Porta l'elenco completo (compresi gli integratori) al medico o al farmacista prima di iniziare qualunque rimedio." });
     }
@@ -618,12 +795,16 @@ NP.neura = (function () {
       result.items.push({ level: "medio", titolo: "Gravidanza e allattamento", testo: "Evita l'automedicazione con piante: molte non hanno dati sufficienti e alcune possono influire sull'utero, sulla produzione di latte o sul bambino." });
     }
 
+    const controlli = [];
+    if (plants.length) controlli.push(plants.length + " pianta" + (plants.length > 1 ? "e" : ""));
+    if (mushrooms.length) controlli.push(mushrooms.length + (mushrooms.length > 1 ? " funghi" : " fungo"));
+
     const levels = result.items.map((i) => i.level);
     result.level = levels.indexOf("alto") !== -1 ? "alto" : levels.indexOf("medio") !== -1 ? "medio" : "basso";
     result.summary = result.urgent
       ? "Sintomo potenzialmente urgente: contatta subito i soccorsi (112/118) o un medico. Le piante non sono la priorità in questo momento."
-      : plants.length
-        ? "Ho controllato " + plants.length + " pianta" + (plants.length > 1 ? "e" : "") + (drugs.length ? " e i farmaci indicati" : "") + ". Livello complessivo: " + result.level + "."
+      : controlli.length
+        ? "Ho controllato " + controlli.join(" e ") + (drugs.length ? " e i farmaci indicati" : "") + ". Livello complessivo: " + result.level + "."
         : "Aggiungi il nome di una pianta per un controllo più preciso.";
 
     if (result.urgent) {
@@ -641,6 +822,8 @@ NP.neura = (function () {
     findPlants: findPlants,
     findCondition: findCondition,
     suggestions: [
+      "Che cosa sono le spezierie d’abbazia?",
+      "Il chaga è sicuro?",
       "A cosa serve la malva?",
       "Posso prendere iperico con la pillola?",
       "Cosa aiuta per il sonno?",

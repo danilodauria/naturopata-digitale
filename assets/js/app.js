@@ -196,8 +196,8 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.11</p><h2>I saperi antichi entrano in casa</h2><p class="text-small muted mb-0">Cinque nuove sezioni: spezierie storiche, amari d’abbazia, tempo balsamico, funghi e oleoliti. E ora link e pulsanti si controllano da soli prima di ogni pubblicazione.</p></div>' +
-        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-secondary btn-small" href="#/amari">Atlante degli amari</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.12</p><h2>Neura impara i saperi antichi</h2><p class="text-small muted mb-0">Ora risponde su spezierie, amari, funghi e preparazioni, con le cautele al posto giusto: ossalati del chaga, alcol e gravidanza, distillazione e autorizzazioni. E il controllo dei funghi è entrato anche nel pannello di sicurezza.</p></div>' +
+        '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 
       '<section class="section">' +

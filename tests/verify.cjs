@@ -176,6 +176,18 @@ ok(/Mattioli/i.test(answer("chi era Mattioli?")), "Neura conosce la pagina Matti
 ok(/112|bollire/i.test(answer("come si tratta l'acqua in escursione?")), "Neura rimanda alla sopravvivenza");
 ok(NP.neura.findPlants("le ortiche").length === 1, "Neura riconosce il plurale 'ortiche'");
 ok(/Interazioni|contraccett|Iperico/i.test(answer("posso prendere iperico con la pillola?")), "Neura riconosce il rischio con la pillola");
+ok(/Casamari/i.test(answer("che cosa sono le spezierie d'abbazia?")), "Neura conosce le spezierie");
+ok(/#\/spezierie/.test(answer("parlami delle spezierie")), "Neura rimanda alle spezierie");
+ok(/Santa Maria Novella/i.test(answer("santa maria novella")), "Neura riconosce Santa Maria Novella");
+ok(/alcol|alcolic/i.test(answer("parlami degli amari")), "Neura avverte che gli amari sono alcolici");
+ok(/#\/amari/.test(answer("che cos'è un amaro d'abbazia?")), "Neura rimanda all'atlante degli amari");
+ok(/ossalat/i.test(answer("il chaga è sicuro?")), "Neura cita gli ossalati del chaga");
+ok(/112|Centro Antiveleni|micologo/i.test(answer("come si raccolgono i funghi?")), "Neura mette la sicurezza davanti ai funghi");
+ok(/#\/estrazioni/.test(answer("come si fa un oleolito?")), "Neura spiega gli oleoliti");
+ok(/vietata|autorizzazion/i.test(answer("la distillazione in casa è legale?")), "Neura dice che la distillazione richiede autorizzazioni");
+ok(/giugno/i.test(answer("qual è il tempo balsamico di giugno?")), "Neura risponde sul tempo balsamico");
+ok(/ossalat/i.test((NP.neura.check("chaga", {}) || { items: [] }).items.map((i) => i.testo).join(" ")), "il controllo di sicurezza considera i funghi");
+ok(NP.neura.search("reishi", 6).some((r) => r.doc.type === "fungo"), "la ricerca di Neura trova i funghi");
 
 const c1 = NP.neura.check("iperico e pillola", { farmaci: true });
 ok(c1.level === "alto", "controllo iperico + contraccettivi = alto");

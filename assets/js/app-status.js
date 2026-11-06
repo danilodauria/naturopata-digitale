@@ -334,11 +334,12 @@
     const m = modo();
     const v = voce();
     const parlato = !!(v && v.supporto && v.supporto().voce);
+    const sez = sezioneGuida(sistemaOperativo().id);
 
     return "<h3>Dove stai usando il programma</h3>" +
       "<p><strong>" + esc(m.titolo) + "</strong> · " + esc(m.dove) + "</p>" +
       "<p>" + esc(m.nota) + "</p>" +
-      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html" data-status-close>Come si installa</a>' +
+      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html' + (sez ? "#" + sez : "") + '" data-status-close>Come si installa</a>' +
         '<a class="btn btn-ghost btn-small" href="scarica/index.html" data-status-close>Pagina dei download</a></div>' +
       "<h3>Neura, qui sul dispositivo</h3>" +
       '<p><span class="status-tag">pronta</span> Neura non è un modello scaricato da Internet: legge le schede delle piante, il manuale e le tabelle di sicurezza già presenti nel programma.</p>' +
@@ -365,7 +366,7 @@
     html += "<h3>Voci del dispositivo</h3>" +
       "<p>Voci disponibili: <strong>" + v.totali + "</strong>" + (v.italiane ? " (" + v.italiane + " in italiano)" : "") + ".</p>" +
       '<p class="text-small muted">Le voci naturali si installano dal pannello Voce e restano dentro il programma; le altre arrivano dal sistema operativo, e senza una voce italiana Neura tace e risponde per iscritto. Chrome ed Edge, nel browser, aggiungono voci online che il programma desktop non vede: lì restano solo quelle installate nel sistema. Per averne altre: su Windows <em>Impostazioni</em> → <em>Data e ora e lingua</em> → <em>Riconoscimento vocale</em> → <em>Aggiungi voci</em>; su macOS <em>Impostazioni di Sistema</em> → <em>Accessibilità</em> → <em>Contenuto pronunciato</em> → <em>Voce di sistema</em> → <em>Gestisci voci</em>.</p>' +
-      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/neura" data-status-close>Scegliere la voce</a></div>';
+      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/neura#voce" data-status-close>Scegliere la voce</a></div>';
 
     const guida = passiInstallazione(s.id);
     html += "<h3>Installazione passo per passo · " + esc(guida.titolo) + "</h3>" +
@@ -377,7 +378,7 @@
       '<p class="text-small muted">Sono gli stessi passaggi della guida, scritti qui: per installare non devi uscire dal programma.</p>' +
       '<div class="status-actions"><a class="btn btn-secondary btn-small" href="come-installare.html' +
         (sezione ? "#" + sezione : "") + '" data-status-close>Guida completa</a>' +
-        '<a class="btn btn-ghost btn-small" href="scarica/index.html" data-status-close>Scarica</a></div>';
+        '<a class="btn btn-ghost btn-small" href="scarica/index.html#computer" data-status-close>Scarica</a></div>';
     return html;
   }
 
@@ -405,7 +406,7 @@
     }
 
     html += "<p><strong>Come si usa.</strong></p><ul class=\"text-small\">" +
-      "<li>Vai nella pagina <a href=\"#/neura\" data-status-close>Neura</a>: accanto alla casella della domanda c'è l'icona dell'onda.</li>" +
+      "<li>Vai alla sezione <a href=\"#/neura#chat\" data-status-close>Neura</a>: accanto alla casella della domanda c'è l'icona dell'onda.</li>" +
       "<li>Toccala e parla con calma; toccala di nuovo per fermare. La frase compare nella casella e parte da sola.</li>" +
       "<li>Alla prima richiesta rispondi <em>Consenti</em>: senza permesso la dettatura non parte.</li>" +
       "</ul>" +
@@ -423,7 +424,7 @@
       "</div>" +
       "<p><strong>Ingestione sospetta di una pianta o di un fungo:</strong> chiama subito un Centro Antiveleni o il 112 e non indurre il vomito. Conserva un campione della pianta.</p>" +
       '<p class="text-small muted">Le chiamate sono gratuite. Segui le istruzioni dell\'operatore e non riagganciare prima che te lo dica.</p>' +
-      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/sicurezza" data-status-close>Numeri e cosa fare</a>' +
+      '<div class="status-actions"><a class="btn btn-secondary btn-small" href="#/sicurezza#numeri" data-status-close>Numeri e cosa fare</a>' +
         '<a class="btn btn-ghost btn-small" href="https://www.iss.it/-/cnsc-cav" target="_blank" rel="noopener">Elenco ISS dei Centri Antiveleni</a></div>';
   }
 

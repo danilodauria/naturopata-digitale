@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.19</p><h2>Installare, senza uscire dal programma</h2><p class="text-small muted mb-0">Il pannello Sistema ora elenca i passaggi di installazione del tuo sistema — Windows, macOS, Linux, Android o iPhone — con il file giusto e gli avvisi da superare. La guida completa resta a un tocco, ma per installare non serve più aprire un\'altra pagina.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.20</p><h2>Ogni pulsante, la sua sezione</h2><p class="text-small muted mb-0">I pannelli di stato ora portano al punto esatto che promettono: i numeri utili di Sicurezza, la scelta della voce in Neura, la chat e la guida del tuo sistema. Il router riconosce le ancore #/rotta#sezione e i test controllano che ogni promessa abbia davvero la sua sezione.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 
@@ -475,9 +475,20 @@ NP.app = (function () {
   }
 
   function parseRoute() {
+    // Una rotta può portarsi dietro una sezione: #/neura#voce.
     const hash = location.hash.replace(/^#\/?/, "");
-    const parts = hash.split("?")[0].split("/").filter(Boolean);
-    return { name: parts[0] || "home", params: parts.slice(1) };
+    const parti = hash.split("#");
+    const parts = parti[0].split("?")[0].split("/").filter(Boolean);
+    return { name: parts[0] || "home", params: parts.slice(1), ancora: parti[1] || "" };
+  }
+
+  // Il pulsante promette una sezione: ci si arriva davvero, non solo alla pagina.
+  function portaAllAncora(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    if (typeof target.scrollIntoView === "function") target.scrollIntoView({ block: "start", behavior: "auto" });
+    if (typeof target.focus === "function") target.focus({ preventScroll: true });
   }
 
   const ROUTES = {
@@ -529,6 +540,7 @@ NP.app = (function () {
     setNav(r.name === "home" ? "home" : r.name);
     document.getElementById("siteHeader").classList.toggle("is-scrolled", window.scrollY > 8);
     window.scrollTo({ top: 0, behavior: "auto" });
+    if (r.ancora) portaAllAncora(r.ancora);
     document.body.classList.remove("no-scroll");
     const nav = document.getElementById("mainNav");
     if (nav) nav.classList.remove("is-open");

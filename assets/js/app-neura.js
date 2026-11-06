@@ -91,7 +91,7 @@
       '<div class="page-head" style="margin-bottom:1.4rem"><p class="eyebrow">Neura · intelligenza locale</p><h1>Chiedi, capisci, controlla.</h1>' +
         '<p class="lead">Un assistente che lavora solo sui contenuti di questo programma. Niente cloud, niente account: le tue domande restano qui.</p></div>' +
       '<div class="neura-layout">' +
-        '<section class="chat-panel" aria-label="Conversazione con Neura">' +
+        '<section class="chat-panel" id="chat" aria-label="Conversazione con Neura">' +
           '<header class="chat-head"><span class="neura-orb" aria-hidden="true"></span><div><h2>Neura</h2><p>Conoscenza locale · nessun dato inviato</p></div><button class="chip chat-stop" type="button" id="neuraStop" title="Zittisci la voce">Stop</button><span class="chat-status">pronta</span></header>' +
           '<div class="chat-log" id="chatLog" role="log" aria-live="polite"></div>' +
           '<div class="chat-suggestions" id="chatSuggestions">' +
@@ -127,7 +127,7 @@
             '<div class="check-result" id="checkResult" aria-live="polite"></div>' +
           "</div>" +
 
-          '<div class="card voice-panel">' +
+          '<div class="card voice-panel" id="voce">' +
             "<h2>Voce</h2>" +
             '<p class="text-small">Il pulsante dell\'altoparlante in alto attiva o disattiva la lettura. Puoi fermarla con Stop, con «Ferma l\'audio» nella barra in alto o con Esc.</p>' +
             '<label class="voice-label" for="voiceSelect">Voce del dispositivo</label>' +

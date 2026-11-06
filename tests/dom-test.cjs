@@ -74,6 +74,8 @@ async function go(hash) {
   helpChip.click();
   await tick(40);
   ok(!doc.getElementById("statusPanel").hidden && /112/.test(doc.getElementById("statusPanel").textContent), "barra di stato: Aiuto subito con il 112");
+  const linkNumeri = Array.prototype.slice.call(doc.getElementById("statusPanel").querySelectorAll("a")).filter(function (a) { return /Numeri e cosa fare/.test(a.textContent); })[0];
+  ok(!!linkNumeri && linkNumeri.getAttribute("href") === "#/sicurezza#numeri", "pannello Aiuto: «Numeri e cosa fare» porta ai numeri utili");
   helpChip.click();
   await tick(20);
   ok(doc.getElementById("statusPanel").hidden, "barra di stato: il pannello si chiude");
@@ -83,6 +85,8 @@ async function go(hash) {
   const pannelloSistema = doc.getElementById("statusPanel");
   ok(!pannelloSistema.hidden && /Installazione passo per passo/.test(pannelloSistema.textContent), "pannello Sistema: i passaggi di installazione sono nel pannello");
   ok(pannelloSistema.querySelectorAll(".status-steps li").length >= 3, "pannello Sistema: elenco numerato dei passaggi");
+  const linkVoce = Array.prototype.slice.call(pannelloSistema.querySelectorAll("a")).filter(function (a) { return /Scegliere la voce/.test(a.textContent); })[0];
+  ok(!!linkVoce && linkVoce.getAttribute("href") === "#/neura#voce", "pannello Sistema: «Scegliere la voce» porta alla sezione Voce");
   osChip.click();
   await tick(20);
   ok(!!doc.querySelector(".welcome-panel"), "benvenuto: scheda di Neura presente");
@@ -402,6 +406,12 @@ async function go(hash) {
   ok(/SHA256SUMS\.txt/.test(sf.querySelector(".sums-status").textContent), "scarica: rinvio al file delle impronte");
   conImpronte.window.close();
   senzaImpronte.window.close();
+
+  // Le ancore delle rotte portano alla sezione, non solo alla pagina
+  await go("#/sicurezza#numeri");
+  ok(!!doc.getElementById("numeri"), "router: #/sicurezza#numeri arriva ai numeri utili");
+  await go("#/neura#voce");
+  ok(!!doc.getElementById("voce"), "router: #/neura#voce arriva alla sezione Voce");
 
   // Errori runtime
   ok(errors.length === 0, "nessun errore JavaScript: " + errors.slice(0, 3).join(" | "));

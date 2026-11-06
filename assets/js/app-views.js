@@ -292,7 +292,7 @@
     A.page(
       '<div class="page-head"><p class="eyebrow">Sicurezza e fonti</p><h1>La prudenza è la prima cura</h1>' +
         '<p class="lead">Le piante sono sostanze attive. Questa pagina raccoglie i segnali d\'allarme, le piante tossiche, le interazioni principali e le fonti per approfondire.</p></div>' +
-      '<div class="callout danger"><span aria-hidden="true">🚨</span><div><p><strong>In caso di emergenza chiama il 112 o il 118.</strong> Per un\'ingestione sospetta di piante o funghi, contatta un Centro Antiveleni. Non indurre il vomito e conserva un campione della pianta.</p><p class="mb-0"><a href="https://www.iss.it/-/cnsc-cav" target="_blank" rel="noopener">Elenco ISS dei Centri Antiveleni (CAV) →</a></p></div></div>' +
+      '<div class="callout danger" id="numeri"><span aria-hidden="true">🚨</span><div><p><strong>In caso di emergenza chiama il 112 o il 118.</strong> Per un\'ingestione sospetta di piante o funghi, contatta un Centro Antiveleni. Non indurre il vomito e conserva un campione della pianta.</p><p class="mb-0"><a href="https://www.iss.it/-/cnsc-cav" target="_blank" rel="noopener">Elenco ISS dei Centri Antiveleni (CAV) →</a></p></div></div>' +
 
       '<section class="section">' +
         groups.map((g) =>
@@ -302,20 +302,20 @@
         ).join("") +
       "</section>" +
 
-      '<section class="section"><div class="section-head"><div><h2>Piante tossiche da riconoscere</h2><p>Non solo «non raccoglierle»: impara a distinguerle dai sosia commestibili.</p></div></div>' +
+      '<section class="section" id="tossiche"><div class="section-head"><div><h2>Piante tossiche da riconoscere</h2><p>Non solo «non raccoglierle»: impara a distinguerle dai sosia commestibili.</p></div></div>' +
         '<div class="toxic-grid">' + (NP.toxic || []).map((t) =>
           '<div class="toxic-card"><h3>' + esc(t.nome) + "</h3><p class=\"latin\">" + esc(t.latino) + "</p><p><strong>" + esc(t.pericolo) + ".</strong> " + esc(t.caratteri) + "</p><p><strong>Sintomi:</strong> " + esc(t.sintomi) + "</p><p><strong>Cosa fare:</strong> " + esc(t.soccorso) + "</p></div>"
         ).join("") + "</div>" +
       "</section>" +
 
-      '<section class="section"><div class="section-head"><div><h2>Interazioni principali</h2><p>Una tabella di orientamento, non un sostituto del parere del farmacista.</p></div></div>' +
+      '<section class="section" id="interazioni"><div class="section-head"><div><h2>Interazioni principali</h2><p>Una tabella di orientamento, non un sostituto del parere del farmacista.</p></div></div>' +
         '<div class="table-wrap"><table class="data-table"><thead><tr><th>Pianta</th><th>Farmaci</th><th>Rischio</th><th>Livello</th></tr></thead><tbody>' +
           (NP.interactions || []).map((it) => "<tr><td><strong>" + esc(it.pianta) + "</strong></td><td>" + esc(it.farmaci) + "</td><td>" + esc(it.effetto) + "</td><td>" + (it.livello === "alto" ? '<span class="badge-dot safety-rosso">alto</span>' : it.livello === "medio" ? '<span class="badge-dot safety-giallo">medio</span>' : '<span class="badge-dot safety-verde">basso</span>') + "</td></tr>").join("") +
         "</tbody></table></div>" +
         '<p class="text-small muted mt-2">Le interazioni possono essere diverse da persona a persona e dipendono da dose, durata e altri farmaci. Porta sempre un elenco completo al medico o al farmacista.</p>' +
       "</section>" +
 
-      '<section class="section"><div class="home-split"><div class="panel"><h2>Le fonti</h2><p class="text-small muted">Le schede citano fonti specifiche. Queste sono le fonti generali del progetto.</p><ul class="source-list">' +
+      '<section class="section" id="fonti"><div class="home-split"><div class="panel"><h2>Le fonti</h2><p class="text-small muted">Le schede citano fonti specifiche. Queste sono le fonti generali del progetto.</p><ul class="source-list">' +
         (NP.sources || []).map((s) => '<li><a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.titolo) + "</a> — " + esc(s.nota) + "</li>").join("") +
         "</ul></div>" +
         '<div class="panel panel-soft"><h2>Segnalare una reazione avversa</h2><p class="text-small">In Italia le reazioni avverse a integratori e prodotti vegetali possono essere segnalate al sistema di farmacovigilanza. La segnalazione aiuta la ricerca e la sicurezza di tutti.</p><p class="text-small mb-0"><a href="https://www.aifa.gov.it/" target="_blank" rel="noopener">AIFA →</a> · <a href="https://www.salute.gov.it/" target="_blank" rel="noopener">Ministero della Salute →</a></p></div></div>' +
@@ -378,7 +378,7 @@
       "</section>" +
 
       '<section class="section"><div class="home-split"><div class="panel"><h2>Che cosa c\'è dentro</h2><div class="mini-stats"><div class="mini-stat"><strong>' + (NP.plants || []).length + "</strong><span>schede</span></div><div class=\"mini-stat\"><strong>" + (NP.manual || []).length + "</strong><span>capitoli</span></div><div class=\"mini-stat\"><strong>" + (NP.quiz || []).length + "</strong><span>domande</span></div></div><p class=\"text-small muted mt-2 mb-0\">Tecnologia: HTML, CSS e JavaScript senza dipendenze esterne; PWA con service worker; tutti i contenuti sono locali.</p></div>" +
-        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.19 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
+        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.20 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
       "</section>" +
 
       '<div class="callout warn"><span aria-hidden="true">⚕️</span><p class="mb-0"><strong>Avvertenza sanitaria.</strong> Naturopata Digitale è un\'opera divulgativa. Non fornisce diagnosi, prescrizioni o trattamenti. Le informazioni sulle piante non sostituiscono il parere di medico, farmacista, dietista o altro professionista sanitario. In caso di sintomi importanti, rivolgiti alle strutture sanitarie.</p></div>',

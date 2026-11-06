@@ -398,6 +398,20 @@ ok(/Installazione passo per passo/.test(jsStatus), "pannello Sistema: mostra i p
 ok(/Naturopata-Digitale-Windows-x64\.exe/.test(jsStatus) && /Naturopata-Digitale-Linux-amd64\.deb/.test(jsStatus), "pannello Sistema: indica il file giusto per Windows e Linux");
 ok(/Aggiungi alla schermata Home/.test(jsStatus), "pannello Sistema: istruzioni per telefono e tablet");
 ok(/ol\.status-steps/.test(cssStatus), "pannello Sistema: elenco numerato leggibile");
+const jsAppPannelli = fs.readFileSync(path.join(root, "assets", "js", "app.js"), "utf8");
+const jsViewsPannelli = fs.readFileSync(path.join(root, "assets", "js", "app-views.js"), "utf8");
+const jsNeuraPannelli = fs.readFileSync(path.join(root, "assets", "js", "app-neura.js"), "utf8");
+ok(/function portaAllAncora/.test(jsAppPannelli) && /ancora/.test(jsAppPannelli), "router: una rotta porta anche a una sezione");
+[["#/neura#voce", "voce"], ["#/neura#chat", "chat"], ["#/sicurezza#numeri", "numeri"]].forEach(function (meta) {
+  ok(jsStatus.indexOf(meta[0]) !== -1, "pannelli: il pulsante porta a " + meta[0]);
+});
+ok(/id="voce"/.test(jsNeuraPannelli) && /id="chat"/.test(jsNeuraPannelli), "Neura: le sezioni voce e chat hanno un'ancora");
+ok(/id="numeri"/.test(jsViewsPannelli), "Sicurezza: i numeri utili hanno un'ancora");
+ok(/sezioneGuida\(sistemaOperativo\(\)\.id\)/.test(jsStatus), "pannello Modo: «Come si installa» apre la sezione del sistema");
+const bloccoRotte = (jsAppPannelli.match(/const ROUTES = \{([\s\S]*?)\n  \};/) || [])[1] || "";
+Array.from(jsStatus.matchAll(/href="#\/([a-z0-9-]+)/g)).forEach(function (m) {
+  ok(bloccoRotte.indexOf(m[1] + ":") !== -1, "pannelli: la rotta #/" + m[1] + " esiste");
+});
 ok(/did-finish-load/.test(mainDesktop) && /caricata/.test(mainDesktop), "desktop: un link che non si apre non riporta alla home");
 ok(/update:controlla/.test(fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8")), "preload: espone lo stato degli aggiornamenti");
 const ponteDesktop = fs.readFileSync(path.join(root, "desktop", "preload.cjs"), "utf8");

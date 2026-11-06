@@ -55,14 +55,14 @@ jobs:
             echo "Dettaglio del controllo: $RUN_URL"
           } > report-finale.md
           esistente="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open \
-            --search 'Link di download non raggiungibili in:title' \
+            --search 'Link non raggiungibili in:title' \
             --json number --jq '.[0].number // empty')"
           if [ -n "$esistente" ]; then
             gh issue comment "$esistente" --repo "$GITHUB_REPOSITORY" --body-file report-finale.md
             echo "::error::Link ancora rotti: aggiornata la segnalazione #$esistente."
           else
             gh issue create --repo "$GITHUB_REPOSITORY" \
-              --title "Link di download non raggiungibili" \
+              --title "Link non raggiungibili" \
               --body-file report-finale.md
             echo "::error::Almeno un link della release non risponde: aperta la segnalazione."
           fi
@@ -74,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           esistente="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open \
-            --search 'Link di download non raggiungibili in:title' \
+            --search 'Link non raggiungibili in:title' \
             --json number --jq '.[0].number // empty')"
           if [ -n "$esistente" ]; then
             gh issue close "$esistente" --repo "$GITHUB_REPOSITORY" \

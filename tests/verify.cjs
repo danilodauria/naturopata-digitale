@@ -425,6 +425,12 @@ ok(/schedule:/.test(linkWf), "workflow link: gira ogni giorno");
 ok(/issues: write/.test(linkWf), "workflow link: può aprire la segnalazione");
 ok(/Naturopata-Digitale-Sorgenti\.zip/.test(fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8")), "workflow desktop: allega i sorgenti");
 ok(/Naturopata-Digitale-Come-si-installa\.pdf/.test(fs.readFileSync(path.join(root, "scripts", "check-links.cjs"), "utf8")), "check-links: controlla anche i fogli");
+const sorgenteLink = fs.readFileSync(path.join(root, "scripts", "check-links.cjs"), "utf8");
+ok(/function controllaEsterni/.test(sorgenteLink), "check-links: controlla i siti di riferimento");
+ok(/function linkEsterni/.test(sorgenteLink), "check-links: raccoglie i link esterni dalle pagine");
+ok(/--esterni/.test(sorgenteLink), "check-links: può controllare solo i link esterni");
+ok(/"bloccato"/.test(sorgenteLink), "check-links: distingue i blocchi anti-bot dai link rotti");
+ok(/Link non raggiungibili in:title/.test(linkWf), "workflow link: segnalazione estesa ai siti esterni");
 const pagesWorkflow = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");
 ok(/scarica/.test(pagesWorkflow), "workflow Pages: pagina di download inclusa");
 ["come-installare.html", "scheda-rapida.html", "versioni.html"].forEach((pagina) => {
@@ -443,6 +449,7 @@ ok(/isAppShell/.test(sw), "service worker: le altre pagine non sovrascrivono la 
 // Il controllo di link e pulsanti deve restare agganciato alla pubblicazione:
 // se qualcuno lo toglie, ce ne accorgiamo qui e non con un link rotto.
 const pacchettoRadice = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+ok(/link:esterni/.test(pacchettoRadice.scripts ? JSON.stringify(pacchettoRadice.scripts) : ""), "npm run link:esterni esiste");
 ok(fs.existsSync(path.join(root, "tests", "interfacce.cjs")), "esiste tests/interfacce.cjs");
 ok(/tests\/interfacce\.cjs/.test(pacchettoRadice.scripts.test), "npm test esegue il controllo di link e pulsanti");
 const pagesControlli = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");

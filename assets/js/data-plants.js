@@ -577,7 +577,7 @@ NP.plants = [
     fonti: [
       { t: "EMA · Melissa officinalis", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
       { t: "PubMed · Melissa anxiety", u: "https://pubmed.ncbi.nlm.nih.gov/?term=melissa+officinalis+anxiety" },
-      { t: "NIH · Lemon balm", u: "https://www.nccih.nih.gov/health/lemon-balm" }
+      { t: "EMA · Melissae folium", u: "https://www.ema.europa.eu/en/medicines/herbal/melissae-folium" }
     ]
   },
 

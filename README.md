@@ -182,13 +182,22 @@ rimasto indietro.
 `link.yml` gira ogni giorno, dopo ogni pubblicazione e quando lo si lancia a
 mano: `scripts/check-links.cjs` apre tutti gli allegati della release, controlla
 che rispondano e confronta le impronte di `SHA256SUMS.txt` con i digest
-dichiarati da GitHub. Se qualcosa non torna apre una segnalazione, la aggiorna
-ai controlli successivi e la chiude da sola quando i link tornano a posto.
+dichiarati da GitHub. Nello stesso passaggio apre anche ogni **sito esterno**
+citato nelle pagine (spezierie, enti, fonti): un 404, un 410 o un dominio che non
+risolve aprono una segnalazione, con il file in cui il link compare. I siti che
+rispondono con un blocco anti-bot o una verifica età non sono link rotti:
+finiscono fra gli avvisi, perché uno script non può leggerli. Se qualcosa non
+torna apre una segnalazione, la aggiorna ai controlli successivi e la chiude da
+sola quando i link tornano a posto.
 
 ```bash
-npm run link                          # ultima release
-node scripts/check-links.cjs v1.3.0   # un tag preciso
+npm run link                            # release + siti di riferimento
+npm run link:esterni                    # solo i siti di riferimento
+node scripts/check-links.cjs v1.3.0     # un tag preciso
 ```
+
+La soglia di attesa per i siti esterni si regola con `EXTERNAL_TIMEOUT`
+(millisecondi, 15000 di default).
 
 ### Sorgenti nella release
 

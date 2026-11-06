@@ -290,7 +290,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Calendula officinalis", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
       { t: "PubMed · Calendula wound healing", u: "https://pubmed.ncbi.nlm.nih.gov/?term=calendula+wound+healing" },
-      { t: "NIH · Calendula", u: "https://www.nccih.nih.gov/health/calendula" }
+      { t: "MSKCC · Calendula", u: "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/calendula" }
     ]
   },
 

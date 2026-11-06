@@ -237,7 +237,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Arnicae flos", u: "https://www.ema.europa.eu/en/medicines/herbal/arnicae-flos" },
       { t: "PubMed · Arnica topical", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Arnica+topical+randomized" },
-      { t: "Ministero della Salute · Flora protetta", u: "https://www.mase.gov.it/pagina/flora-e-vegetazione" }
+      { t: "Ministero dell'Ambiente · Biodiversità", u: "https://www.mase.gov.it/pagina/biodiversita" }
     ]
   },
 
@@ -284,7 +284,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Absinthii herba", u: "https://www.ema.europa.eu/en/medicines/herbal/absinthii-herba" },
       { t: "PubMed · Artemisia absinthium", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Artemisia+absinthium" },
-      { t: "EFSA · Tujone", u: "https://www.efsa.europa.eu/en/topics/topic/thujone" }
+      { t: "UE · Limiti per il tujone", u: "https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32008R1334" }
     ]
   },
 
@@ -376,7 +376,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "PubMed · Ocimum basilicum", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Ocimum+basilicum+clinical" },
       { t: "NCCIH · Erbe e interazioni", u: "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" },
-      { t: "EFSA · Estragolo", u: "https://www.efsa.europa.eu/en/topics/topic/flavouring-substances" }
+      { t: "UE · Limiti per l'estragolo", u: "https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32008R1334" }
     ]
   }
 ,
@@ -469,7 +469,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Cinnamomi cortex", u: "https://www.ema.europa.eu/en/medicines/herbal/cinnamomi-cortex" },
       { t: "EMA · Cinnamomi corticis aetheroleum", u: "https://www.ema.europa.eu/en/medicines/herbal/cinnamomi-corticis-aetheroleum" },
-      { t: "EFSA · Cumarina", u: "https://www.efsa.europa.eu/en/topics/topic/coumarin" }
+      { t: "UE · Limiti per la cumarina", u: "https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32008R1334" }
     ]
   },
 
@@ -657,7 +657,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "PubMed · Coriandrum sativum", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Coriandrum+sativum+anxiety" },
       { t: "NCCIH · Erbe e interazioni", u: "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" },
-      { t: "EFSA · Sicurezza degli oli essenziali", u: "https://www.efsa.europa.eu/en/topics/topic/flavouring-substances" }
+      { t: "EFSA · Aromatizzanti e oli essenziali", u: "https://www.efsa.europa.eu/en/topics/topic/flavourings" }
     ]
   },
 

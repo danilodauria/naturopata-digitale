@@ -93,23 +93,134 @@ async function raggiungibile(url, tentativi = 3) {
   return { ok: false, stato: stato, errore: errore };
 }
 
+/* --------------------------------------------------------------------------
+   Siti di riferimento: i link esterni citati nelle pagine
+   --------------------------------------------------------------------------
+   Un sito che sparisce deve essere segnalato, non scoperto da chi legge. Si
+   controllano gli indirizzi http(s) presenti nelle pagine del sito, esclusi
+   quelli del progetto. Un 403, un 429 o una pagina di verifica età non sono
+   link rotti: sono siti che non si lasciano leggere da uno script, e finiscono
+   fra gli avvisi. Un 404, un 410 o un nome che non risolve sono guasti veri. */
+
+const CARTELLE_ESCLUSE = ["node_modules", "backup", ".git", "desktop", "artifacts"];
+const NOSTRO = /danilodauria\.github\.io\/naturopata-digitale/;
+const UA_BROWSER =
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36";
+const TIMEOUT_MS = parseInt(process.env.EXTERNAL_TIMEOUT || "15000", 10);
+const CONCORRENZA = 4;
+
+function pagineHtml(cartella, trovate = []) {
+  for (const voce of fs.readdirSync(cartella, { withFileTypes: true })) {
+    if (CARTELLE_ESCLUSE.indexOf(voce.name) !== -1) continue;
+    const pieno = path.join(cartella, voce.name);
+    if (voce.isDirectory()) pagineHtml(pieno, trovate);
+    else if (/\.html$/i.test(voce.name)) trovate.push(pieno);
+    // I siti delle spezierie e le fonti stanno nei dati JavaScript: senza
+    // questi file il controllo non vedrebbe proprio i riferimenti esterni.
+    else if (/\.js$/i.test(voce.name) && path.basename(path.dirname(cartella)) === "assets") {
+      trovate.push(pieno);
+    }
+  }
+  return trovate;
+}
+
+function linkEsterni() {
+  const radice = path.join(__dirname, "..");
+  const visti = new Map();
+  for (const pagina of pagineHtml(radice)) {
+    const testo = fs.readFileSync(pagina, "utf8");
+    const re = /https?:\/\/[^"'\s<>)\\]+/g;
+    let m;
+    while ((m = re.exec(testo))) {
+      const url = m[0].replace(/&amp;/g, "&").replace(/[.,;:]+$/, "");
+      if (NOSTRO.test(url)) continue;
+      if (!visti.has(url)) visti.set(url, path.relative(radice, pagina));
+    }
+  }
+  return Array.from(visti, ([url, dove]) => ({ url, dove }));
+}
+
+async function statoEsterno(url) {
+  for (let tentativo = 1; tentativo <= 2; tentativo++) {
+    try {
+      const r = await fetch(url, {
+        redirect: "follow",
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+        headers: { "User-Agent": UA_BROWSER, Accept: "text/html,application/xhtml+xml" }
+      });
+      if (r.body) { try { await r.body.cancel(); } catch (e) {} }
+      // Un 404 isolato può essere un singhiozzo del sito, non un link morto:
+      // si riprova una volta prima di segnalarlo.
+      if (r.status >= 400 && tentativo === 1) {
+        await new Promise((p) => setTimeout(p, 800));
+        continue;
+      }
+      return { stato: r.status };
+    } catch (e) {
+      if (tentativo === 2) {
+        return { stato: 0, errore: e.name === "TimeoutError" ? "tempo scaduto" : e.message };
+      }
+    }
+  }
+  return { stato: 0, errore: "errore di rete" };
+}
+
+function classifica(esito) {
+  if (esito.stato >= 200 && esito.stato < 400) return "ok";
+  if ([202, 401, 403, 405, 406, 412, 429, 503].indexOf(esito.stato) !== -1) return "bloccato";
+  return "rotto";
+}
+
+async function controllaEsterni() {
+  const link = linkEsterni();
+  console.log("Siti di riferimento da controllare: " + link.length);
+  const esiti = [];
+  let indice = 0;
+  async function operaio() {
+    while (indice < link.length) {
+      const voce = link[indice++];
+      const esito = await statoEsterno(voce.url);
+      esiti.push(Object.assign({}, voce, esito, { classe: classifica(esito) }));
+    }
+  }
+  await Promise.all(Array.from({ length: CONCORRENZA }, operaio));
+  const ordine = { rotto: 0, bloccato: 1, ok: 2 };
+  esiti.sort((a, b) => ordine[a.classe] - ordine[b.classe] || a.url.localeCompare(b.url));
+  const rotti = esiti.filter((e) => e.classe === "rotto");
+  const bloccati = esiti.filter((e) => e.classe === "bloccato");
+  const ok = esiti.filter((e) => e.classe === "ok");
+  ok.forEach((e) => console.log("✓ " + e.url + " (HTTP " + e.stato + ")"));
+  bloccati.forEach((e) => console.log("… " + e.url + " (HTTP " + e.stato + " · non verificabile da script)"));
+  rotti.forEach((e) =>
+    console.log("✗ " + e.url + " (HTTP " + (e.stato || "errore") + (e.errore ? " · " + e.errore : "") + ")")
+  );
+  return { totale: link.length, ok, bloccati, rotti };
+}
+
 (async function main() {
-  let rel;
-  try {
-    rel = await trovaRelease();
-  } catch (e) {
-    console.error(e.message);
-    process.exit(2);
+  const soloEsterni = process.argv.indexOf("--esterni") !== -1;
+  let rel = null;
+  let erroreRelease = "";
+  if (!soloEsterni) {
+    try {
+      rel = await trovaRelease();
+    } catch (e) {
+      // Il limite di richieste anonime non è un link rotto: si annota e si
+      // prosegue con i siti esterni, che restano controllabili.
+      erroreRelease = e.message;
+      console.log("Release non controllata: " + erroreRelease);
+    }
+    if (!rel && !erroreRelease) {
+      console.log("Nessuna release pubblicata" + (TAG ? " per " + TAG : "") + ": niente da controllare per la release.");
+    }
   }
 
-  if (!rel) {
-    console.log("Nessuna release pubblicata" + (TAG ? " per " + TAG : "") + ": niente da controllare.");
-    return;
-  }
+  const problemi = [];
+  const avvisi = [];
 
+  if (rel) {
   console.log("Release " + rel.tag_name + " · " + rel.assets.length + " allegati");
   const perNome = new Map(rel.assets.map((a) => [a.name, a]));
-  const problemi = [];
 
   for (const nome of ATTESI) {
     if (!perNome.has(nome)) {
@@ -162,8 +273,30 @@ async function raggiungibile(url, tentativi = 3) {
     }
   }
 
+  } /* fine dei controlli sulla release */
+
+  const esterni = await controllaEsterni();
+  esterni.rotti.forEach((e) =>
+    problemi.push([
+      e.url,
+      "sito non raggiungibile (HTTP " + (e.stato || "errore") + (e.errore ? " · " + e.errore : "") + ") · citato in " + e.dove
+    ])
+  );
+  esterni.bloccati.forEach((e) =>
+    avvisi.push([e.url, "HTTP " + e.stato + " · non verificabile da script (blocco bot o verifica età) · citato in " + e.dove])
+  );
+
   if (!problemi.length) {
-    console.log("Tutti i " + ATTESI.length + " link rispondono e le impronte combaciano.");
+    console.log(
+      "Link controllati: " +
+        (rel ? ATTESI.length + " della release, " : "") +
+        esterni.totale +
+        " esterni. Nessun link rotto" +
+        (avvisi.length ? "; " + avvisi.length + " non verificabili da script." : ".")
+    );
+    if (avvisi.length) {
+      console.log("Avvisi:\n" + avvisi.map(([u, p]) => "- " + u + " · " + p).join("\n"));
+    }
     try { fs.rmSync(REPORT, { force: true }); } catch (e) {}
     return;
   }
@@ -172,14 +305,19 @@ async function raggiungibile(url, tentativi = 3) {
     .map(([nome, p]) => "| `" + nome + "` | " + String(p).replace(/\|/g, "\\|") + " |")
     .join("\n");
   const corpo = [
-    "# Link di download non raggiungibili",
+    "# Link non raggiungibili",
     "",
     "Controllo del " + new Date().toISOString().slice(0, 16).replace("T", " ") +
-      " UTC sulla release **" + rel.tag_name + "**.",
+      " UTC" + (rel ? " sulla release **" + rel.tag_name + "**" : "") + ": allegati della release e siti di riferimento citati nelle pagine.",
     "",
-    "| File | Problema |",
+    "| Risorsa | Problema |",
     "|---|---|",
     tabella,
+    "",
+    avvisi.length
+      ? "## Non verificabili da script\n\nQuesti siti rispondono con un blocco anti-bot o una verifica età: non sono link rotti, ma non si possono controllare automaticamente.\n\n| Risorsa | Nota |\n|---|---|\n" +
+        avvisi.map(([nome, p]) => "| `" + nome + "` | " + String(p).replace(/\|/g, "\\|") + " |").join("\n")
+      : "",
     "",
     "Il controllo gira ogni giorno e dopo ogni pubblicazione. Quando i link tornano a posto, la segnalazione si chiude da sola alla verifica successiva.",
     ""

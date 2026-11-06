@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.17</p><h2>Ogni pianta, la sua scheda</h2><p class="text-small muted mb-0">Nel tempo balsamico e nella fitoalimurgia i nomi delle piante sono collegamenti: ortica, iperico, sambuco, tarassaco, calendula aprono la scheda con parti usate, stagione e avvertenze. «Foglie tenere» e «fiori» restano parole, senza schede inventate.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.18</p><h2>I riferimenti restano vivi</h2><p class="text-small muted mb-0">Il controllo automatico del sito ora segue anche i collegamenti esterni — EMA, EFSA, NCCIH, MSD Manual, spezierie e riviste — e segnala i siti di riferimento che spariscono. Dieci indirizzi non più raggiungibili sono stati sostituiti da pagine verificate.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

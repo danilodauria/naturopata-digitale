@@ -98,7 +98,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "PubMed · Petroselinum crispum", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Petroselinum+crispum" },
       { t: "NCCIH · Erbe e interazioni", u: "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" },
-      { t: "NCCIH · Warfarin e vitamina K", u: "https://www.nccih.nih.gov/health/warfarin" }
+      { t: "NCCIH · Erbe e farmaci", u: "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" }
     ]
   },
 
@@ -145,7 +145,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Rhei radix", u: "https://www.ema.europa.eu/en/medicines/herbal/rhei-radix" },
       { t: "PubMed · Rheum palmatum", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Rheum+palmatum" },
-      { t: "MSD Manual · Lassativi", u: "https://www.msdmanuals.com/home/digestive-disorders/symptoms-and-diagnosis-of-digestive-disorders/laxatives" }
+      { t: "MSD Manual · Stitichezza e lassativi", u: "https://www.msdmanuals.com/home/digestive-disorders/symptoms-of-digestive-disorders/constipation-in-adults" }
     ]
   },
 
@@ -239,7 +239,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Sennae folium", u: "https://www.ema.europa.eu/en/medicines/herbal/sennae-folium" },
       { t: "PubMed · Senna", u: "https://pubmed.ncbi.nlm.nih.gov/?term=senna+laxative" },
-      { t: "MSD Manual · Lassativi", u: "https://www.msdmanuals.com/home/digestive-disorders/symptoms-and-diagnosis-of-digestive-disorders/laxatives" }
+      { t: "MSD Manual · Stitichezza e lassativi", u: "https://www.msdmanuals.com/home/digestive-disorders/symptoms-of-digestive-disorders/constipation-in-adults" }
     ]
   },
 
@@ -333,7 +333,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Uvae ursi folium", u: "https://www.ema.europa.eu/en/medicines/herbal/uvae-ursi-folium" },
       { t: "PubMed · Arctostaphylos uva-ursi", u: "https://pubmed.ncbi.nlm.nih.gov/?term=Arctostaphylos+uva-ursi" },
-      { t: "MSD Manual · Infezioni urinarie", u: "https://www.msdmanuals.com/home/kidney-and-urinary-tract-disorders/urinary-tract-infections" }
+      { t: "MSD Manual · Infezioni urinarie", u: "https://www.msdmanuals.com/home/infections/urinary-tract-infections-utis/overview-of-urinary-tract-infections-utis" }
     ]
   },
 

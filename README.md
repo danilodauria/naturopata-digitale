@@ -244,15 +244,15 @@ Ogni salvataggio importante può lasciare una copia datata del progetto, senza
 dipendere dal servizio di hosting o dal repository remoto:
 
 ```bash
-npm run backup            # crea backup/Naturopata-Digitale-AAAA-MM-GG/
+npm run backup            # crea backup/Naturopata-Digitale-AAAA-MM-GG-v1.3.14/
 npm run backup -- --dry-run   # mostra che cosa farebbe, senza scrivere
 npm run backup -- --nota "prima della pubblicazione"
 ```
 
 Dentro la cartella trovi l'archivio zip del commit, l'elenco dei file con le
 dimensioni, il checksum SHA-256, un `LEGGIMI-BACKUP.txt` passo passo e un
-`backup.json`. I backup non si sovrascrivono: due nello stesso giorno diventano
-`…-2`, `…-3`. Lo storico completo è in `backup/INDICE-BACKUP.txt`.
+`backup.json`. Il nome porta la data e la versione del progetto; i backup non
+si sovrascrivono: due nello stesso giorno diventano `…-2`, `…-3`. Lo storico completo è in `backup/INDICE-BACKUP.txt`.
 
 L'archivio contiene solo i file versionati: niente `node_modules`, niente
 `desktop/app` o `desktop/dist`, niente chiavi o file `.env`. La cartella

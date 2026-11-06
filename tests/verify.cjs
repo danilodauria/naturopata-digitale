@@ -457,6 +457,7 @@ if (fs.existsSync(backupScript)) {
   ok(/SHA256SUMS\.txt/.test(sorgenteBackup), "il backup genera il checksum dell'archivio");
   ok(/git", a|git archive|"archive"/.test(sorgenteBackup), "il backup archivia i file versionati");
   ok(/while \(fs\.existsSync\(path\.join\(DEST, nomeCartella\)\)\)/.test(sorgenteBackup), "il backup non sovrascrive i salvataggi precedenti");
+  ok(/PREFIX \+ "-" \+ data \+ "-v" \+ versione/.test(sorgenteBackup), "il nome del backup porta data e versione");
 }
 ok(/^\/backup\/$/m.test(fs.readFileSync(path.join(root, ".gitignore"), "utf8")), "la cartella dei backup resta fuori dal repository");
 

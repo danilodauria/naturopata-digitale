@@ -62,10 +62,11 @@ const data = dataRoma();
 const sporco = git("status", "--porcelain").toString().trim();
 
 /* Cartella datata, senza mai sovrascrivere lo storico. */
-let nomeCartella = PREFIX + "-" + data;
+const baseNome = PREFIX + "-" + data + "-v" + versione;
+let nomeCartella = baseNome;
 let n = 2;
 while (fs.existsSync(path.join(DEST, nomeCartella))) {
-  nomeCartella = PREFIX + "-" + data + "-" + n;
+  nomeCartella = baseNome + "-" + n;
   n++;
 }
 const cartella = path.join(DEST, nomeCartella);
@@ -74,7 +75,7 @@ const percorsoZip = path.join(cartella, nomeZip);
 
 if (dryRun) {
   console.log("Anteprima backup:");
-  console.log("  cartella: backup/" + nomeCartella);
+  console.log("  cartella: backup/" + nomeCartella + " (data e versione nel nome)");
   console.log("  archivio: " + nomeZip);
   console.log("  versione: " + versione + " · commit " + commit + " · ramo " + ramo);
   console.log("  modifiche non committate: " + (sporco ? "sì (" + sporco.split("\n").length + " file)" : "no"));

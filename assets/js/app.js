@@ -227,24 +227,9 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.20</p><h2>Ogni pulsante, la sua sezione</h2><p class="text-small muted mb-0">I pannelli di stato ora portano al punto esatto che promettono: i numeri utili di Sicurezza, la scelta della voce in Neura, la chat e la guida del tuo sistema. Il router riconosce le ancore #/rotta#sezione e i test controllano che ogni promessa abbia davvero la sua sezione.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.21</p><h2>Una home che non si ripete</h2><p class="text-small muted mb-0">I cinque percorsi dei saperi antichi comparivano due volte nella pagina iniziale: ora la sezione è una sola. In più il menu «Altro» si chiude con Esc e restituisce il fuoco al pulsante, e con / la ricerca dell\'erbario si apre da tastiera.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
-
-      '<section class="section">' +
-        '<div class="section-head"><div><p class="eyebrow">Saperi antichi</p><h2>Spezierie, amari, funghi, alambicchi</h2><p>Cinque percorsi fra storia e pratica: che cosa resta delle antiche farmacie, come si legge un amaro, quando si raccoglie, che cosa non fare mai.</p></div></div>' +
-        '<div class="info-grid">' +
-          [
-            { href: "#/spezierie", t: "Antiche spezierie", d: "Farmacie d’abbazia e liquorerie storiche, con i siti ufficiali e i criteri per riconoscere una spezieria vera." },
-            { href: "#/amari", t: "Atlante degli amari", d: "Otto amari fra monasteri e botteghe: ingredienti, storia, cautele e come verificare i prezzi." },
-            { href: "#/balsamico", t: "Tempo balsamico", d: "Dodici mesi di raccolta: il momento giusto pianta per pianta, e che cosa si prepara." },
-            { href: "#/funghi", t: "Funghi e foraging", d: "Reishi, chaga, shiitake: evidenza reale, sicurezza e le otto regole del bosco." },
-            { href: "#/estrazioni", t: "Oleoliti e distillati", d: "Macerazioni, tinture, idrolati: tempi veri, errori da evitare e limiti di legge." }
-          ].map((x) =>
-            '<a class="info-card" href="' + x.href + '"><h3>' + x.t + "</h3><p>" + x.d + '</p><p class="mb-0"><strong>Apri →</strong></p></a>'
-          ).join("") +
-        "</div>" +
-      "</section>" +
 
       '<section class="section">' +
         '<div class="section-head"><div><p class="eyebrow">Saperi antichi</p><h2>Spezierie, amari, funghi, alambicchi</h2><p>Cinque percorsi fra storia e pratica: che cosa resta delle antiche farmacie, come si legge un amaro, quando si raccoglie, che cosa non fare mai.</p></div></div>' +

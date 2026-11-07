@@ -63,6 +63,15 @@ async function go(hash) {
   ok(doc.querySelectorAll('#moreMenu a[href="versioni.html"]').length === 1, "menu Altro: Versioni e novità");
   ok(doc.querySelectorAll('#moreMenu a[href="scheda-rapida.html"]').length === 1, "menu Altro: Scheda rapida");
 
+  // La home non ripete i percorsi; il menu si chiude a tastiera restituendo il fuoco
+  ok(doc.querySelectorAll(".info-card").length === 5, "home: cinque percorsi dei saperi antichi, senza doppioni");
+  const apriAltro = doc.getElementById("moreBtn");
+  apriAltro.click();
+  ok(!doc.getElementById("moreMenu").hidden, "menu Altro: si apre");
+  doc.dispatchEvent(new win.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  ok(doc.getElementById("moreMenu").hidden, "menu Altro: Esc chiude il menu");
+  ok(doc.activeElement === apriAltro, "menu Altro: Esc riporta il fuoco al pulsante");
+
   // Barra di stato e benvenuto di Neura
   await tick(90);
   ok(!!doc.getElementById("statusBar"), "barra di stato: presente");
@@ -132,6 +141,8 @@ async function go(hash) {
   doc.querySelector("[data-reset-filters]").click();
   await tick(60);
   ok(doc.querySelectorAll(".plant-card").length === 65, "erbario: reset filtri");
+  doc.dispatchEvent(new win.KeyboardEvent("keydown", { key: "/", bubbles: true }));
+  ok(doc.activeElement && doc.activeElement.id === "plantSearch", "erbario: il tasto / porta il cursore nella ricerca");
 
   // Dettaglio pianta
   await go("#/pianta/camomilla");

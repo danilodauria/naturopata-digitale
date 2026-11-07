@@ -234,9 +234,24 @@
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenus();
+      if (e.key === "Escape") {
+        // Se era aperto «Altro», il fuoco torna al pulsante che lo ha aperto:
+        // chiudere un menu non deve lasciare il cursore da nessuna parte.
+        const menuAltro = document.getElementById("moreMenu");
+        const eraAperto = !!(menuAltro && !menuAltro.hidden);
+        closeMenus();
+        if (eraAperto) {
+          const apriAltro = document.getElementById("moreBtn");
+          if (apriAltro) apriAltro.focus();
+        }
+      }
       const tag = (e.target.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea" || tag === "select" || e.target.isContentEditable) return;
+      // La barra porta alla ricerca dell'erbario, come nelle app di consultazione.
+      if (e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const cerca = document.getElementById("plantSearch");
+        if (cerca) { e.preventDefault(); cerca.focus(); cerca.select(); }
+      }
       if (location.hash.indexOf("#/quiz") === 0 && state.quiz) {
         if (["1", "2", "3", "4"].indexOf(e.key) !== -1) {
           e.preventDefault();

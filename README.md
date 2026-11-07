@@ -277,6 +277,14 @@ L'archivio contiene solo i file versionati: niente `node_modules`, niente
 `backup/` resta fuori dal repository (è in `.gitignore`), così i backup non
 finiscono online e non gonfiano la storia Git.
 
+Accanto allo storico, ogni `npm run backup` lascia in `artifacts/` un archivio
+pronto da scaricare che contiene **solo il backup appena creato**, con nome,
+data e versione nel nome del file
+(`Naturopata-Digitale-backup-AAAA-MM-GG-vX.Y.Z.zip`, con la sua impronta
+`.sha256.txt`). Chi ha già le versioni precedenti scarica così soltanto
+l'ultima: gli archivi di backup più vecchi vengono tolti da `artifacts/`, mentre
+le cartelle in `backup/` restano intatte.
+
 `npm run rilascio` incatena test, PDF, pacchetto desktop, test finale e backup:
 è la sequenza usata per ogni pubblicazione.
 

@@ -9,6 +9,8 @@
  *   - un backup.json leggibile dalle macchine.
  * Non sovrascrive mai un backup esistente: se la data è già usata aggiunge -2, -3…
  * Aggiorna backup/INDICE-BACKUP.txt con lo storico completo.
+ * Lascia in artifacts/ un archivio con il solo backup appena creato, così chi
+ * ha già le versioni precedenti scarica soltanto l'ultima.
  *
  * Uso:  node scripts/backup.cjs [--nota "testo"] [--dry-run]
  */
@@ -17,6 +19,7 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const zlib = require("zlib");
 const { execFileSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
@@ -47,6 +50,89 @@ function mb(n) {
 }
 function kb(n) {
   return (n / 1024).toFixed(0) + " KB";
+}
+
+/* Archivio da consegnare ----------------------------------------------------
+   Non tutti hanno `zip` installato, e Windows non ce l'ha affatto: il file da
+   scaricare lo scriviamo qui, con quello che Node ha già. Compressione deflate
+   e nomi UTF-8, senza dipendenze esterne. */
+const TABELLA_CRC = (() => {
+  const t = new Int32Array(256);
+  for (let i = 0; i < 256; i++) {
+    let c = i;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    t[i] = c;
+  }
+  return t;
+})();
+
+function crc32(buffer) {
+  let c = -1;
+  for (let i = 0; i < buffer.length; i++) c = TABELLA_CRC[(c ^ buffer[i]) & 0xff] ^ (c >>> 8);
+  return (c ^ -1) >>> 0;
+}
+
+function scriviZip(destinazione, cartellaSorgente, prefisso) {
+  const voci = [];
+  (function cammina(rel) {
+    const qui = path.join(cartellaSorgente, rel);
+    for (const voce of fs.readdirSync(qui, { withFileTypes: true })) {
+      const dentro = rel ? rel + "/" + voce.name : voce.name;
+      if (voce.isDirectory()) cammina(dentro);
+      else voci.push(dentro);
+    }
+  })("");
+  voci.sort();
+
+  const parti = [];
+  const centrale = [];
+  let offset = 0;
+  for (const rel of voci) {
+    const dati = fs.readFileSync(path.join(cartellaSorgente, rel));
+    const compresso = zlib.deflateRawSync(dati, { level: 9 });
+    const nome = Buffer.from(prefisso + rel, "utf8");
+    const crc = crc32(dati);
+
+    const locale = Buffer.alloc(30);
+    locale.writeUInt32LE(0x04034b50, 0);
+    locale.writeUInt16LE(20, 4); // versione minima
+    locale.writeUInt16LE(0x0800, 6); // nomi UTF-8
+    locale.writeUInt16LE(8, 8); // deflate
+    locale.writeUInt16LE(0, 10);
+    locale.writeUInt16LE(0x21, 12); // 1980-01-01
+    locale.writeUInt32LE(crc, 14);
+    locale.writeUInt32LE(compresso.length, 18);
+    locale.writeUInt32LE(dati.length, 22);
+    locale.writeUInt16LE(nome.length, 26);
+    locale.writeUInt16LE(0, 28);
+    parti.push(locale, nome, compresso);
+
+    const cent = Buffer.alloc(46);
+    cent.writeUInt32LE(0x02014b50, 0);
+    cent.writeUInt16LE(20, 4);
+    cent.writeUInt16LE(20, 6);
+    cent.writeUInt16LE(0x0800, 8);
+    cent.writeUInt16LE(8, 10);
+    cent.writeUInt16LE(0, 12);
+    cent.writeUInt16LE(0x21, 14);
+    cent.writeUInt32LE(crc, 16);
+    cent.writeUInt32LE(compresso.length, 20);
+    cent.writeUInt32LE(dati.length, 24);
+    cent.writeUInt16LE(nome.length, 28);
+    cent.writeUInt32LE(offset, 42);
+    centrale.push(cent, nome);
+
+    offset += locale.length + nome.length + compresso.length;
+  }
+
+  const directory = Buffer.concat(centrale);
+  const fine = Buffer.alloc(22);
+  fine.writeUInt32LE(0x06054b50, 0);
+  fine.writeUInt16LE(voci.length, 8);
+  fine.writeUInt16LE(voci.length, 10);
+  fine.writeUInt32LE(directory.length, 12);
+  fine.writeUInt32LE(offset, 16);
+  fs.writeFileSync(destinazione, Buffer.concat([Buffer.concat(parti), directory, fine]));
 }
 
 if (!gitTest("rev-parse", "--git-dir")) {
@@ -286,6 +372,23 @@ const indice =
   "Per crearne uno nuovo: npm run backup\n";
 fs.writeFileSync(path.join(DEST, "INDICE-BACKUP.txt"), indice);
 
+/* 7. Archivio da consegnare: solo questo backup, con nome, data e versione.
+   Chi ha già le versioni precedenti non deve riscaricarle: dentro c'è una sola
+   fotografia, quella appena creata. */
+const ARTEFATTI = path.join(ROOT, "artifacts");
+const nomeUltimo = PREFIX + "-backup-" + data + "-v" + versione + ".zip";
+const percorsoUltimo = path.join(ARTEFATTI, nomeUltimo);
+fs.mkdirSync(ARTEFATTI, { recursive: true });
+for (const voce of fs.readdirSync(ARTEFATTI)) {
+  if (!/^Naturopata-Digitale-backup-.*\.zip(\.sha256\.txt)?$/.test(voce)) continue;
+  if (voce === nomeUltimo || voce === nomeUltimo + ".sha256.txt") continue;
+  fs.rmSync(path.join(ARTEFATTI, voce), { force: true });
+}
+scriviZip(percorsoUltimo, cartella, nomeCartella + "/");
+const byteUltimo = fs.statSync(percorsoUltimo).size;
+const shaUltimo = crypto.createHash("sha256").update(fs.readFileSync(percorsoUltimo)).digest("hex");
+fs.writeFileSync(percorsoUltimo + ".sha256.txt", shaUltimo + "  " + nomeUltimo + "\n");
+
 console.log("✓ Backup creato: backup/" + nomeCartella);
 console.log("  " + nomeZip + " · " + mb(zipBuffer.length) + " · " + file.length + " file (" + mb(byteTotali) + " sciolti)");
 console.log("  versione " + versione + " · commit " + commit + " · " + data + " " + oraRoma());
@@ -294,3 +397,5 @@ if (sporco) {
   console.log("  ⚠ modifiche non committate: " + sporco.split("\n").length + " file (il backup fotografa il commit " + commit + ")");
 }
 console.log("  storico: " + schede.length + " backup in backup/INDICE-BACKUP.txt");
+console.log("  da scaricare: artifacts/" + nomeUltimo + " · " + mb(byteUltimo) + " · solo la versione " + versione);
+console.log("  impronta archivio: " + shaUltimo);

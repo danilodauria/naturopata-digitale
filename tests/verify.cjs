@@ -490,6 +490,9 @@ if (fs.existsSync(backupScript)) {
   ok(/INDICE-BACKUP\.txt/.test(sorgenteBackup), "il backup aggiorna l'indice storico");
   ok(/SHA256SUMS\.txt/.test(sorgenteBackup), "il backup genera il checksum dell'archivio");
   ok(/git", a|git archive|"archive"/.test(sorgenteBackup), "il backup archivia i file versionati");
+  ok(/function scriviZip\(/.test(sorgenteBackup), "il backup scrive da sé l'archivio da scaricare");
+  ok(/PREFIX \+ "-backup-" \+ data \+ "-v" \+ versione/.test(sorgenteBackup), "l'archivio da scaricare porta nome, data e versione");
+  ok(/readdirSync\(ARTEFATTI\)/.test(sorgenteBackup), "in artifacts/ resta solo l'ultimo archivio da scaricare");
   ok(/while \(fs\.existsSync\(path\.join\(DEST, nomeCartella\)\)\)/.test(sorgenteBackup), "il backup non sovrascrive i salvataggi precedenti");
   ok(/PREFIX \+ "-" \+ data \+ "-v" \+ versione/.test(sorgenteBackup), "il nome del backup porta data e versione");
 }

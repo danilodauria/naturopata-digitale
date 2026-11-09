@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.27</p><h2>Il quiz di ogni pianta ruota</h2><p class="text-small muted mb-0">Le cinque domande non sono più sempre le stesse: a ogni partita si mescolano quelle della scheda con quelle del quiz generale che nominano la pianta. Per la withania entra anche la domanda sull\'ashwagandha.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.28</p><h2>Oleoliti, durata allineata</h2><p class="text-small muted mb-0">La domanda sull\'oleolito di iperico diceva «circa un anno», mentre il resto del quiz e il manuale indicano tre-sei mesi. Ora è coerente: tre-sei mesi in vetro scuro, al buio e al fresco.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

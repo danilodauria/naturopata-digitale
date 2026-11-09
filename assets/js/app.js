@@ -138,7 +138,8 @@ NP.app = (function () {
 
   function plantCard(p) {
     const firstTag = (p.categorie || [])[0] || "Officinale";
-    return '<a class="plant-card tone-' + (p.tono || 1) + '" href="#/pianta/' + p.id + '">' +
+    return '<article class="plant-card tone-' + (p.tono || 1) + '">' +
+      '<a class="plant-card-link" href="#/pianta/' + p.id + '" aria-label="Apri la scheda di ' + esc(p.nome) + '"></a>' +
       '<div class="plant-card-top">' +
         '<span class="plant-leaf-watermark" aria-hidden="true">' + ico("leaf") + "</span>" +
         '<span class="plant-monogram">' + esc(p.nome.charAt(0)) + "</span>" +
@@ -152,8 +153,10 @@ NP.app = (function () {
           (p.fito && p.fito.commestibile ? '<span class="tag">In cucina</span>' : "") +
           (state.favs.has(p.id) ? '<span class="tag" aria-label="Nei preferiti">♥</span>' : "") +
         "</div>" +
-        '<div class="plant-card-foot"><span>Raccolta: ' + esc(monthLabel(p.raccolta.mesi, true)) + "</span><span>Leggi →</span></div>" +
-      "</div></a>";
+        '<div class="plant-card-foot"><span>Raccolta: ' + esc(monthLabel(p.raccolta.mesi, true)) + "</span>" +
+          '<span class="plant-card-actions"><a class="btn btn-ghost btn-small plant-card-quiz" href="#/quiz/pianta/' + p.id + '" aria-label="Quiz su ' + esc(p.nome) + '">Quiz</a><span>Leggi →</span></span>' +
+        "</div>" +
+      "</div></article>";
   }
 
   /* ------------------------------------------------------------------------
@@ -227,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.25</p><h2>Il quiz, ricontrollato</h2><p class="text-small muted mb-0">Tutte le 133 domande sono state confrontate con le schede e con le fonti citate. Una frase non supportata sul pelargonium è stata corretta, insieme a qualche dettaglio: l\'ortica, la durata degli oleoliti, i funghi di Ötzi e la corteccia in primavera.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.26</p><h2>Quiz anche dall\'erbario</h2><p class="text-small muted mb-0">Ogni card dell\'elenco ha il suo pulsante Quiz: apre le cinque domande della pianta senza entrare nella scheda. Il resto della card resta cliccabile come prima, e i pulsanti sono settanta, uno per pianta.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

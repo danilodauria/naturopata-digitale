@@ -862,6 +862,10 @@ html[data-theme="dark"] .plant-monogram { color: #c3e8d0; }
   font-size: .72rem;
   color: var(--text-faint);
 }
+.plant-card-link { position: absolute; inset: 0; z-index: 1; border-radius: var(--radius); }
+.plant-card-link:focus-visible { outline: 2px solid var(--verde-600); outline-offset: 2px; }
+.plant-card-actions { display: flex; align-items: center; gap: .3rem; }
+.plant-card-quiz { position: relative; z-index: 2; font-size: .68rem; padding: .18rem .5rem; }
 .fav-mark { color: var(--terra); font-size: .95rem; }
 
 .empty-state {

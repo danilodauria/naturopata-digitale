@@ -144,6 +144,16 @@ async function go(hash) {
   doc.dispatchEvent(new win.KeyboardEvent("keydown", { key: "/", bubbles: true }));
   ok(doc.activeElement && doc.activeElement.id === "plantSearch", "erbario: il tasto / porta il cursore nella ricerca");
 
+  // Il pulsante quiz sta su ogni card: apre il quiz senza passare dalla scheda.
+  const quizDalleCard = doc.querySelectorAll(".plant-card .plant-card-quiz");
+  ok(quizDalleCard.length === 70, "erbario: 70 pulsanti quiz nelle card");
+  const primoQuiz = quizDalleCard[0].getAttribute("href");
+  ok(/^#\/quiz\/pianta\//.test(primoQuiz), "erbario: il pulsante quiz punta alla rotta della pianta");
+  await go(primoQuiz);
+  ok(/Domanda 1 di 5/.test((doc.querySelector(".quiz-counter") || {}).textContent || ""), "erbario: il pulsante apre il quiz della pianta");
+  win.NP.app.state.quiz = null;
+  await tick(20);
+
   // Dettaglio pianta
   await go("#/pianta/camomilla");
   ok(doc.querySelector("h1").textContent.indexOf("Camomilla") !== -1, "pianta: titolo");

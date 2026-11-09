@@ -530,6 +530,7 @@ const STAGIONI = { primavera: [3, 4, 5], estate: [6, 7, 8], autunno: [9, 10, 11]
 const VIETATO = /evitar|sconsigli|controindicat|non (usare|assumere|somministrare)|dannos|rischio/;
 let coerenzaEsaminate = 0;
 const incoerenze = [];
+const domandeAbbinate = new Set();
 
 function chiaviPianta(p) {
   return [p.nome, (p.latino || "").split(" ")[0]]
@@ -538,9 +539,15 @@ function chiaviPianta(p) {
     .filter((k) => k.length > 3);
 }
 
+// Confronto per parole intere: senza confini «china» entrerebbe dentro
+// «echinacea» e la domanda finirebbe sotto la scheda sbagliata.
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const contieneParola = (testo, chiave) =>
+  new RegExp("(^|[^a-z0-9])" + escapeRe(chiave) + "($|[^a-z0-9])").test(testo);
+
 function nominaPianta(q, p) {
   const testo = normTesto(q.q) + " " + normTesto(q.o[q.r]);
-  return chiaviPianta(p).some((k) => testo.indexOf(k) !== -1);
+  return chiaviPianta(p).some((k) => contieneParola(testo, k));
 }
 
 // Restituisce l'elenco dei motivi per cui la domanda contraddice la scheda.
@@ -573,7 +580,7 @@ function incoerenzeTra(q, p) {
 
   // La raccolta si controlla solo quando la pianta è nominata nella domanda
   // stessa: un mese citato in una risposta può riguardare un'altra specie.
-  if (chiavi.some((k) => domanda.indexOf(k) !== -1) && /raccolt|si raccogli|si cogli|si raccolgono|si colgono/.test(domanda)) {
+  if (chiavi.some((k) => contieneParola(domanda, k)) && /raccolt|si raccogli|si cogli|si raccolgono|si colgono/.test(domanda)) {
     const mesi = new Set();
     Object.keys(MESI_NOME).forEach((m) => { if (domanda.indexOf(m) !== -1) mesi.add(MESI_NOME[m]); });
     Object.keys(STAGIONI).forEach((s) => { if (domanda.indexOf(s) !== -1) STAGIONI[s].forEach((m) => mesi.add(m)); });
@@ -588,6 +595,7 @@ plants.forEach((p) => {
   quiz.forEach((q) => {
     if (!nominaPianta(q, p)) return;
     coerenzaEsaminate++;
+    domandeAbbinate.add(q.id);
     incoerenzeTra(q, p).forEach((m) => incoerenze.push(q.id + " / " + p.id + ": " + m));
   });
 });
@@ -602,9 +610,11 @@ const nomeProva = plants[0].nome.toLowerCase();
 ok(incoerenzeTra({ id: "prova", q: "La " + nomeProva + " in gravidanza:", o: ["È sicura in gravidanza", "Va evitata", "Solo dopo i pasti", "Non esiste"], r: 0, e: "Prova." }, provaPianta).length > 0, "il controllo riconosce una gravidanza dichiarata sicura contro la scheda");
 ok(incoerenzeTra({ id: "prova", q: "La " + nomeProva + " in gravidanza:", o: ["Va evitata", "È sicura in gravidanza", "Solo dopo i pasti", "Non esiste"], r: 0, e: "Prova." }, provaPianta).length === 0, "il controllo non segnala una risposta coerente con la scheda");
 ok(incoerenzeTra({ id: "prova", q: "La " + nomeProva + " si mangia in insalata?", o: ["Sì, in cucina", "No", "Solo cotta", "Solo secca"], r: 0, e: "Prova." }, provaPianta).length > 0, "il controllo riconosce una pianta non commestibile proposta in cucina");
+ok(contieneParola(normTesto("La China Martini contiene china"), "china"), "il confronto riconosce la china quando è nominata");
+ok(!contieneParola(normTesto("L'echinacea è un'asteracea"), "china"), "il confronto non scambia l'echinacea per la china");
 
 incoerenze.forEach((m) => console.error("! incoerenza: " + m));
-console.log("Coerenza quiz/schede: " + coerenzaEsaminate + " domande abbinate a una pianta, " + incoerenze.length + " incoerenze, 3 autotest.");
+console.log("Coerenza quiz/schede: " + coerenzaEsaminate + " abbinamenti domanda-pianta (" + domandeAbbinate.size + " domande), " + incoerenze.length + " incoerenze, 5 autotest.");
 ok(incoerenze.length === 0, incoerenze.length + " domande contraddicono la scheda della stessa pianta");
 
 // Statistiche di copertura

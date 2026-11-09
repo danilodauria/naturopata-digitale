@@ -84,7 +84,7 @@ NP.plants = [
       livello: "giallo",
       gravidanza: "L'infuso alimentare è accettabile; evitare olio essenziale e dosi elevate, che possono favorire il reflusso.",
       allattamento: "Uso alimentare occasionale; evitare oli essenziali concentrati.",
-      bambini: "Non applicare prodotti mentolati su viso e torace dei bambini piccoli, per il rischio di apnea riflessa. Infuso solo dopo i 6 anni e in dose ridotta.",
+      bambini: "Non applicare prodotti mentolati su viso e torace dei bambini sotto i 2 anni (alcune linee guida arrivano a 30 mesi), per il rischio di apnea riflessa. Infuso solo dopo i 6 anni e in dose ridotta: è una convenzione prudenziale, non una soglia delle monografie.",
       controindicazioni: ["Reflusso gastroesofageo e ernia iatale: può peggiorare i sintomi", "Calcolosi biliare", "Ostruzione delle vie biliari"],
       interazioni: ["Possibile aumento dell'assorbimento di alcuni farmaci per effetto sulla motilità intestinale", "Antiacidi e inibitori di pompa: possibile riduzione dell'efficacia se assunti insieme"],
       nota: "L'olio essenziale non va ingerito liberamente: è concentrato e può causare irritazione esofagea. Le capsule gastroresistenti sono un prodotto farmaceutico specifico."
@@ -226,7 +226,7 @@ NP.plants = [
       livello: "giallo",
       gravidanza: "Evitare olio essenziale e dosi elevate; l'uso culinario è accettabile.",
       allattamento: "Uso alimentare; evitare oli essenziali concentrati.",
-      bambini: "Non usare olio essenziale su bambini sotto i 2 anni; sciroppi con miele solo dopo i 12 mesi (rischio botulismo).",
+      bambini: "Non usare olio essenziale su bambini sotto i 6 anni: il timolo e il carvacrolo sono dermocaustici e gli oli ricchi di fenoli non sono consigliati prima di quell'età. Sciroppi con miele solo dopo i 12 mesi (rischio botulismo).",
       controindicazioni: ["Allergia alle Lamiaceae", "Uso interno di olio essenziale", "Dermatiti da contatto con olio puro"],
       interazioni: ["Anticoagulanti (potenziamento teorico)", "Farmaci per la tiroide: cautela con estratti", "Sedativi: effetto additivo lieve"],
       nota: "Il timolo puro è caustico. L'olio essenziale va sempre diluito e usato solo per brevi periodi, lontano da occhi e mucose."

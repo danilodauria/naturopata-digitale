@@ -40,7 +40,7 @@ NP.plants = NP.plants.concat([
       bambini: "Non usare come rimedio; limitare le caramelle e i prodotti concentrati.",
       controindicazioni: ["Ipertensione", "Insufficienza cardiaca o renale", "Ipokaliemia", "Cirrosi e disturbi epatici gravi", "Gravidanza (dosi terapeutiche)"],
       interazioni: ["Digossina (rischio di tossicità da ipokaliemia)", "Diuretici tiazidici e dell'ansa", "Corticosteroidi", "Antipertensivi", "Anticoagulanti (teorico)"],
-      nota: "Non superare 100 mg di glicirrizina al giorno e non protrarre l'uso. Se si assumono farmaci per pressione, cuore o reni, evitare senza parere medico."
+      nota: "L'EMA indica di non superare 100 mg di glicirrizina al giorno per uso medicinale; l'ANSES, per il consumo abituale anche alimentare, si ferma a 10 mg. Non protrarre l'uso: la glicirrizina si accumula. Se si assumono farmaci per pressione, cuore o reni, evitare senza parere medico."
     },
     sosia: [
       { nome: "Liquirizia di bosco (Polypodium vulgare)", rischio: "Dolce ma diversa; non ha le stesse proprietà e non va usata come sostituto." }
@@ -51,6 +51,7 @@ NP.plants = NP.plants.concat([
     fonti: [
       { t: "EMA · Glycyrrhiza glabra", u: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicinal-products" },
       { t: "EFSA · Acido glicirrizico", u: "https://www.efsa.europa.eu/" },
+      { t: "ANSES · Réglisse : à consommer occasionnellement", u: "https://www.anses.fr/fr/content/reglisse-consommer-occasionnellement-et-avec-moderation" },
       { t: "PubMed · Licorice hypertension", u: "https://pubmed.ncbi.nlm.nih.gov/?term=licorice+glycyrrhizin+hypertension" }
     ]
   },
@@ -122,7 +123,7 @@ NP.plants = NP.plants.concat([
     ],
     preparazioni: [
       { nome: "Infuso", ricetta: "1–2 g di sommità secche in 200 ml di acqua a 90 °C per 10 minuti.", dose: "2 tazze al giorno; per la depressione serve una preparazione standardizzata e un parere medico." },
-      { nome: "Olio di iperico", ricetta: "Fiori freschi coperti di olio d'oliva, al sole per 3–4 settimane, poi filtrare.", dose: "Uso esterno su pelle integra, 1–2 volte al giorno." },
+      { nome: "Olio di iperico", ricetta: "Fiori freschi coperti di olio d'oliva, al sole o al caldo per 30–40 giorni agitando ogni giorno, poi filtrare.", dose: "Uso esterno su pelle integra, 1–2 volte al giorno; si conserva 3–6 mesi in vetro scuro, al buio e al fresco." },
       { nome: "Tintura", ricetta: "Secondo indicazioni del produttore.", dose: "Solo su parere professionale, per la complessità delle interazioni." }
     ],
     sicurezza: {
@@ -306,7 +307,7 @@ NP.plants = NP.plants.concat([
     descrizione: "Arbusto spinoso con fiori rosa pallido in primavera e falsi frutti rossi (cinorrodi) in autunno. I cinorrodi sono una delle fonti vegetali più ricche di vitamina C e contengono flavonoidi e carotenoidi. Si usano per sciroppi, confetture e tisane, oltre che come integratore antiossidante. I peli interni dei semi sono irritanti e vanno eliminati.",
     parti: ["Cinorrodi (falsi frutti)", "Petali"],
     habitat: "Siepi, margini di boschi, scarpate, fino a 1.800 m.",
-    raccolta: { mesi: [9, 10, 11], nota: "Raccogliere i cinorrodi ben maturi, dopo le prime gelate; i petali in primavera, con tempo asciutto." },
+    raccolta: { mesi: [9, 10, 11], nota: "I mesi si riferiscono ai cinorrodi: raccoglierli ben maturi, dopo le prime gelate. I petali si raccolgono a maggio–giugno, con tempo asciutto." },
     proprieta: ["Vitaminizzante", "Antiossidante", "Astringente", "Antinfiammatoria lieve", "Immunostimolante tradizionale"],
     usi: [
       "Apporto di vitamina C in autunno e inverno",

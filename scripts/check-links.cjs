@@ -140,13 +140,22 @@ function linkEsterni() {
   return Array.from(visti, ([url, dove]) => ({ url, dove }));
 }
 
+/* L'API di GitHub non serve HTML: se le si chiede text/html risponde 415, che
+   non è un link rotto ma un modo sbagliato di chiedere. Agli endpoint dell'API
+   si chiede JSON, alle pagine si chiede HTML. */
+function accetta(url) {
+  return /^https:\/\/api\.github\.com\//.test(url)
+    ? "application/vnd.github+json"
+    : "text/html,application/xhtml+xml";
+}
+
 async function statoEsterno(url) {
   for (let tentativo = 1; tentativo <= 2; tentativo++) {
     try {
       const r = await fetch(url, {
         redirect: "follow",
         signal: AbortSignal.timeout(TIMEOUT_MS),
-        headers: { "User-Agent": UA_BROWSER, Accept: "text/html,application/xhtml+xml" }
+        headers: { "User-Agent": UA_BROWSER, Accept: accetta(url) }
       });
       if (r.body) { try { await r.body.cancel(); } catch (e) {} }
       // Un 404 isolato può essere un singhiozzo del sito, non un link morto:

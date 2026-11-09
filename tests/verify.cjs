@@ -698,6 +698,55 @@ ok(!coerenteConOleoliti("pochi giorni"), "durate: pochi giorni per l'oleolito è
 ok(durateDiConservazione("30-40 giorni di macerazione, poi si conserva 3–6 mesi").length === 1, "durate: la macerazione non viene scambiata per conservazione");
 console.log("Durate di conservazione: " + confronti.length + " confronti quiz/schede contro il manuale (" + Object.keys(durataManuale).join(", ") + "), 4 autotest.");
 
+/* --- Soglia della liquirizia: scheda e quiz devono citare le stesse cifre ---
+   La liquirizia è l'unica pianta per cui il quiz nomina un'istituzione con una
+   soglia propria (l'ANSES, più prudente dell'EMA). Le due pagine possono
+   divergere senza che nessuna delle due sia incoerente con se stessa: qui si
+   confrontano le cifre in mg e gli enti citati, in entrambe le direzioni. */
+function soglieMg(testo) {
+  const trovate = [];
+  const re = /(\d{1,4}(?:[.,]\d+)?)\s*mg\b(?!\s*\/\s*kg)/gi;
+  let m;
+  while ((m = re.exec(testoPiatto(testo)))) trovate.push(Number(m[1].replace(",", ".")));
+  return trovate;
+}
+const ENTI_SOGLIA = ["EMA", "ANSES", "EFSA", "OMS", "WHO", "ESCOP", "Farmacopea"];
+const entiCitati = (testo) => ENTI_SOGLIA.filter((e) => new RegExp("\\b" + e + "\\b", "i").test(testoPiatto(testo)));
+
+/* Restituisce solo le divergenze: insiemi vuoti = scheda e quiz concordano. */
+function divergenzeSoglia(nota, spiegazione, fonti) {
+  const scheda = [...new Set(soglieMg(nota))].sort((a, b) => a - b);
+  const quizS = [...new Set(soglieMg(spiegazione))].sort((a, b) => a - b);
+  const documentazione = (nota || "") + " " + (fonti || []).map((f) => f.t).join(" ");
+  return {
+    scheda,
+    quiz: quizS,
+    soloQuiz: quizS.filter((v) => scheda.indexOf(v) === -1),
+    soloScheda: scheda.filter((v) => quizS.indexOf(v) === -1),
+    entiMancanti: entiCitati(spiegazione).filter((e) => entiCitati(documentazione).indexOf(e) === -1)
+  };
+}
+
+const liquirizia = plants.find((p) => p.id === "liquirizia");
+const p7 = quiz.find((q) => q.id === "p7");
+ok(!!(liquirizia && p7), "liquirizia: la scheda e la domanda p7 esistono");
+if (liquirizia && p7) {
+  const soglia = divergenzeSoglia(liquirizia.sicurezza.nota, p7.e, liquirizia.fonti);
+  ok(soglia.scheda.length >= 2, "liquirizia: la scheda nomina le due soglie (" + soglia.scheda.join(" e ") + " mg)");
+  ok(soglia.soloQuiz.length === 0, "liquirizia: il quiz cita " + soglia.soloQuiz.join(", ") + " mg che la scheda non riporta");
+  ok(soglia.soloScheda.length === 0, "liquirizia: la scheda cita " + soglia.soloScheda.join(", ") + " mg che il quiz non riporta");
+  ok(soglia.entiMancanti.length === 0, "liquirizia: la scheda non documenta " + soglia.entiMancanti.join(", ") + " citati dal quiz");
+  console.log("Soglia della liquirizia: " + soglia.scheda.join(" + ") + " mg nella scheda, " + soglia.quiz.join(" + ") + " mg nel quiz (p7), 5 autotest.");
+}
+
+// Autotest: la guardia deve scattare su una divergenza e tacere su testi coerenti.
+const notaProva = "L'EMA indica di non superare 100 mg di glicirrizina al giorno; l'ANSES si ferma a 10 mg.";
+ok(divergenzeSoglia(notaProva, "Non superare 100 mg di glicirrizina; l'ANSES indica 10 mg.", []).soloQuiz.length === 0, "soglie: due testi coerenti non divergono");
+ok(divergenzeSoglia(notaProva, "Non superare 100 mg di glicirrizina; l'ANSES indica 5 mg.", []).soloQuiz.length === 1, "soglie: una cifra diversa nel quiz viene segnalata");
+ok(divergenzeSoglia(notaProva, "Non superare 40 mg di glicirrizina.", []).soloScheda.length === 2, "soglie: le cifre della scheda assenti dal quiz vengono segnalate");
+ok(divergenzeSoglia("Non superare 100 mg di glicirrizina.", "L'ANSES indica 10 mg.", []).entiMancanti.indexOf("ANSES") !== -1, "soglie: l'ente citato dal quiz deve essere documentato nella scheda");
+ok(divergenzeSoglia(notaProva, "L'ANSES indica 10 mg per 70 kg, cioè 0,14 mg/kg.", []).soloQuiz.length === 0, "soglie: il valore per chilo non viene scambiato per una soglia");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

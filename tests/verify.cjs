@@ -5,7 +5,7 @@
 global.window = global;
 const path = require("path");
 const files = [
-  "data-plants", "data-plants-2", "data-plants-3", "data-plants-4", "data-plants-5",
+  "data-plants", "data-plants-2", "data-plants-3", "data-plants-4", "data-plants-5", "data-plants-6",
   "data-manual", "data-manual-2", "data-manual-3",
   "data-manual-4", "data-manual-5", "data-extra", "data-extra-2", "data-extra-3",
   "data-quiz", "data-quiz-2", "data-quiz-3", "data-quiz-4", "data-library", "data-saperi", "neura"
@@ -28,7 +28,7 @@ const parts = NP.manualParts;
 
 console.log("Dati: " + plants.length + " piante, " + manual.length + " capitoli, " + quiz.length + " domande.");
 
-ok(plants.length === 65, "ci sono 65 piante");
+ok(plants.length === 70, "ci sono 70 piante");
 ok(manual.length === 18, "ci sono 18 capitoli");
 ok(quiz.length >= 80, "almeno 80 domande (" + quiz.length + ")");
 ok(NP.conditions.length === 8, "8 schede di benessere");
@@ -89,6 +89,11 @@ const testoQuiz = JSON.stringify(quiz).toLowerCase();
   ok(testoQuiz.toLowerCase().indexOf(t) !== -1, "estrazione senza domande: " + t)
 );
 ok(/tempo balsamico|riposo|corteccia/i.test(testoQuiz), "tempo balsamico senza domande");
+["boswellia", "ortosifon", "pelargonium", "rodiola", "withania"].forEach((id) => {
+  const p = plants.find((x) => x.id === id);
+  ok(!!p, "pianta nuova presente: " + id);
+  if (p) ok(testoQuiz.indexOf(p.nome.toLowerCase()) !== -1, "pianta nuova senza domande: " + p.nome);
+});
 
 NP.conditions.forEach((c) => {
   (c.piante || []).forEach((x) => ok(plantIds.has(x.id), "condizione " + c.id + ": pianta inesistente " + x.id));

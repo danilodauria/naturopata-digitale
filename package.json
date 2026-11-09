@@ -1,8 +1,8 @@
 {
   "name": "naturopata-digitale",
-  "version": "1.3.22",
+  "version": "1.3.23",
   "private": true,
-  "description": "Erbario con 65 piante officinali, manuale, fitoalimurgia, sopravvivenza, biblioteca storica, quiz e assistente locale Neura. PWA statica in italiano, anche offline.",
+  "description": "Erbario con 70 piante officinali, manuale, fitoalimurgia, sopravvivenza, biblioteca storica, quiz e assistente locale Neura. PWA statica in italiano, anche offline.",
   "author": "Danilo D'Auria",
   "license": "MIT",
   "keywords": [

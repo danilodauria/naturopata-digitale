@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.22</p><h2>Un quiz che copre tutto</h2><p class="text-small muted mb-0">Due categorie nuove, funghi e micologia e saperi e storia, e domande su estrazioni, tempo balsamico e sulle piante che mancavano: da 85 a 128 domande. In più la risposta corretta non sta più sempre in A, e dalla spiegazione si arriva alla scheda del tema.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.23</p><h2>Cinque piante in più</h2><p class="text-small muted mb-0">Boswellia, ortosifon, pelargonium, rodiola e withania: l\'erbario passa a 70 schede, con fonti, avvertenze per gravidanza, allattamento e bambini, e una domanda di quiz per ciascuna. Le schede dicono anche i rischi meno noti, come il fegato della withania.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

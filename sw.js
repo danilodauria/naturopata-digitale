@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.3.22-1";
+const VERSION = "nd-v1.3.23-1";
 const SHELL = [
   "./",
   "index.html",
@@ -22,6 +22,7 @@ const SHELL = [
   "assets/js/data-plants-3.js",
   "assets/js/data-plants-4.js",
   "assets/js/data-plants-5.js",
+  "assets/js/data-plants-6.js",
   "assets/js/data-manual.js",
   "assets/js/data-manual-2.js",
   "assets/js/data-manual-3.js",

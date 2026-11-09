@@ -127,7 +127,7 @@ async function go(hash) {
 
   // Erbario
   await go("#/erbario");
-  ok(doc.querySelectorAll(".plant-card").length === 65, "erbario: 65 schede");
+  ok(doc.querySelectorAll(".plant-card").length === 70, "erbario: 70 schede");
   const input = doc.querySelector("#plantSearch");
   input.value = "malva selvatica";
   input.dispatchEvent(new win.Event("input", { bubbles: true }));
@@ -140,7 +140,7 @@ async function go(hash) {
   ok(!!doc.querySelector(".empty-state"), "erbario: stato vuoto");
   doc.querySelector("[data-reset-filters]").click();
   await tick(60);
-  ok(doc.querySelectorAll(".plant-card").length === 65, "erbario: reset filtri");
+  ok(doc.querySelectorAll(".plant-card").length === 70, "erbario: reset filtri");
   doc.dispatchEvent(new win.KeyboardEvent("keydown", { key: "/", bubbles: true }));
   ok(doc.activeElement && doc.activeElement.id === "plantSearch", "erbario: il tasto / porta il cursore nella ricerca");
 

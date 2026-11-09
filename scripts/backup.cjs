@@ -279,7 +279,7 @@ ${elencoCartelle}
 In sintesi:
   - index.html e le altre pagine: il sito statico (erbario, manuale, saperi,
     quiz, biblioteca, Neura, scarica);
-  - assets/js: i dati (65 piante, capitoli, amari, spezierie, funghi,
+  - assets/js: i dati (70 piante, capitoli, amari, spezierie, funghi,
     estrazioni, mesi balsamici, biblioteca) e la logica, Neura compresa;
   - assets/css, assets/img, assets/pdf: stile, immagini e PDF già impaginati;
   - tests: i controlli automatici su dati, DOM e percorsi;

@@ -1,6 +1,6 @@
 {
   "name": "naturopata-digitale",
-  "version": "1.3.22",
+  "version": "1.3.23",
   "private": true,
   "description": "Naturopata Digitale per Windows, Linux e macOS: erbario, manuale, sopravvivenza e biblioteca, anche offline.",
   "author": "Danilo D'Auria",
@@ -89,7 +89,7 @@
       "packageCategory": "education",
       "maintainer": "Danilo D'Auria",
       "synopsis": "Erbario, manuale e sapere pratico delle piante, offline",
-      "description": "Naturopata Digitale raccoglie 65 schede di piante officinali, un manuale, la fitoalimurgia, tre livelli di sopravvivenza, i Discorsi di Mattioli, quiz e un assistente locale. Funziona senza Internet e senza account.",
+      "description": "Naturopata Digitale raccoglie 70 schede di piante officinali, un manuale, la fitoalimurgia, tre livelli di sopravvivenza, i Discorsi di Mattioli, quiz e un assistente locale. Funziona senza Internet e senza account.",
       "target": [
         "deb",
         "AppImage"

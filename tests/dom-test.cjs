@@ -274,6 +274,24 @@ async function go(hash) {
   const poolWithania = win.NP.app.views.plantQuestionPool(win.NP.plants.find((x) => x.id === "withania"));
   ok(poolWithania.length === 6, "quiz pianta: il pool unisce scheda e domande generali (" + poolWithania.length + ")");
   ok(poolWithania.some((q) => q.id === "n5"), "quiz pianta: entra la domanda generale che la nomina");
+
+  // Una domanda generale resta nel pool solo se la pianta è protagonista:
+  // il nome deve stare nella domanda o nella risposta corretta, non in una
+  // spiegazione o in un'opzione sbagliata.
+  const normPool = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const marginali = [];
+  win.NP.plants.forEach((pl) => {
+    const chiaviPl = [pl.nome, (pl.latino || "").split(" ")[0]]
+      .concat(pl.nomi || []).map(normPool).filter((k) => k.length > 3);
+    win.NP.app.views.plantQuestionPool(pl).forEach((q) => {
+      if (String(q.id).indexOf("scheda-") === 0) return;
+      const dritta = normPool([q.q, q.o[q.r]].join(" "));
+      if (!chiaviPl.some((k) => dritta.indexOf(k) !== -1)) marginali.push(pl.id + "/" + q.id);
+    });
+  });
+  ok(marginali.length === 0, "quiz pianta: niente domande con la pianta solo di passaggio (" + marginali.slice(0, 4).join(", ") + ")");
+  const poolMenta = win.NP.app.views.plantQuestionPool(win.NP.plants.find((x) => x.id === "menta"));
+  ok(poolMenta.length === 17, "quiz pianta: la menta resta a 17 domande (" + poolMenta.length + ")");
   ok(/Withania/i.test(doc.querySelector(".quiz-counter").textContent), "quiz pianta: intestazione con il nome");
   ok(doc.querySelectorAll("#quizOptions .option").length === 4, "quiz pianta: quattro opzioni");
   for (let i = 0; i < 5; i++) {

@@ -135,24 +135,21 @@
     return items;
   }
 
-  /* Le domande del quiz generale che nominano la pianta: prima quelle in cui
-     compare nella domanda o nella risposta corretta, poi quelle che la citano
-     solo nella spiegazione o nelle altre opzioni. */
+  /* Le domande del quiz generale che parlano davvero della pianta: il nome
+     deve comparire nella domanda o nella risposta corretta. Una citazione di
+     passaggio — in una spiegazione o in un'opzione sbagliata — non basta:
+     riempiva il pool di domande su altre piante (la menta ne aveva 28, quasi
+     tutte così) e rendeva il quiz della pianta un quiz su qualcos'altro. */
   function plantGeneralQuestions(p) {
     const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const chiavi = [p.nome, (p.latino || "").split(" ")[0]]
       .concat(p.nomi || [])
       .map(norm)
       .filter((k) => k.length > 3);
-    const primarie = [];
-    const secondarie = [];
-    (NP.quiz || []).forEach((q) => {
+    return (NP.quiz || []).filter((q) => {
       const dritta = norm([q.q, q.o[q.r]].join(" "));
-      const resto = norm([q.o.join(" "), q.e].join(" "));
-      if (chiavi.some((k) => dritta.indexOf(k) !== -1)) primarie.push(q);
-      else if (chiavi.some((k) => resto.indexOf(k) !== -1)) secondarie.push(q);
+      return chiavi.some((k) => dritta.indexOf(k) !== -1);
     });
-    return primarie.concat(secondarie);
   }
 
   function plantQuestionPool(p) {

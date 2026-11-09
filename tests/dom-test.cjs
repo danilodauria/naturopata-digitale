@@ -255,6 +255,31 @@ async function go(hash) {
   if (quit) quit.click();
   await tick(30);
 
+  // Quiz di una singola pianta: dalla scheda si arriva a domande solo su di lei,
+  // anche quando il quiz generale non la nomina mai.
+  await go("#/pianta/withania");
+  ok(!!doc.querySelector('a[href="#/quiz/pianta/withania"]'), "pianta: pulsante del quiz della pianta");
+  await go("#/quiz/pianta/withania");
+  ok(/Domanda 1 di 5/.test(doc.querySelector(".quiz-counter").textContent), "quiz pianta: cinque domande");
+  ok(/Withania/i.test(doc.querySelector(".quiz-counter").textContent), "quiz pianta: intestazione con il nome");
+  ok(doc.querySelectorAll("#quizOptions .option").length === 4, "quiz pianta: quattro opzioni");
+  for (let i = 0; i < 5; i++) {
+    const qp = win.NP.app.state.quiz;
+    doc.querySelector('[data-opt="' + qp.items[qp.index].r + '"]').click();
+    await tick(20);
+    ok(!!doc.querySelector("#answerBox strong"), "quiz pianta: spiegazione " + (i + 1));
+    doc.querySelector("[data-next-quiz]").click();
+    await tick(30);
+  }
+  ok(!!doc.querySelector(".result-panel"), "quiz pianta: risultato");
+  ok(/100%/.test(doc.querySelector(".score-ring").textContent), "quiz pianta: punteggio pieno");
+  ok(!!doc.querySelector('a[href="#/pianta/withania"]'), "quiz pianta: ritorno alla scheda");
+  win.NP.app.state.quiz = null;
+  await go("#/quiz/pianta/inesistente");
+  ok(!!doc.querySelector(".empty-state"), "quiz pianta: pianta inesistente");
+  await go("#/quiz");
+  await tick(20);
+
   // Neura chat
   await go("#/neura");
   ok(!!doc.querySelector(".chat-panel"), "neura: pannello chat");

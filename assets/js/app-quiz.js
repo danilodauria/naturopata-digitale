@@ -39,6 +39,106 @@
     return (NP.quiz || []).filter((q) => (cat === "tutte" || q.cat === cat) && (level === "tutti" || q.livello === level));
   }
 
+  /* Quiz di una singola pianta ----------------------------------------------
+     Il quiz generale nomina le piante solo di passaggio: ventisei schede non
+     hanno nemmeno una domanda che le riguardi. Il quiz della scheda nasce
+     quindi dai dati della scheda stessa — famiglia, parti, raccolta, sicurezza
+     e proprietà — con i distrattori presi dalle altre piante, così sono
+     plausibili ma sbagliati. Stessa pianta, stesse domande: si possono
+     rileggere e verificare. */
+  const LIVELLI_SICUREZZA = [
+    ["verde", "Sicura — uso tradizionale alle dosi usuali"],
+    ["giallo", "Cautela — chiedere parere se si assumono farmaci"],
+    ["rosso", "Attenzione — interazioni o rischi importanti"],
+    ["nero", "Pericolosa — pianta tossica, non usare"]
+  ];
+
+  function plantQuestions(p) {
+    const others = (NP.plants || []).filter((x) => x.id !== p.id);
+    const tre = (valori, esclusi) => {
+      const out = [];
+      valori.forEach((v) => {
+        if (v && esclusi.indexOf(v) === -1 && out.indexOf(v) === -1) out.push(v);
+      });
+      return out.slice(0, 3);
+    };
+    const items = [];
+
+    const famiglie = tre(others.map((x) => x.famiglia), [p.famiglia]);
+    if (famiglie.length === 3) {
+      items.push({
+        id: "scheda-" + p.id + "-famiglia",
+        cat: "riconoscimento",
+        livello: "base",
+        q: "A quale famiglia botanica appartiene " + p.nome + "?",
+        o: [p.famiglia].concat(famiglie),
+        r: 0,
+        e: "La scheda la colloca tra le " + p.famiglia + "; il nome botanico è " + p.latino + "."
+      });
+    }
+
+    const mieParti = (p.parti || []).join(", ");
+    const parti = tre(others.map((x) => (x.parti || []).join(", ")), [mieParti]);
+    if (mieParti && parti.length === 3) {
+      items.push({
+        id: "scheda-" + p.id + "-parti",
+        cat: "riconoscimento",
+        livello: "base",
+        q: "Quali parti si usano di " + p.nome + "?",
+        o: [mieParti].concat(parti),
+        r: 0,
+        e: "La scheda indica come parti usate: " + mieParti + "."
+      });
+    }
+
+    const miaRaccolta = A.monthLabel(p.raccolta.mesi);
+    const raccolte = tre(others.map((x) => A.monthLabel(x.raccolta.mesi)), [miaRaccolta]);
+    if (miaRaccolta && raccolte.length === 3) {
+      items.push({
+        id: "scheda-" + p.id + "-raccolta",
+        cat: "preparazioni",
+        livello: "intermedio",
+        q: "In quali mesi si raccoglie " + p.nome + "?",
+        o: [miaRaccolta].concat(raccolte),
+        r: 0,
+        e: "Mesi di raccolta indicati nella scheda: " + miaRaccolta + "."
+      });
+    }
+
+    const livello = LIVELLI_SICUREZZA.filter((x) => x[0] === p.sicurezza.livello)[0];
+    if (livello) {
+      items.push({
+        id: "scheda-" + p.id + "-sicurezza",
+        cat: "sicurezza",
+        livello: "intermedio",
+        q: "Come si colloca " + p.nome + " nella scala di sicurezza dell'erbario?",
+        o: LIVELLI_SICUREZZA.map((x) => x[1]),
+        r: LIVELLI_SICUREZZA.indexOf(livello),
+        e: "Livello «" + A.SAFETY[p.sicurezza.livello].label + "»: " + A.SAFETY[p.sicurezza.livello].long + "."
+      });
+    }
+
+    const miaProprieta = (p.proprieta || [])[0];
+    const proprieta = tre(others.map((x) => (x.proprieta || [])[0]), p.proprieta || []);
+    if (miaProprieta && proprieta.length === 3) {
+      items.push({
+        id: "scheda-" + p.id + "-proprieta",
+        cat: "proprieta",
+        livello: "base",
+        q: "Quale di queste proprietà è indicata nella scheda di " + p.nome + "?",
+        o: [miaProprieta].concat(proprieta),
+        r: 0,
+        e: "La scheda elenca: " + p.proprieta.join(", ") + "."
+      });
+    }
+
+    return items;
+  }
+
+  function plantQuizStart(p) {
+    startQuiz({ items: plantQuestions(p), timerOn: false, plantId: p.id, plantNome: p.nome });
+  }
+
   function stopTimer() {
     if (A.state.quizTimer) { clearInterval(A.state.quizTimer); A.state.quizTimer = null; }
   }
@@ -92,7 +192,7 @@
 
   function startQuiz(opts) {
     stopTimer();
-    const pool = filtered(opts.cat, opts.level);
+    const pool = opts.items ? opts.items : filtered(opts.cat || "tutte", opts.level || "tutti");
     if (!pool.length) {
       A.page('<div class="empty-state"><h1>Nessuna domanda</h1><p>Con questi filtri non ci sono domande disponibili. Prova ad allargare la selezione.</p><a class="btn btn-primary" href="#/quiz">Torna al quiz</a></div>');
       return;
@@ -110,6 +210,8 @@
       seconds: 30,
       cat: opts.cat,
       level: opts.level,
+      plantId: opts.plantId || "",
+      plantNome: opts.plantNome || "",
       saved: false
     };
     renderQuestion();
@@ -128,7 +230,7 @@
     A.page(
       '<div class="quiz-shell">' +
         '<div class="quiz-top">' +
-          '<span class="quiz-counter">Domanda ' + (quiz.index + 1) + " di " + quiz.items.length + " · " + esc(cat ? cat.nome : "") + "</span>" +
+          '<span class="quiz-counter">Domanda ' + (quiz.index + 1) + " di " + quiz.items.length + " · " + esc(quiz.plantNome ? "Quiz su " + quiz.plantNome : cat ? cat.nome : "") + "</span>" +
           '<div style="display:flex;gap:.5rem;align-items:center">' +
             '<span class="tag tag-line">' + esc(LEVELS[q.livello] || q.livello) + "</span>" +
             (quiz.timerOn ? '<span class="quiz-timer" id="quizTimer">30 s</span>' : "") +
@@ -253,9 +355,9 @@
         "<p>Hai risposto correttamente a <strong>" + quiz.correct + "</strong> domande su <strong>" + total + "</strong>.</p>" +
         '<div class="result-stats"><div><strong>' + quiz.correct + "</strong><span>corrette</span></div><div><strong>" + wrong.length + "</strong><span>da rivedere</span></div><div><strong>" + total + "</strong><span>domande</span></div></div>" +
         '<div class="hero-actions" style="justify-content:center">' +
-          '<button class="btn btn-primary" type="button" data-quiz-reset>Nuovo quiz</button>' +
+          '<button class="btn btn-primary" type="button" data-quiz-reset>' + (quiz.plantId ? "Rifai il quiz" : "Nuovo quiz") + "</button>" +
           (wrong.length ? '<button class="btn btn-secondary" type="button" data-quiz-review>Ripassa gli errori</button>' : "") +
-          '<a class="btn btn-ghost" href="#/erbario">Torna all\'erbario</a>' +
+          (quiz.plantId ? '<a class="btn btn-secondary" href="#/pianta/' + quiz.plantId + '">Torna alla scheda</a>' : '<a class="btn btn-ghost" href="#/erbario">Torna all\'erbario</a>') +
         "</div>" +
         (wrong.length ? '<div class="review-list"><h3>Da rivedere</h3>' + wrong.map((a) =>
           '<div class="review-item"><div class="q">' + esc(a.q.q) + '</div><div class="a">Risposta corretta: ' + esc(a.q.o[a.q.r]) + '</div><div class="exp">' + esc(a.q.e) + "</div></div>"
@@ -265,7 +367,12 @@
     );
 
     const reset = document.querySelector("[data-quiz-reset]");
-    if (reset) reset.addEventListener("click", () => { A.state.quiz = null; setupView(); });
+    if (reset) reset.addEventListener("click", () => {
+      const plantId = quiz.plantId;
+      A.state.quiz = null;
+      const p = plantId ? (NP.plants || []).find((x) => x.id === plantId) : null;
+      if (p) plantQuizStart(p); else setupView();
+    });
     const review = document.querySelector("[data-quiz-review]");
     if (review) review.addEventListener("click", () => {
       const items = wrong.map((a) => a.q);
@@ -285,7 +392,18 @@
     if (btn) btn.click();
   }
 
-  views.quiz = function () {
+  views.quiz = function (params) {
+    /* #/quiz/pianta/<id>: si entra direttamente nelle domande di quella scheda. */
+    const plantId = params && params[0] === "pianta" ? params[1] : null;
+    if (plantId) {
+      const p = (NP.plants || []).find((x) => x.id === plantId);
+      if (!p) {
+        A.page('<div class="empty-state" style="margin:3rem 0"><h1>Pianta non trovata</h1><p>Il quiz della scheda non esiste: il collegamento è cambiato o la pianta non è nell\'erbario.</p><a class="btn btn-primary" href="#/erbario">Torna all\'erbario</a></div>', "view-404");
+        return;
+      }
+      const inCorso = A.state.quiz;
+      if (!inCorso || inCorso.plantId !== p.id) { plantQuizStart(p); return; }
+    }
     if (A.state.quiz) {
       const qz = A.state.quiz;
       if (qz.index >= qz.items.length) { renderResult(); return; }

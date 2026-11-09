@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.23</p><h2>Cinque piante in più</h2><p class="text-small muted mb-0">Boswellia, ortosifon, pelargonium, rodiola e withania: l\'erbario passa a 70 schede, con fonti, avvertenze per gravidanza, allattamento e bambini, e una domanda di quiz per ciascuna. Le schede dicono anche i rischi meno noti, come il fegato della withania.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.24</p><h2>Il quiz di ogni pianta</h2><p class="text-small muted mb-0">Ogni scheda ha il suo pulsante: apre cinque domande su quella pianta — famiglia, parti, raccolta, sicurezza e proprietà — con le risposte sbagliate prese dalle altre schede. Funziona per tutte le 70 piante, anche per quelle che il quiz generale non nomina mai.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 
@@ -379,6 +379,7 @@ NP.app = (function () {
           '<div class="plant-hero-meta">' + (p.categorie || []).map((c) => '<span class="tag tag-line">' + esc(c) + "</span>").join("") + '<span class="tag tag-line">' + esc(p.famiglia) + "</span></div>" +
           '<div class="plant-actions">' +
             '<button class="btn ' + (fav ? "btn-primary" : "btn-secondary") + ' btn-small" type="button" data-fav="' + p.id + '" aria-pressed="' + fav + '">' + (fav ? "♥ Nei preferiti" : "♡ Aggiungi ai preferiti") + "</button>" +
+            '<a class="btn btn-secondary btn-small" href="#/quiz/pianta/' + p.id + '">Quiz su ' + esc(p.nome) + " " + ico("spark") + "</a>" +
             '<button class="btn btn-secondary btn-small" type="button" data-print>Stampa la scheda ' + ico("print") + "</button>" +
             '<button class="btn btn-ghost btn-small" type="button" data-ask="' + esc("Spiegami " + p.nome + " e le sue avvertenze") + '">Chiedi a Neura ' + ico("brain") + "</button>" +
           "</div>" +
@@ -486,7 +487,7 @@ NP.app = (function () {
     benessere: (p) => (views.benessere ? views.benessere(p) : view404()),
     sopravvivenza: (p) => (views.sopravvivenza ? views.sopravvivenza(p) : view404()),
     matthioli: () => (views.matthioli ? views.matthioli() : view404()),
-    quiz: () => (views.quiz ? views.quiz() : view404()),
+    quiz: (p) => (views.quiz ? views.quiz(p) : view404()),
     neura: () => (views.neura ? views.neura() : view404()),
     calendario: () => (views.calendario ? views.calendario() : view404()),
     glossario: () => (views.glossario ? views.glossario() : view404()),
@@ -511,6 +512,9 @@ NP.app = (function () {
     } else if (r.name === "benessere" && r.params[0]) {
       const c = (NP.conditions || []).find((x) => x.id === r.params[0]);
       label = c ? c.titolo : "Benessere";
+    } else if (r.name === "quiz" && r.params[0] === "pianta") {
+      const p = (NP.plants || []).find((x) => x.id === r.params[1]);
+      label = p ? "Quiz · " + p.nome : "Quiz";
     }
     document.title = (label ? label + " · " : "") + "Naturopata Digitale";
   }

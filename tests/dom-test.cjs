@@ -271,6 +271,9 @@ async function go(hash) {
   ok(!!doc.querySelector('a[href="#/quiz/pianta/withania"]'), "pianta: pulsante del quiz della pianta");
   await go("#/quiz/pianta/withania");
   ok(/Domanda 1 di 5/.test(doc.querySelector(".quiz-counter").textContent), "quiz pianta: cinque domande");
+  const poolWithania = win.NP.app.views.plantQuestionPool(win.NP.plants.find((x) => x.id === "withania"));
+  ok(poolWithania.length === 6, "quiz pianta: il pool unisce scheda e domande generali (" + poolWithania.length + ")");
+  ok(poolWithania.some((q) => q.id === "n5"), "quiz pianta: entra la domanda generale che la nomina");
   ok(/Withania/i.test(doc.querySelector(".quiz-counter").textContent), "quiz pianta: intestazione con il nome");
   ok(doc.querySelectorAll("#quizOptions .option").length === 4, "quiz pianta: quattro opzioni");
   for (let i = 0; i < 5; i++) {

@@ -135,8 +135,34 @@
     return items;
   }
 
+  /* Le domande del quiz generale che nominano la pianta: prima quelle in cui
+     compare nella domanda o nella risposta corretta, poi quelle che la citano
+     solo nella spiegazione o nelle altre opzioni. */
+  function plantGeneralQuestions(p) {
+    const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const chiavi = [p.nome, (p.latino || "").split(" ")[0]]
+      .concat(p.nomi || [])
+      .map(norm)
+      .filter((k) => k.length > 3);
+    const primarie = [];
+    const secondarie = [];
+    (NP.quiz || []).forEach((q) => {
+      const dritta = norm([q.q, q.o[q.r]].join(" "));
+      const resto = norm([q.o.join(" "), q.e].join(" "));
+      if (chiavi.some((k) => dritta.indexOf(k) !== -1)) primarie.push(q);
+      else if (chiavi.some((k) => resto.indexOf(k) !== -1)) secondarie.push(q);
+    });
+    return primarie.concat(secondarie);
+  }
+
+  function plantQuestionPool(p) {
+    return plantQuestions(p).concat(plantGeneralQuestions(p));
+  }
+
   function plantQuizStart(p) {
-    startQuiz({ items: plantQuestions(p), timerOn: false, plantId: p.id, plantNome: p.nome });
+    /* A ogni partita si mescola tutto il pool e si tengono cinque domande: così
+       ruotano sia quelle della scheda sia quelle del quiz generale. */
+    startQuiz({ items: shuffle(plantQuestionPool(p)).slice(0, 5), timerOn: false, plantId: p.id, plantNome: p.nome });
   }
 
   function stopTimer() {
@@ -423,4 +449,5 @@
   views.quizKey = key;
   views.quizNextKey = nextKey;
   views.startQuiz = startQuiz;
+  views.plantQuestionPool = plantQuestionPool;
 })();

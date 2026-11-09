@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.30</p><h2>Quiz di pianta più mirato</h2><p class="text-small muted mb-0">Nel quiz di una pianta entrano solo le domande generali che la nominano nella domanda o nella risposta corretta: le citazioni di passaggio non contano più. La menta passa da 28 domande a 17.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.31</p><h2>Parole intere, non pezzi di parola</h2><p class="text-small muted mb-0">Nel quiz di una pianta il nome deve comparire come parola: «alimentare» non porta più dentro una domanda sulla menta. La menta scende da 28 domande generali a una, per un pool di sei.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

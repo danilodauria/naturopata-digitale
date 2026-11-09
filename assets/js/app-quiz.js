@@ -146,10 +146,12 @@
       .concat(p.nomi || [])
       .map(norm)
       .filter((k) => k.length > 3);
-    return (NP.quiz || []).filter((q) => {
-      const dritta = norm([q.q, q.o[q.r]].join(" "));
-      return chiavi.some((k) => dritta.indexOf(k) !== -1);
-    });
+    if (!chiavi.length) return [];
+    /* Confronto per parole intere: senza confini «menta» entrava in
+       «alimentare» e «timo» in «legittimo», riportando nel pool domande che
+       della pianta non parlano. */
+    const re = new RegExp("\\b(?:" + chiavi.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")\\b");
+    return (NP.quiz || []).filter((q) => re.test(norm([q.q, q.o[q.r]].join(" "))));
   }
 
   function plantQuestionPool(p) {

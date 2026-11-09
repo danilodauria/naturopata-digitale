@@ -279,19 +279,21 @@ async function go(hash) {
   // il nome deve stare nella domanda o nella risposta corretta, non in una
   // spiegazione o in un'opzione sbagliata.
   const normPool = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const parolaPool = (chiavi) => new RegExp("\\b(?:" + chiavi.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")\\b");
   const marginali = [];
   win.NP.plants.forEach((pl) => {
     const chiaviPl = [pl.nome, (pl.latino || "").split(" ")[0]]
       .concat(pl.nomi || []).map(normPool).filter((k) => k.length > 3);
+    const re = parolaPool(chiaviPl);
     win.NP.app.views.plantQuestionPool(pl).forEach((q) => {
       if (String(q.id).indexOf("scheda-") === 0) return;
-      const dritta = normPool([q.q, q.o[q.r]].join(" "));
-      if (!chiaviPl.some((k) => dritta.indexOf(k) !== -1)) marginali.push(pl.id + "/" + q.id);
+      if (!re.test(normPool([q.q, q.o[q.r]].join(" ")))) marginali.push(pl.id + "/" + q.id);
     });
   });
   ok(marginali.length === 0, "quiz pianta: niente domande con la pianta solo di passaggio (" + marginali.slice(0, 4).join(", ") + ")");
   const poolMenta = win.NP.app.views.plantQuestionPool(win.NP.plants.find((x) => x.id === "menta"));
-  ok(poolMenta.length === 17, "quiz pianta: la menta resta a 17 domande (" + poolMenta.length + ")");
+  ok(poolMenta.length === 6, "quiz pianta: la menta resta a 6 domande (" + poolMenta.length + ")");
+  ok(!poolMenta.some((q) => q.id === "e6"), "quiz pianta: «alimentare» non porta dentro una domanda fuori tema");
   ok(/Withania/i.test(doc.querySelector(".quiz-counter").textContent), "quiz pianta: intestazione con il nome");
   ok(doc.querySelectorAll("#quizOptions .option").length === 4, "quiz pianta: quattro opzioni");
   for (let i = 0; i < 5; i++) {

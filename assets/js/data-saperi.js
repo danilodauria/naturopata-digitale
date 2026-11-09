@@ -457,7 +457,7 @@ window.NP = window.NP || {};
         "Filtra con una garza e strizza bene i fiori; imbottiglia in vetro scuro e conserva al fresco."
       ],
       sicurezza: "L’iperico è fotosensibilizzante: non esporre al sole la pelle trattata. Assunto per bocca interagisce con molti farmaci, contraccettivi compresi: l’uso interno va deciso con un professionista.",
-      conservazione: "Circa 12 mesi al riparo dalla luce. Se l’olio sa di rancido o fa muffa, si butta."
+      conservazione: "3–6 mesi al riparo dalla luce. Se l’olio sa di rancido o fa muffa, si butta."
     },
     {
       id: "oleolito-calendula",
@@ -472,7 +472,7 @@ window.NP = window.NP || {};
         "Filtra, imbottiglia e conserva al buio."
       ],
       sicurezza: "Uso cutaneo. Chi è allergico alle Asteraceae deve fare una prova su una piccola area. Non applicare su ferite aperte senza parere.",
-      conservazione: "12 mesi in vetro scuro, lontano dal calore."
+      conservazione: "3–6 mesi in vetro scuro, lontano dal calore."
     },
     {
       id: "tintura-ortica",

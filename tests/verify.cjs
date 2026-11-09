@@ -617,6 +617,83 @@ incoerenze.forEach((m) => console.error("! incoerenza: " + m));
 console.log("Coerenza quiz/schede: " + coerenzaEsaminate + " abbinamenti domanda-pianta (" + domandeAbbinate.size + " domande), " + incoerenze.length + " incoerenze, 5 autotest.");
 ok(incoerenze.length === 0, incoerenze.length + " domande contraddicono la scheda della stessa pianta");
 
+/* --- Durate di conservazione: quiz e schede devono dire lo stesso del manuale ---
+   Il manuale è la fonte: la sua riga «Durata indicativa: foglie e fiori 6–12 mesi;
+   radici e cortecce 12–24 mesi; oleoliti 3–6 mesi» viene letta e usata come metro.
+   Ogni durata di conservazione citata in una domanda o in una scheda deve
+   sovrapporsi a quella del manuale: è così che un residuo come e1 («circa un
+   anno» per l'oleolito) non può rientrare senza far fallire il test. */
+const testoPiatto = (s) => String(s || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+const IN_MESI = { giorni: 1 / 31, settimane: 7 / 31, mesi: 1, anni: 12 };
+
+function durateIn(testo) {
+  const trovate = [];
+  const re = /(\d{1,2})\s*[–\-]\s*(\d{1,2})\s*(giorni|settimane|mesi|anni)|\b(\d{1,2})\s*(giorni|settimane|mesi|anni)\b/gi;
+  let m;
+  while ((m = re.exec(testo))) {
+    if (m[1]) trovate.push({ min: +m[1], max: +m[2], unita: m[3].toLowerCase(), testo: m[0] });
+    else trovate.push({ min: +m[4], max: +m[4], unita: m[5].toLowerCase(), testo: m[0] });
+  }
+  return trovate;
+}
+const inMesi = (d) => ({ min: d.min * IN_MESI[d.unita], max: d.max * IN_MESI[d.unita] });
+const siSovrappongono = (a, b) => a.min <= b.max + 0.01 && b.min <= a.max + 0.01;
+
+/* Vale la durata della conservazione, non quella della preparazione: in
+   «30-40 giorni di macerazione, poi si conserva 3–6 mesi» conta solo la seconda. */
+function durateDiConservazione(testo) {
+  const out = [];
+  const re = /(si conserva|si conservano|conservazione|conservat[oaie]|dura|durata|entro)\b[^.]{0,150}/gi;
+  let m;
+  while ((m = re.exec(testo))) durateIn(m[0]).forEach((d) => out.push(d));
+  return out;
+}
+
+const capitoloConservazione = manual.find((c) => c.id === "raccolta-e-conservazione");
+const rigaDurate = (/Durata indicativa:([^.]+)\./.exec(testoPiatto(capitoloConservazione && capitoloConservazione.html)) || [])[1] || "";
+const durataManuale = {};
+rigaDurate.split(";").forEach((pezzo) => {
+  const etichetta = pezzo.replace(/[\d–-].*$/, "").trim().toLowerCase();
+  const d = durateIn(pezzo)[0];
+  if (etichetta && d) durataManuale[etichetta] = d;
+});
+ok(!!durataManuale["oleoliti"], "manuale: la durata degli oleoliti si legge (\"" + rigaDurate.trim().slice(0, 50) + "\")");
+ok(!!durataManuale["foglie e fiori"] && !!durataManuale["radici e cortecce"], "manuale: durate di foglie, fiori, radici e cortecce");
+
+const confronti = [];
+quiz.forEach((q) => {
+  const testo = testoPiatto([q.q, q.o[q.r], q.e].join(" "));
+  [["oleoliti", /oleolit/i], ["foglie e fiori", /foglie e fiori/i], ["radici e cortecce", /radici e cortecce/i]].forEach(([voce, re]) => {
+    if (!re.test(testo)) return;
+    durateDiConservazione(testo).forEach((d) => confronti.push({ dove: "quiz " + q.id, voce, durata: d }));
+  });
+});
+(NP.estrazioni || []).forEach((e) => {
+  if (!/oleolito/i.test(e.id)) return;
+  const d = durateIn(testoPiatto(e.conservazione))[0] || null;
+  confronti.push({ dove: "scheda " + e.id, voce: "oleoliti", durata: d });
+});
+
+ok(confronti.length >= 4, "durate di conservazione da confrontare (" + confronti.length + ")");
+confronti.forEach((c) => {
+  if (!c.durata) { ok(false, c.dove + ": durata di conservazione non leggibile"); return; }
+  const metro = durataManuale[c.voce];
+  if (!metro) return;
+  ok(siSovrappongono(inMesi(c.durata), inMesi(metro)), c.dove + ": «" + c.durata.testo + "» contro il manuale «" + metro.testo + "»");
+});
+
+// Autotest: il confronto deve scattare su un residuo e tacere su un valore coerente.
+const metroOleoliti = inMesi(durataManuale["oleoliti"] || { min: 3, max: 6, unita: "mesi" });
+const coerenteConOleoliti = (testo) => {
+  const d = durateIn(testo)[0];
+  return !!d && siSovrappongono(inMesi(d), metroOleoliti);
+};
+ok(coerenteConOleoliti("3–6 mesi"), "durate: 3–6 mesi è coerente con il manuale");
+ok(!coerenteConOleoliti("circa 12 mesi"), "durate: 12 mesi per l'oleolito è segnalato come residuo");
+ok(!coerenteConOleoliti("pochi giorni"), "durate: pochi giorni per l'oleolito è segnalato come residuo");
+ok(durateDiConservazione("30-40 giorni di macerazione, poi si conserva 3–6 mesi").length === 1, "durate: la macerazione non viene scambiata per conservazione");
+console.log("Durate di conservazione: " + confronti.length + " confronti quiz/schede contro il manuale (" + Object.keys(durataManuale).join(", ") + "), 4 autotest.");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

@@ -20,6 +20,21 @@
     return a;
   }
 
+  /* Le risposte corrette non devono stare sempre nella stessa posizione: se
+     finissero tutte in A si potrebbe rispondere senza leggere. La posizione
+     dipende dall'id della domanda, così cambia da una domanda all'altra e resta
+     la stessa a ogni partita (utile per rileggere e per i controlli). */
+  function ordinaOpzioni(q) {
+    const giusta = q.o[q.r];
+    let h = 0;
+    for (let i = 0; i < q.id.length; i++) h = (h * 31 + q.id.charCodeAt(i)) % 97;
+    const posto = h % q.o.length;
+    const altre = q.o.filter((_, i) => i !== q.r);
+    const o = [];
+    for (let i = 0; i < q.o.length; i++) o.push(i === posto ? giusta : altre.shift());
+    return { id: q.id, cat: q.cat, livello: q.livello, q: q.q, o: o, r: posto, e: q.e };
+  }
+
   function filtered(cat, level) {
     return (NP.quiz || []).filter((q) => (cat === "tutte" || q.cat === cat) && (level === "tutti" || q.livello === level));
   }
@@ -34,7 +49,7 @@
     const byCat = stats.byCat || {};
     A.page(
       '<div class="page-head"><p class="eyebrow">Quiz interattivo</p><h1>Quanto conosci le piante?</h1>' +
-        '<p class="lead">' + (NP.quiz || []).length + ' domande su riconoscimento, proprietà, sicurezza, preparazioni, fitoalimurgia e fondamenti. Ogni risposta ha una spiegazione, anche quando è sbagliata.</p></div>' +
+        '<p class="lead">' + (NP.quiz || []).length + ' domande su ' + cats.map((c) => c.nome.toLowerCase()).join(", ") + '. Ogni risposta ha una spiegazione, anche quando è sbagliata.</p></div>' +
       '<div class="quiz-setup"><div class="quiz-setup-panel">' +
         '<div class="field-row two">' +
           '<label><span class="label">Categoria</span><select class="select" id="quizCat"><option value="tutte">Tutte le categorie</option>' +
@@ -82,7 +97,9 @@
       A.page('<div class="empty-state"><h1>Nessuna domanda</h1><p>Con questi filtri non ci sono domande disponibili. Prova ad allargare la selezione.</p><a class="btn btn-primary" href="#/quiz">Torna al quiz</a></div>');
       return;
     }
-    const items = shuffle(opts.items || pool).slice(0, opts.items ? opts.items.length : Math.min(opts.count || 10, pool.length));
+    const items = shuffle(opts.items || pool)
+      .slice(0, opts.items ? opts.items.length : Math.min(opts.count || 10, pool.length))
+      .map(ordinaOpzioni);
     A.state.quiz = {
       items: items,
       index: 0,
@@ -196,6 +213,8 @@
     if (cat === "sicurezza") return "#/sicurezza";
     if (cat === "preparazioni") return "#/capitolo/forme-d-uso";
     if (cat === "fitoalimurgia") return "#/fitoalimurgia";
+    if (cat === "funghi") return "#/funghi";
+    if (cat === "storia") return "#/spezierie";
     return "#/manuale";
   }
 

@@ -11,7 +11,9 @@ NP.quizCategories = [
   { id: "sicurezza", nome: "Sicurezza", desc: "Interazioni, controindicazioni, sosia e segnali d'allarme." },
   { id: "preparazioni", nome: "Preparazioni", desc: "Infusi, decotti, tinture, oleoliti e conservazione." },
   { id: "fitoalimurgia", nome: "Fitoalimurgia", desc: "Raccolta responsabile e piante selvatiche in cucina." },
-  { id: "olistica", nome: "Olistica e scienza", desc: "Metodo, evidenza, stili di vita e ruolo della naturopatia." }
+  { id: "olistica", nome: "Olistica e scienza", desc: "Metodo, evidenza, stili di vita e ruolo della naturopatia." },
+  { id: "funghi", nome: "Funghi e micologia", desc: "Riconoscere, cucinare e usare i funghi senza rischi." },
+  { id: "storia", nome: "Saperi e storia", desc: "Spezierie, amari, tempo balsamico e libri antichi." }
 ];
 
 NP.quiz = [

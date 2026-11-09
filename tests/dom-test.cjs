@@ -238,6 +238,19 @@ async function go(hash) {
   await go("#/quiz");
   ok(win.NP.app.state.quiz.locked === false, "quiz: rientro senza blocco");
   ok(doc.querySelectorAll("[data-opt]:not([disabled])").length === 4, "quiz: opzioni di nuovo attive");
+
+  // La risposta corretta non sta sempre nella stessa posizione: si sceglie
+  // l'opzione giusta in base a r, e con tutte le domande le posizioni sono varie.
+  win.NP.app.state.quiz = null;
+  await go("#/erbario");
+  await go("#/quiz");
+  await tick(20);
+  doc.querySelector("#quizCount").value = "999";
+  doc.querySelector("[data-quiz-start]").click();
+  await tick(40);
+  const posizioni = new Set(win.NP.app.state.quiz.items.map((x) => x.r));
+  ok(posizioni.size === 4, "quiz: risposta corretta in posizioni diverse (" + [...posizioni].join(",") + ")");
+  win.NP.app.state.quiz = null;
   const quit = doc.querySelector("[data-quit-quiz]");
   if (quit) quit.click();
   await tick(30);

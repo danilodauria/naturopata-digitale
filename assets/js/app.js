@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.21</p><h2>Una home che non si ripete</h2><p class="text-small muted mb-0">I cinque percorsi dei saperi antichi comparivano due volte nella pagina iniziale: ora la sezione è una sola. In più il menu «Altro» si chiude con Esc e restituisce il fuoco al pulsante, e con / la ricerca dell\'erbario si apre da tastiera.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.22</p><h2>Un quiz che copre tutto</h2><p class="text-small muted mb-0">Due categorie nuove, funghi e micologia e saperi e storia, e domande su estrazioni, tempo balsamico e sulle piante che mancavano: da 85 a 128 domande. In più la risposta corretta non sta più sempre in A, e dalla spiegazione si arriva alla scheda del tema.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

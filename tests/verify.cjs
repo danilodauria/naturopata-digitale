@@ -8,7 +8,7 @@ const files = [
   "data-plants", "data-plants-2", "data-plants-3", "data-plants-4", "data-plants-5",
   "data-manual", "data-manual-2", "data-manual-3",
   "data-manual-4", "data-manual-5", "data-extra", "data-extra-2", "data-extra-3",
-  "data-quiz", "data-quiz-2", "data-quiz-3", "data-library", "data-saperi", "neura"
+  "data-quiz", "data-quiz-2", "data-quiz-3", "data-quiz-4", "data-library", "data-saperi", "neura"
 ];
 files.forEach((f) => require(path.join(__dirname, "..", "assets", "js", f + ".js")));
 
@@ -75,6 +75,20 @@ quiz.forEach((q) => {
 
 const catCounts = {};
 cats.forEach((c) => { catCounts[c.id] = quiz.filter((q) => q.cat === c.id).length; ok(catCounts[c.id] >= 10, "categoria " + c.id + " con meno di 10 domande"); });
+
+// Ogni argomento del sito deve avere domande: funghi, spezierie, amari,
+// estrazioni e tempo balsamico compaiono dopo la prima stesura dei quiz.
+ok(cats.length === 8, "otto categorie di quiz (" + cats.length + ")");
+ok(quiz.length >= 120, "almeno 120 domande (" + quiz.length + ")");
+const testoQuiz = JSON.stringify(quiz).toLowerCase();
+(NP.funghi || []).forEach((f) => ok(testoQuiz.indexOf(f.nome.toLowerCase()) !== -1, "fungo senza domande: " + f.nome));
+["Casamari", "Santa Maria Novella", "Camaldoli", "Strega", "Fernet-Branca", "Montenegro", "Lucano", "Averna", "Carpano"].forEach((s) =>
+  ok(testoQuiz.indexOf(s.toLowerCase()) !== -1, "spezieria senza domande: " + s)
+);
+["oleolito", "tintura madre", "sciroppo", "idrolato", "distillazione di alcol"].forEach((t) =>
+  ok(testoQuiz.toLowerCase().indexOf(t) !== -1, "estrazione senza domande: " + t)
+);
+ok(/tempo balsamico|riposo|corteccia/i.test(testoQuiz), "tempo balsamico senza domande");
 
 NP.conditions.forEach((c) => {
   (c.piante || []).forEach((x) => ok(plantIds.has(x.id), "condizione " + c.id + ": pianta inesistente " + x.id));

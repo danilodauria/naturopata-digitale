@@ -9,6 +9,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const cp = require("child_process");
 const root = path.join(__dirname, "..");
 process.chdir(root);
 global.window = global;
@@ -22,6 +23,7 @@ global.window = global;
 const NP = global.NP;
 const { plants, quiz } = NP;
 const versione = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).version;
+const commit = (() => { try { return cp.execSync("git rev-parse --short HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return "n/d"; } })();
 
 const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const piatto = (s) => String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -45,6 +47,12 @@ function piantaDi(q) {
   if (!trovati.length) return [];
   const massimo = Math.max.apply(null, trovati.map((x) => x.l));
   return trovati.filter((x) => x.l === massimo).map((x) => x.p);
+}
+/* Versione ingenua, tenuta per documentare che cosa il rilevatore scarta. */
+function piantaDiIngenua(q) {
+  const testo = norm(q.q) + " " + norm(q.o[q.r]);
+  const chiavi = (p) => [p.nome, (p.latino || "").split(" ")[0]].concat(p.nomi || []).map(norm).filter((k) => k.length > 3);
+  return plants.filter((p) => chiavi(p).some((k) => parola(testo, k)));
 }
 
 /* ---------- sicurezza affermata con altre parole ---------- */
@@ -113,25 +121,56 @@ const FRAMING_USO = /(si usano?|si utilizzano?|si raccolgono?|si colgono?|si pre
 
 function partiContrastanti(q, p) {
   const motivi = [];
-  const detto = senzaNegazioni(piatto(q.q + " " + q.o[q.r]));
-  if (!FRAMING_USO.test(q.q + " " + q.o[q.r])) return motivi;
+  const testo = piatto(q.q + " " + q.o[q.r]);
+  if (!FRAMING_USO.test(testo)) return motivi;
   const scheda = partiScheda(p);
   if (!scheda.length) return motivi;
-  partiInTesto(detto)
+  partiInTesto(senzaNegazioni(testo))
     .filter((x) => scheda.indexOf(x) === -1)
     .forEach((x) => motivi.push({ parte: x, scheda: (p.parti || []).join(", ") }));
   return motivi;
 }
 
 /* ---------- analisi del corpus ---------- */
+const copertura = {};
 const sicurezza = [];
 const parti = [];
+const scartate = [];
+
 quiz.forEach((q) => {
-  piantaDi(q).forEach((p) => {
+  const c = (copertura[q.cat] = copertura[q.cat] || { tot: 0, conPianta: 0, conParte: 0, segnalate: 0 });
+  c.tot++;
+  const piante = piantaDi(q);
+  if (piante.length) c.conPianta++;
+  const testo = piatto(q.q + " " + q.o[q.r]);
+  if (partiInTesto(testo).length) c.conParte++;
+
+  piante.forEach((p) => {
     sicurezzaAffermata(q, p).forEach((m) =>
       sicurezza.push({ id: q.id, pianta: p.id, frase: (q.o[q.r] || "").trim(), etichetta: m.etichetta, scheda: m.scheda }));
-    partiContrastanti(q, p).forEach((m) =>
-      parti.push({ id: q.id, pianta: p.id, parte: m.parte, scheda: m.scheda, domanda: q.q.trim(), risposta: (q.o[q.r] || "").trim() }));
+    const trovate = partiContrastanti(q, p);
+    trovate.forEach((m) =>
+      parti.push({ id: q.id, pianta: p.id, parte: m.parte, scheda: m.scheda, domanda: q.q.trim() }));
+    if (trovate.length) c.segnalate++;
+  });
+});
+
+/* Per ogni segnalazione del rilevatore ingenuo, il motivo per cui è stata scartata. */
+quiz.forEach((q) => {
+  const testo = piatto(q.q + " " + q.o[q.r]);
+  const dette = partiInTesto(testo);
+  if (!dette.length) return;
+  piantaDiIngenua(q).forEach((p) => {
+    const schedaIngenua = partiInTesto((p.parti || []).join(" "));
+    dette.filter((x) => schedaIngenua.indexOf(x) === -1).forEach((parte) => {
+      if (parti.some((r) => r.id === q.id && r.pianta === p.id && r.parte === parte)) return; // è un rilievo vero, non uno scarto
+      let motivo = "da rivedere";
+      if (partiInTesto(senzaNegazioni(testo)).indexOf(parte) === -1) motivo = "negazione («senza fiori», «non una radice»): non è un'affermazione";
+      else if (partiScheda(p).indexOf(parte) !== -1) motivo = "contenitore: la scheda dice «" + (p.parti || []).join(", ") + "», che comprende la parte";
+      else if (!FRAMING_USO.test(testo)) motivo = "non è una parte usata: la domanda parla di anatomia o di riconoscimento";
+      else if (piantaDi(q).indexOf(p) === -1) motivo = "nome latino generico: la domanda riguarda un'altra pianta";
+      scartate.push({ id: q.id, pianta: p.id, parte, motivo });
+    });
   });
 });
 
@@ -158,53 +197,84 @@ proveFallite.forEach(([, nome]) => console.error("autotest fallito: " + nome));
 
 /* ---------- report ---------- */
 const righe = [];
-righe.push("# Rilievi sulle parafrasi — sicurezza e parti usate");
+const tot = (k) => Object.keys(copertura).reduce((s, c) => s + copertura[c][k], 0);
+righe.push("# Verifica delle parafrasi — sicurezza e parti usate");
 righe.push("");
-righe.push("Versione in prova: **" + versione + "**. Generato da `npm run audit:parafrasi`.");
-righe.push("Questo report **non blocca** i test: le contraddizioni esplicite restano coperte da");
-righe.push("`npm test`, qui si cercano quelle girate intorno.");
+righe.push("Data: 9 novembre 2026 · versione in prova **" + versione + "** · commit `" + commit + "`");
+righe.push("Ambito: tutte le **" + quiz.length + " domande** del quiz, contro le **" + plants.length + " schede** dell'erbario.");
 righe.push("");
-righe.push("Autotest del rilevatore: **" + (prove.length - proveFallite.length) + "/" + prove.length + " superati**.");
+righe.push("Verifica eseguita senza modificare i contenuti. Non blocca i test: le contraddizioni");
+righe.push("esplicite restano coperte da `npm test`, qui si cercano quelle girate intorno.");
+righe.push("Riproducibile con `npm run audit:parafrasi`.");
 righe.push("");
-righe.push("## Sicurezza affermata con altre parole: " + sicurezza.length);
+righe.push("## 1. Corpus e copertura");
+righe.push("");
+righe.push("| categoria | domande | con una pianta riconosciuta | con una parte citata | segnalate |");
+righe.push("|---|---|---|---|---|");
+Object.keys(copertura).forEach((c) => {
+  const x = copertura[c];
+  righe.push("| " + c + " | " + x.tot + " | " + x.conPianta + " | " + x.conParte + " | " + x.segnalate + " |");
+});
+righe.push("| **totale** | **" + tot("tot") + "** | **" + tot("conPianta") + "** | **" + tot("conParte") + "** | **" + tot("segnalate") + "** |");
+righe.push("");
+righe.push("Le domande senza una pianta riconosciuta (" + (tot("tot") - tot("conPianta")) + ") non possono essere confrontate con una scheda: restano fuori da questo controllo.");
+righe.push("");
+righe.push("## 2. Sicurezza affermata con altre parole: " + sicurezza.length);
 righe.push("");
 if (!sicurezza.length) {
-  righe.push("Nessun rilievo: dove la scheda chiede cautela, nessuna risposta corretta la nega con perifrasi.");
+  righe.push("Nessuna incoerenza: dove la scheda chiede cautela, nessuna risposta corretta la nega con perifrasi.");
 } else {
   righe.push("| domanda | pianta | che cosa dice la risposta | perché è un rilievo | scheda |");
   righe.push("|---|---|---|---|---|");
   sicurezza.forEach((r) => righe.push("| `" + r.id + "` | " + r.pianta + " | " + r.frase.replace(/\|/g, "/") + " | " + r.etichetta + " | " + String(r.scheda).replace(/\|/g, "/").slice(0, 90) + " |"));
 }
 righe.push("");
-righe.push("## Parti usate in contrasto con la scheda: " + parti.length);
+righe.push("## 3. Parti usate in contrasto con la scheda: " + parti.length);
 righe.push("");
 if (!parti.length) {
-  righe.push("Nessun rilievo: dove una domanda dice quale parte si usa, la scheda indica la stessa.");
+  righe.push("Nessuna incoerenza: dove una domanda dice quale parte si usa, la scheda indica la stessa.");
 } else {
   righe.push("| domanda | pianta | parte citata | parti nella scheda | domanda |");
   righe.push("|---|---|---|---|---|");
   parti.forEach((r) => righe.push("| `" + r.id + "` | " + r.pianta + " | " + r.parte + " | " + r.scheda + " | " + r.domanda.replace(/\|/g, "/").slice(0, 80) + " |"));
 }
 righe.push("");
-righe.push("## Come leggerlo");
+righe.push("## 4. Segnalazioni scartate: " + scartate.length);
+righe.push("");
+righe.push("Sono i casi che un rilevatore ingenuo segnalerebbe e che qui vengono archiviati con il motivo.");
+righe.push("Servono a mostrare che il controllo guarda le parole, non solo la presenza di una parola.");
+righe.push("");
+if (!scartate.length) {
+  righe.push("Nessuna.");
+} else {
+  righe.push("| domanda | pianta | parte | perché non è un rilievo |");
+  righe.push("|---|---|---|---|");
+  scartate.forEach((r) => righe.push("| `" + r.id + "` | " + r.pianta + " | " + r.parte + " | " + r.motivo + " |"));
+}
+righe.push("");
+righe.push("## 5. Autotest del rilevatore: " + (prove.length - proveFallite.length) + "/" + prove.length);
+righe.push("");
+prove.forEach(([esito, nome]) => righe.push("- " + (esito ? "superato" : "**fallito**") + " — " + nome));
+righe.push("");
+righe.push("## 6. Limiti");
 righe.push("");
 righe.push("- Un rilievo non è automaticamente un errore: può essere una sfumatura legittima o un uso");
 righe.push("  alimentare diverso da quello officinale. Va letto, non applicato.");
-righe.push("- Il rilevatore è prudente per costruzione: preferisce il nome completo al genere latino,");
-righe.push("  toglie le negazioni («senza fiori», «non una radice»), considera «sommità fiorite» un");
-righe.push("  contenitore dei fiori e guarda le parti solo quando la domanda dice che cosa si usa.");
-righe.push("- Le perifrasi e le regole stanno in `scripts/audit-parafrasi.cjs`: aggiungerne una rende");
-righe.push("  l'audit più severo, senza toccare i contenuti.");
-righe.push("- Nessuna correzione viene applicata da questo script.");
+righe.push("- Il rilevatore riconosce le perifrasi elencate in `scripts/audit-parafrasi.cjs`: una formula");
+righe.push("  diversa può sfuggire. Aggiungerne una rende l'audit più severo, senza toccare i contenuti.");
+righe.push("- Il confronto è con la scheda, non con la letteratura: una scheda sbagliata in modo");
+righe.push("  coerente con le sue domande non viene segnalata.");
+righe.push("- " + (tot("tot") - tot("conPianta")) + " domande non nominano una pianta e restano fuori dal confronto.");
 
-const destinazione = path.join(root, "artifacts", "report-parafrasi-v" + versione + ".md");
+const destinazione = path.join(root, "artifacts", "verifica-parafrasi-v" + versione + ".md");
 fs.mkdirSync(path.dirname(destinazione), { recursive: true });
 fs.writeFileSync(destinazione, righe.join("\n") + "\n", "utf8");
 
-console.log("Audit delle parafrasi (non bloccante)");
-console.log("  domande esaminate: " + quiz.length + ", piante: " + plants.length);
+console.log("Verifica delle parafrasi (non bloccante)");
+console.log("  domande esaminate: " + quiz.length + ", con pianta riconosciuta: " + tot("conPianta"));
 console.log("  sicurezza affermata con perifrasi: " + sicurezza.length);
 console.log("  parti in contrasto con la scheda: " + parti.length);
+console.log("  segnalazioni scartate con motivo: " + scartate.length);
 console.log("  autotest: " + (prove.length - proveFallite.length) + "/" + prove.length);
 console.log("  report: " + path.relative(root, destinazione));
 process.exit(0);

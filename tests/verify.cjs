@@ -488,6 +488,10 @@ ok(/isAppShell/.test(sw), "service worker: le altre pagine non sovrascrivono la 
 // se qualcuno lo toglie, ce ne accorgiamo qui e non con un link rotto.
 const pacchettoRadice = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 ok(/link:esterni/.test(pacchettoRadice.scripts ? JSON.stringify(pacchettoRadice.scripts) : ""), "npm run link:esterni esiste");
+// L'audit delle parafrasi deve restare uno strumento di revisione: se qualcuno
+// lo aggancia a npm test, i suoi rilievi diventano bloccanti per errore.
+ok(/audit:parafrasi/.test(pacchettoRadice.scripts ? JSON.stringify(pacchettoRadice.scripts) : ""), "esiste npm run audit:parafrasi");
+ok(!/audit:parafrasi/.test(pacchettoRadice.scripts.test || ""), "l'audit delle parafrasi resta fuori dai test bloccanti");
 ok(fs.existsSync(path.join(root, "tests", "interfacce.cjs")), "esiste tests/interfacce.cjs");
 ok(/tests\/interfacce\.cjs/.test(pacchettoRadice.scripts.test), "npm test esegue il controllo di link e pulsanti");
 const pagesControlli = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");

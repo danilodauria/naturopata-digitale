@@ -149,7 +149,9 @@ jobs:
           echo "Release di riferimento: $tag"
 
       - name: Allega il codice sorgente
-        if: steps.rel.outputs.pronta == '1'
+        # Solo dal run del tag: sui push su main l'archivio sarebbe quello del
+        # commit nuovo e finirebbe, con --clobber, sulla release precedente.
+        if: steps.rel.outputs.pronta == '1' && startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.rel.outputs.tag }}

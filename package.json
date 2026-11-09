@@ -17,6 +17,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "audit:parafrasi": "node scripts/audit-parafrasi.cjs",
     "serve": "python3 -m http.server 3000 --bind 0.0.0.0",
     "icons": "python3 scripts/make_icons.py",
     "vademecum": "sh -c '[ -x .venv/bin/python ] && .venv/bin/python scripts/build_vademecum.py || python3 scripts/build_vademecum.py'",

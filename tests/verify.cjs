@@ -517,6 +517,96 @@ if (fs.existsSync(backupScript)) {
 }
 ok(/^\/backup\/$/m.test(fs.readFileSync(path.join(root, ".gitignore"), "utf8")), "la cartella dei backup resta fuori dal repository");
 
+// Coerenza tra quiz e schede: una domanda che nomina la pianta non deve
+// affermare il contrario di quello che dice la sua scheda su gravidanza,
+// allattamento, neonati, commestibilità, livello di rischio e raccolta.
+// Si guardano solo affermazioni esplicite, per non inseguire le sfumature:
+// la domanda entra nel confronto se il nome (o il genere latino, o un
+// sinonimo) compare nella domanda o nella risposta corretta, come fa l'app
+// quando costruisce il quiz della pianta.
+const normTesto = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const MESI_NOME = { gennaio: 1, febbraio: 2, marzo: 3, aprile: 4, maggio: 5, giugno: 6, luglio: 7, agosto: 8, settembre: 9, ottobre: 10, novembre: 11, dicembre: 12 };
+const STAGIONI = { primavera: [3, 4, 5], estate: [6, 7, 8], autunno: [9, 10, 11], inverno: [12, 1, 2] };
+const VIETATO = /evitar|sconsigli|controindicat|non (usare|assumere|somministrare)|dannos|rischio/;
+let coerenzaEsaminate = 0;
+const incoerenze = [];
+
+function chiaviPianta(p) {
+  return [p.nome, (p.latino || "").split(" ")[0]]
+    .concat(p.nomi || [])
+    .map(normTesto)
+    .filter((k) => k.length > 3);
+}
+
+function nominaPianta(q, p) {
+  const testo = normTesto(q.q) + " " + normTesto(q.o[q.r]);
+  return chiaviPianta(p).some((k) => testo.indexOf(k) !== -1);
+}
+
+// Restituisce l'elenco dei motivi per cui la domanda contraddice la scheda.
+function incoerenzeTra(q, p) {
+  const motivi = [];
+  const chiavi = chiaviPianta(p);
+  const domanda = normTesto(q.q);
+  const risposta = normTesto(q.o[q.r]);
+  const testo = domanda + " " + risposta;
+
+  const campo = (valore, parole, etichetta) => {
+    if (!VIETATO.test(normTesto(valore))) return;
+    const parola = parole.find((w) => testo.indexOf(w) !== -1);
+    if (!parola) return;
+    const sicuro = new RegExp("(sicur|senza rischi|senza problemi|non ha controindicazioni)[^.]{0,40}" + parola + "|" + parola + "[^.]{0,40}(sicur|senza rischi|senza problemi|non ha controindicazioni)");
+    if (sicuro.test(risposta)) motivi.push("la scheda la sconsiglia " + etichetta + ", la risposta la dice sicura");
+  };
+  campo(p.sicurezza.gravidanza, ["gravidanza"], "in gravidanza");
+  campo(p.sicurezza.allattamento, ["allattamento", "allatta"], "in allattamento");
+  campo(p.sicurezza.bambini, ["neonati", "lattanti"], "ai neonati");
+
+  if (/parere|medico|pediatra/.test(normTesto(p.sicurezza.bambini)) && /senza (parere|problemi)/.test(risposta) && /bambin|neonat|lattant/.test(testo))
+    motivi.push("la scheda chiede il parere del medico per i bambini, la risposta li dice senza problemi");
+
+  if (p.fito && p.fito.commestibile === false && /(si mangia|si consuma|e commestibile|in cucina|ottim[ao] (in|per))/.test(risposta) && !/non (si mangia|e commestibile|commestibil)/.test(risposta))
+    motivi.push("la scheda la segna non commestibile, la risposta la propone in cucina");
+
+  if (p.sicurezza.livello === "rosso" && /(e sicur|senza rischi|innocu|non ha controindicazioni)/.test(risposta))
+    motivi.push("la scheda segna rischio alto, la risposta la dice sicura");
+
+  // La raccolta si controlla solo quando la pianta è nominata nella domanda
+  // stessa: un mese citato in una risposta può riguardare un'altra specie.
+  if (chiavi.some((k) => domanda.indexOf(k) !== -1) && /raccolt|si raccogli|si cogli|si raccolgono|si colgono/.test(domanda)) {
+    const mesi = new Set();
+    Object.keys(MESI_NOME).forEach((m) => { if (domanda.indexOf(m) !== -1) mesi.add(MESI_NOME[m]); });
+    Object.keys(STAGIONI).forEach((s) => { if (domanda.indexOf(s) !== -1) STAGIONI[s].forEach((m) => mesi.add(m)); });
+    if (mesi.size && [...mesi].every((m) => p.raccolta.mesi.indexOf(m) === -1))
+      motivi.push("la domanda indica mesi fuori dalla raccolta della scheda (" + p.raccolta.mesi.join(",") + ")");
+  }
+
+  return motivi;
+}
+
+plants.forEach((p) => {
+  quiz.forEach((q) => {
+    if (!nominaPianta(q, p)) return;
+    coerenzaEsaminate++;
+    incoerenzeTra(q, p).forEach((m) => incoerenze.push(q.id + " / " + p.id + ": " + m));
+  });
+});
+
+// Autotest: il controllo deve scattare su una contraddizione vera e tacere su
+// una risposta coerente, altrimenti sarebbe un controllo che non controlla.
+const provaPianta = Object.assign({}, plants[0], {
+  sicurezza: Object.assign({}, plants[0].sicurezza, { gravidanza: "Da evitare in gravidanza.", bambini: "Solo con parere pediatrico." }),
+  fito: Object.assign({}, plants[0].fito || {}, { commestibile: false })
+});
+const nomeProva = plants[0].nome.toLowerCase();
+ok(incoerenzeTra({ id: "prova", q: "La " + nomeProva + " in gravidanza:", o: ["È sicura in gravidanza", "Va evitata", "Solo dopo i pasti", "Non esiste"], r: 0, e: "Prova." }, provaPianta).length > 0, "il controllo riconosce una gravidanza dichiarata sicura contro la scheda");
+ok(incoerenzeTra({ id: "prova", q: "La " + nomeProva + " in gravidanza:", o: ["Va evitata", "È sicura in gravidanza", "Solo dopo i pasti", "Non esiste"], r: 0, e: "Prova." }, provaPianta).length === 0, "il controllo non segnala una risposta coerente con la scheda");
+ok(incoerenzeTra({ id: "prova", q: "La " + nomeProva + " si mangia in insalata?", o: ["Sì, in cucina", "No", "Solo cotta", "Solo secca"], r: 0, e: "Prova." }, provaPianta).length > 0, "il controllo riconosce una pianta non commestibile proposta in cucina");
+
+incoerenze.forEach((m) => console.error("! incoerenza: " + m));
+console.log("Coerenza quiz/schede: " + coerenzaEsaminate + " domande abbinate a una pianta, " + incoerenze.length + " incoerenze, 3 autotest.");
+ok(incoerenze.length === 0, incoerenze.length + " domande contraddicono la scheda della stessa pianta");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

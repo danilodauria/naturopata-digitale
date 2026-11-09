@@ -158,7 +158,7 @@ NP.sources = [
   { titolo: "NIH — Office of Dietary Supplements", url: "https://ods.od.nih.gov/", nota: "Schede informative basate sull'evidenza." },
   { titolo: "NIH — NCCIH, Herbs at a Glance", url: "https://www.nccih.nih.gov/health/herbsataglance", nota: "Sintesi divulgative su singole piante." },
   { titolo: "EFSA — European Food Safety Authority", url: "https://www.efsa.europa.eu/", nota: "Valutazioni su sicurezza, contaminanti e sostanze botaniche." },
-  { titolo: "Ministero della Salute — Integratori alimentari", url: "https://www.salute.gov.it/portale/integratoriAlimentari/homeIntegratoriAlimentari.jsp", nota: "Normativa e registro degli integratori in Italia." },
+  { titolo: "Ministero della Salute — Integratori alimentari", url: "https://www.salute.gov.it/new/it/tema/alimenti-fini-medici-speciali-ed-integratori/", nota: "Normativa e registro degli integratori in Italia." },
   { titolo: "Epicentro ISS", url: "https://www.epicentro.iss.it/", nota: "Dati e guide di salute pubblica." },
   { titolo: "ISS — Centri Antiveleni (CAV)", url: "https://www.iss.it/-/cnsc-cav", nota: "Numeri utili in caso di ingestione sospetta." },
   { titolo: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/", nota: "Banca dati della letteratura biomedica." }

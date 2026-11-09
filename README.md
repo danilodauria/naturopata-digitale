@@ -285,6 +285,9 @@ data e versione nel nome del file
 l'ultima: gli archivi di backup più vecchi vengono tolti da `artifacts/`, mentre
 le cartelle in `backup/` restano intatte.
 
+Per rimettere in piedi il progetto su un computer nuovo partendo dal solo
+archivio scaricato: [docs/ripristino-backup.md](docs/ripristino-backup.md).
+
 `npm run rilascio` incatena test, PDF, pacchetto desktop, test finale e backup:
 è la sequenza usata per ogni pubblicazione.
 

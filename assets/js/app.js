@@ -227,7 +227,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.24</p><h2>Il quiz di ogni pianta</h2><p class="text-small muted mb-0">Ogni scheda ha il suo pulsante: apre cinque domande su quella pianta — famiglia, parti, raccolta, sicurezza e proprietà — con le risposte sbagliate prese dalle altre schede. Funziona per tutte le 70 piante, anche per quelle che il quiz generale non nomina mai.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.25</p><h2>Il quiz, ricontrollato</h2><p class="text-small muted mb-0">Tutte le 133 domande sono state confrontate con le schede e con le fonti citate. Una frase non supportata sul pelargonium è stata corretta, insieme a qualche dettaglio: l\'ortica, la durata degli oleoliti, i funghi di Ötzi e la corteccia in primavera.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

@@ -127,7 +127,7 @@ NP.plants = NP.plants.concat([
       allattamento: "Da evitare, per assenza di dati.",
       bambini: "Solo con parere pediatrico; in Germania l'estratto è autorizzato dai 12 mesi, in Italia decide il medico.",
       controindicazioni: ["Malattie epatiche gravi", "Diatesi emorragica", "Allergia alle Geraniaceae"],
-      interazioni: ["Anticoagulanti: segnalazioni di aumento dell'INR con warfarin", "Farmaci epatotossici: cautela", "Immunosoppressori: dati insufficienti"],
+      interazioni: ["Anticoagulanti: cautela prudenziale, interazione con il warfarin non documentata nell'uomo", "Farmaci epatotossici: cautela", "Immunosoppressori: dati insufficienti"],
       nota: "Sono segnalati rari casi di danno epatico. Se compaiono ittero, urine scure, nausea o stanchezza insolita, sospendere e controllare le transaminasi."
     },
     sosia: [

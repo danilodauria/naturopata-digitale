@@ -1,6 +1,6 @@
 # Promemoria · prossimo aggiornamento
 
-Segnato il **10 novembre 2026**, con la versione **1.3.37** pubblicata.
+Segnato il **10 novembre 2026**, con la versione **1.3.38** pubblicata.
 
 ## Quando
 

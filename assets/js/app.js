@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.37</p><h2>Le prove, su carta</h2><p class="text-small muted mb-0">Arrivano due fogli da spuntare mentre si provano i pacchetti: la lista completa in tre pagine e la versione rapida in una, per dieci minuti. Installazione, avvio, uso senza rete, voce naturale e aggiornamento, con un registro per annotare quello che non torna.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.38</p><h2>I numeri, quelli veri</h2><p class="text-small muted mb-0">Il LEGGIMI e la descrizione dell’app dicevano ancora 60 schede e 85 domande: ora riportano le 70 schede, le 135 domande in otto categorie e le 47 piante commestibili. Corretti i conteggi, non i contenuti.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

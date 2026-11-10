@@ -16,7 +16,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from reportlab.lib.units import mm  # noqa: E402,F401
-from reportlab.platypus import Paragraph, Spacer, Table, TableStyle  # noqa: E402
+from reportlab.platypus import (  # noqa: E402
+    KeepTogether, Paragraph, Spacer, Table, TableStyle,
+)
 
 from fogli_comune import (  # noqa: E402
     BORDO, CARTA, CARTA_2, M_L, M_R, PAGE_W, PDF_DIR, SALVIA_CHIARA,
@@ -166,12 +168,15 @@ def storia(versione=VERSIONE):
         "Interrompendo il download a metà, alla riapertura non resta una voce «mezza installata».",
     ], S))
 
-    out.append(para("F · Aggiornamento dalla versione precedente", "h2", S))
-    out.append(para(
-        "Vale per installer Windows, AppImage e macOS. La versione portatile <font name='Courier' size='8'>.zip</font> "
-        "e il pacchetto <font name='Courier' size='8'>.deb</font> si aggiornano a mano: reinstalla sopra.",
-        "nota", S))
-    out.append(caselle([
+    # Sezione intera o niente: se il titolo non entra in fondo alla pagina con
+    # le sue caselle, passa tutto alla pagina dopo invece di spezzarsi.
+    out.append(KeepTogether([
+        para("F · Aggiornamento dalla versione precedente", "h2", S),
+        para(
+            "Vale per installer Windows, AppImage e macOS. La versione portatile <font name='Courier' size='8'>.zip</font> "
+            "e il pacchetto <font name='Courier' size='8'>.deb</font> si aggiornano a mano: reinstalla sopra.",
+            "nota", S),
+        caselle([
         "Installa la versione precedente, aprila e attendi: il controllo parte da solo dopo circa 4 secondi.",
         "<i>Stato</i> → <i>Aggiornamenti</i>: da «Controllo le nuove versioni…» a «Nuova versione " + versione + " trovata».",
         "L'avanzamento in percentuale compare e il programma resta utilizzabile durante il download.",
@@ -179,7 +184,8 @@ def storia(versione=VERSIONE):
         "Dopo il riavvio il piè di pagina dice " + versione + " e preferiti, letture e chat sono ancora lì.",
         "«Controlla adesso» risponde «Questa è la versione più recente».",
         "Solo macOS: compare l'errore atteso sui pacchetti non firmati, il pulsante porta alla release, e il <font name='Courier' size='8'>.dmg</font> nuovo installato sopra conserva i dati.",
-    ], S))
+        ], S),
+    ]))
 
     out.append(para("G · Se qualcosa non torna", "h2", S))
     out.append(para(

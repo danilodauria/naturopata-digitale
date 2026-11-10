@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from reportlab.lib.units import mm  # noqa: E402
-from reportlab.platypus import Spacer, Table, TableStyle  # noqa: E402
+from reportlab.platypus import PageBreak, Spacer, Table, TableStyle  # noqa: E402
 
 from fogli_comune import (  # noqa: E402
     BORDO, CARTA, ORO_SOFT, PDF_DIR, TERRA_SOFT, chiudi, comando, compila, para,
@@ -90,6 +90,10 @@ def storia(versione):
         "niente, dal browser.", "nota", S))
 
     # --- Se il file non parte ---------------------------------------------
+    # Da qui comincia la seconda facciata: la prima si chiude con i quattro
+    # sistemi, la seconda porta i controlli, le impronte e gli avvisi, invece
+    # di lasciare una pagina con tre riquadri in cima e il resto vuoto.
+    out.append(PageBreak())
     out.append(para("Se il file non parte", "h2", S))
     out.append(punti([
         "Scarica di nuovo il file: un download interrotto è la causa più frequente.",

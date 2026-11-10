@@ -804,6 +804,75 @@ ok(dosiDiscordanti(quantitaIn("1–2 g"), quantitaIn("0,5–1 g")).length === 0,
 ok(dosiDiscordanti(quantitaIn("2 g"), quantitaIn("0,5–1 g")).length === 1, "dosi: una quantità fuori intervallo viene segnalata");
 ok(dosiDiscordanti(quantitaIn("10 ml"), quantitaIn("200 ml")).length === 1, "dosi: i millilitri non si confondono con i grammi");
 
+/* --- Preparazioni: stesse quantità per la stessa forma d'uso ---
+   Una scheda descrive più preparazioni, ognuna con le sue quantità: infuso,
+   decotto, oleolito. Confrontare una domanda con l'intera scheda lascia
+   passare un errore, perché «3–4 g in infuso» può ritrovare i suoi grammi nel
+   decotto della stessa pianta. Qui il confronto avviene solo fra la domanda e
+   le preparazioni che citano la stessa forma d'uso, in tutte e due le
+   direzioni: le quantità della domanda devono stare nella preparazione, e
+   quelle della preparazione devono essere citate dalle domande sulla stessa
+   forma. Se per una forma non esiste nessuna domanda, non c'è nulla da
+   confrontare e resta la guardia generale sulle dosi. */
+const FORME_USO = [
+  ["infuso", /\binfus/], ["decotto", /\bdecott/], ["macerato", /\bmacerat/],
+  ["tintura", /\btintur/], ["oleolito", /\boleolit/], ["cataplasma", /\bcataplasm/],
+  ["sciroppo", /\bsciropp/], ["estratto secco", /\bestratt[oi] secc/],
+  ["polvere", /\bpolver/], ["olio essenziale", /\boli[oi] essenzial/],
+  ["succo", /\bsucch/], ["impacco", /\bimpacc/], ["collutorio", /\bcollutori/],
+  ["lavaggio", /\blavagg/], ["frizione", /\bfrizion/], ["bagno", /\bbagn[oi]\b/]
+];
+const formeIn = (testo) => FORME_USO.filter((f) => f[1].test(testoPiatto(testo).toLowerCase())).map((f) => f[0]);
+const testiPreparazione = (pr) => (pr.ricetta || "") + " " + (pr.dose || "");
+const testoDomanda = (q) => [q.q, q.o[q.r], q.e].join(" ");
+
+const preparazioniConDosi = [];
+plants.forEach((p) => (p.preparazioni || []).forEach((pr) => {
+  const quantita = quantitaIn(testiPreparazione(pr));
+  const forme = formeIn(pr.nome || "");
+  if (quantita.length && forme.length) preparazioniConDosi.push({ pianta: p.id, nome: pr.nome, forme: forme, quantita: quantita });
+}));
+ok(preparazioniConDosi.length >= 20, "preparazioni: le schede descrivono dosi per forma d'uso (" + preparazioniConDosi.length + ")");
+
+const domandeConDosi = quiz.map((q) => {
+  const testo = testoDomanda(q);
+  return { id: q.id, piante: piantaCitata(testo).map((p) => p.id), forme: formeIn(testo), quantita: quantitaIn(testo) };
+}).filter((d) => d.quantita.length);
+
+const stessaForma = (a, b) => a.some((f) => b.indexOf(f) !== -1);
+let confrontiPreparazioni = 0, discordanzePreparazioni = 0, coppiePreparazioni = 0, quantitaNonCitate = 0;
+
+domandeConDosi.forEach((d) => {
+  if (!d.forme.length) return;
+  preparazioniConDosi
+    .filter((pr) => d.piante.indexOf(pr.pianta) !== -1 && stessaForma(pr.forme, d.forme))
+    .forEach((pr) => {
+      const mancanti = dosiDiscordanti(d.quantita, pr.quantita);
+      confrontiPreparazioni += d.quantita.length;
+      discordanzePreparazioni += mancanti.length;
+      ok(!mancanti.length, "quiz " + d.id + "/" + pr.pianta + " («" + pr.nome + "»): «" + mancanti.map((x) => x.testo).join(", ") + "» non compare nella preparazione");
+    });
+});
+
+preparazioniConDosi.forEach((pr) => {
+  const domande = domandeConDosi.filter((d) => d.piante.indexOf(pr.pianta) !== -1 && stessaForma(pr.forme, d.forme));
+  if (!domande.length) return;
+  coppiePreparazioni++;
+  const citate = [].concat(...domande.map((d) => d.quantita));
+  const mancanti = dosiDiscordanti(pr.quantita, citate);
+  quantitaNonCitate += mancanti.length;
+  ok(!mancanti.length, "scheda " + pr.pianta + " («" + pr.nome + "»): «" + mancanti.map((x) => x.testo).join(", ") + "» non compare nelle domande sulla stessa forma d'uso (" + domande.map((d) => d.id).join(", ") + ")");
+});
+
+console.log("Preparazioni quiz/schede: " + confrontiPreparazioni + " quantità confrontate sulla stessa forma d'uso (" + discordanzePreparazioni + " discordanti), " + coppiePreparazioni + " " + (coppiePreparazioni === 1 ? "coppia" : "coppie") + " scheda/domande con " + quantitaNonCitate + " quantità non citate, 6 autotest.");
+
+ok(formeIn("Infuso di foglie").indexOf("infuso") !== -1 && formeIn("Infuso di foglie").indexOf("decotto") === -1, "forme: l'infuso non si confonde con il decotto");
+ok(formeIn("Oleolito di iperico").indexOf("oleolito") !== -1 && formeIn("Oleolito di iperico").indexOf("olio essenziale") === -1, "forme: l'oleolito non è un olio essenziale");
+ok(dosiDiscordanti(quantitaIn("3–4 g in 200 ml"), quantitaIn("0,5–1 g in 200 ml")).length === 1, "preparazioni: una dose diversa nella stessa forma viene segnalata");
+ok(dosiDiscordanti(quantitaIn("0,5–1 g in 200 ml"), quantitaIn("0,5–1 g in 200 ml")).length === 0, "preparazioni: dose identica non è una discordanza");
+ok(dosiDiscordanti(quantitaIn("0,5–1 g in 200 ml"), quantitaIn("0,5–1 g in 150 ml")).length === 1, "preparazioni: il volume d'acqua non citato viene segnalato");
+ok(dosiDiscordanti(quantitaIn("0,5–1 g"), quantitaIn("500 mg–1 g")).length === 0, "preparazioni: grammi e milligrammi restano la stessa dose");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

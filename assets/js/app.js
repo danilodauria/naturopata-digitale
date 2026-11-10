@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.34</p><h2>Le dosi si controllano a vicenda</h2><p class="text-small muted mb-0">Ogni quantità in grammi o milligrammi citata da una domanda deve ritrovarsi nella scheda della stessa pianta: «0,5 g» e «500 mg» sono la stessa dose, i millilitri restano volume d’acqua. La soglia della liquirizia è sorvegliata in entrambe le direzioni, e il contenitore desktop passa a Electron 45 con macOS 11 come minimo.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.35</p><h2>Una dose, controllata due volte</h2><p class="text-small muted mb-0">Il quiz arriva a 134 domande con la dose della senna, 0,5–1 g di foglie in 200 ml di acqua a 90 °C. La guardia sulle dosi ora confronta davvero grammi e millilitri con la scheda: le quantità verificate passano da due a sei, e ogni cifra nuova deve esistere in tutte e due le pagine.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

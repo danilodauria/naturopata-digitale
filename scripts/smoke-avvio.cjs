@@ -6,8 +6,11 @@
  * arriva, o il programma muore prima, l'esito è negativo. Serve a scoprire un
  * avvio rotto prima della release, non a sostituire una prova a mano.
  *
- * Uso:  node scripts/smoke-avvio.cjs <eseguibile> [argomenti...]
- *       xvfb-run -a node scripts/smoke-avvio.cjs dist/linux-unpacked/naturopata-digitale --no-sandbox
+ * Uso:  node scripts/smoke-avvio.cjs <eseguibile o cartella> [argomenti...]
+ *       xvfb-run -a node scripts/smoke-avvio.cjs dist/linux-unpacked --no-sandbox
+ *
+ * Se si indica la cartella, l'eseguibile viene cercato dentro: così il nome
+ * del binario, che electron-builder ricava dal pacchetto, non va ripetuto.
  *
  * Variabili: SMOKE_TIMEOUT (secondi, default 90).
  * Licenza del codice: MIT · Danilo D'Auria
@@ -27,6 +30,32 @@ if (!eseguibile) {
   process.exit(2);
 }
 const argomenti = args;
+
+function trovaEseguibile(indicato) {
+  const assoluto = path.resolve(indicato);
+  if (!fs.existsSync(assoluto)) return { errore: "non esiste: " + indicato };
+  if (fs.statSync(assoluto).isFile()) return { percorso: assoluto };
+  const voci = fs.readdirSync(assoluto).filter((nome) => {
+    const pieno = path.join(assoluto, nome);
+    const stato = fs.statSync(pieno);
+    return stato.isFile() && (stato.mode & 0o111) !== 0 &&
+      !/\.(so|so\.\d+|pak|bin|dat|json|html|txt|png|ico)$/i.test(nome) &&
+      nome !== "chrome-sandbox" && nome !== "chrome_crashpad_handler";
+  });
+  if (voci.length === 1) return { percorso: path.join(assoluto, voci[0]) };
+  if (voci.length === 0) return { errore: "nessun eseguibile in " + indicato };
+  return { errore: "più eseguibili in " + indicato + ": " + voci.join(", ") };
+}
+
+const trovato = trovaEseguibile(eseguibile);
+if (trovato.errore) {
+  console.error("✗ " + trovato.errore);
+  process.exit(2);
+}
+/* Sempre assoluto: la cartella di lavoro diventa quella dell'eseguibile, e un
+ * percorso relativo non si risolverebbe più dopo il cambio di directory. */
+const percorsoEseguibile = trovato.percorso;
+
 const ATTESA = Math.max(10, Number(process.env.SMOKE_TIMEOUT || 90)) * 1000;
 const ATTESA_DOPO_CARICO = 3000;
 
@@ -69,18 +98,18 @@ async function main() {
   const porta = await portaLibera();
   const log = fs.createWriteStream(percorsoLog, { flags: "a" });
   log.write("# prova di avvio · " + new Date().toISOString() + "\n");
-  log.write("# eseguibile: " + eseguibile + "\n");
+  log.write("# eseguibile: " + percorsoEseguibile + "\n");
   log.write("# argomenti: " + argomenti.join(" ") + "\n\n");
 
   let figlio;
   try {
-    figlio = spawn(eseguibile, ["--remote-debugging-port=" + porta].concat(argomenti), {
-      cwd: path.dirname(path.resolve(eseguibile)),
+    figlio = spawn(percorsoEseguibile, ["--remote-debugging-port=" + porta].concat(argomenti), {
+      cwd: path.dirname(percorsoEseguibile),
       stdio: ["ignore", "pipe", "pipe"],
       env: Object.assign({}, process.env, { ELECTRON_ENABLE_LOGGING: "1" })
     });
   } catch (errore) {
-    console.error("✗ non riesco ad avviare " + eseguibile + ": " + errore.message);
+    console.error("✗ non riesco ad avviare " + percorsoEseguibile + ": " + errore.message);
     process.exit(1);
   }
 

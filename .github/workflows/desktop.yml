@@ -65,7 +65,7 @@ jobs:
       # --no-sandbox vale solo per questa prova: sui runner il sandbox di
       # Chromium non ha i privilegi che avrebbe su un computer normale.
       - name: Avvia l'app e verifica che la pagina carichi
-        run: xvfb-run -a node scripts/smoke-avvio.cjs desktop/dist/linux-unpacked/naturopata-digitale --no-sandbox
+        run: xvfb-run -a node scripts/smoke-avvio.cjs desktop/dist/linux-unpacked --no-sandbox
 
       - name: Conserva il registro dell'avvio
         if: always()

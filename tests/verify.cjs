@@ -492,6 +492,12 @@ ok(/link:esterni/.test(pacchettoRadice.scripts ? JSON.stringify(pacchettoRadice.
 // lo aggancia a npm test, i suoi rilievi diventano bloccanti per errore.
 ok(/audit:parafrasi/.test(pacchettoRadice.scripts ? JSON.stringify(pacchettoRadice.scripts) : ""), "esiste npm run audit:parafrasi");
 ok(!/audit:parafrasi/.test(pacchettoRadice.scripts.test || ""), "l'audit delle parafrasi resta fuori dai test bloccanti");
+// Gli esiti e le versioni di chiusura li scrive lo script: se spariscono dal
+// report, rigenerarlo non deve più richiedere un intervento a mano.
+const sorgenteAudit = fs.readFileSync(path.join(root, "scripts", "audit-parafrasi.cjs"), "utf8");
+ok(/const ESITI = \[/.test(sorgenteAudit), "l'audit tiene la tabella degli esiti");
+ok(sorgenteAudit.indexOf("Esiti e versioni di chiusura") !== -1, "l'audit scrive gli esiti nel report");
+ok(/dataRoma/.test(sorgenteAudit), "l'audit scrive la data di generazione");
 ok(fs.existsSync(path.join(root, "tests", "interfacce.cjs")), "esiste tests/interfacce.cjs");
 ok(/tests\/interfacce\.cjs/.test(pacchettoRadice.scripts.test), "npm test esegue il controllo di link e pulsanti");
 const pagesControlli = fs.readFileSync(path.join(root, ".github", "workflows", "pages.yml"), "utf8");

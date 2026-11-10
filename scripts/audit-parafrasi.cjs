@@ -24,6 +24,22 @@ const NP = global.NP;
 const { plants, quiz } = NP;
 const versione = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).version;
 const commit = (() => { try { return cp.execSync("git rev-parse --short HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return "n/d"; } })();
+const dataRoma = new Intl.DateTimeFormat("it-IT", { timeZone: "Europe/Rome", dateStyle: "long" }).format(new Date());
+
+/* Esiti e versioni di chiusura.
+   È l'unico posto da toccare quando un rilievo viene chiuso: il report li
+   riporta da qui, così rigenerarlo non cancella la memoria di che cosa è stato
+   corretto e in quale versione. Le cifre di stato (domande, segnalazioni,
+   autotest) sono invece contate a ogni esecuzione. */
+const ESITI = [
+  ["Quattro rilievi delle schede: liquirizia, timo, menta, rosa canina", "1.3.33", "corretti nelle schede, con la soglia ANSES e la sua fonte per la liquirizia"],
+  ["Olio di iperico «3–4 settimane»", "1.3.33", "portato a 30–40 giorni, come quiz e spezierie"],
+  ["Soglia di glicirrizina, scheda ↔ quiz `p7`", "1.3.34", "guardia bloccante in `tests/verify.cjs`: cifre in mg ed enti citati, confronto nelle due direzioni"],
+  ["Dosi in g e mg, quiz ↔ schede", "1.3.34 · copertura reale 1.3.35", "grammi normalizzati a milligrammi, millilitri solo contro millilitri, 5 autotest"],
+  ["Domanda con dose e nome della pianta", "1.3.35", "`pr15` sulla senna (0,5–1 g in 200 ml a 90 °C): quantità confrontate da 2 a 6"],
+  ["Domanda sui frutti di senna e titolazione", "1.3.36", "quiz a 135 domande; la dose si legge sull'etichetta del prodotto titolato, senza cifre inventate"],
+  ["Dosi confrontate per forma d'uso nelle preparazioni", "1.3.36", "guardia in entrambe le direzioni fra domanda e preparazione con la stessa forma, 6 autotest"]
+];
 
 const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const piatto = (s) => String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -200,7 +216,7 @@ const righe = [];
 const tot = (k) => Object.keys(copertura).reduce((s, c) => s + copertura[c][k], 0);
 righe.push("# Verifica delle parafrasi — sicurezza e parti usate");
 righe.push("");
-righe.push("Data: 9 novembre 2026 · versione in prova **" + versione + "** · commit `" + commit + "`");
+righe.push("Data: " + dataRoma + " · versione in prova **" + versione + "** · commit `" + commit + "`");
 righe.push("Ambito: tutte le **" + quiz.length + " domande** del quiz, contro le **" + plants.length + " schede** dell'erbario.");
 righe.push("");
 righe.push("Verifica eseguita senza modificare i contenuti. Non blocca i test: le contraddizioni");
@@ -265,6 +281,24 @@ righe.push("  diversa può sfuggire. Aggiungerne una rende l'audit più severo, 
 righe.push("- Il confronto è con la scheda, non con la letteratura: una scheda sbagliata in modo");
 righe.push("  coerente con le sue domande non viene segnalata.");
 righe.push("- " + (tot("tot") - tot("conPianta")) + " domande non nominano una pianta e restano fuori dal confronto.");
+righe.push("");
+righe.push("## 7. Esiti e versioni di chiusura");
+righe.push("");
+righe.push("Tabella scritta dallo script insieme al report: per chiudere un rilievo si aggiunge una riga");
+righe.push("a `ESITI` in `scripts/audit-parafrasi.cjs`, e ogni rigenerazione la riporta senza interventi a mano.");
+righe.push("");
+righe.push("| Che cosa | Chiuso in | Esito |");
+righe.push("|---|---|---|");
+ESITI.forEach(([cosa, chiusura, esito]) => righe.push("| " + cosa + " | **" + chiusura + "** | " + esito + " |"));
+righe.push("");
+righe.push("Stato dell'audit alla " + versione + ": **" + quiz.length + " domande**, " + tot("conPianta") +
+  " con pianta riconosciuta, " + sicurezza.length + " sicurezza affermate con perifrasi, " + parti.length +
+  " parti in contrasto con la scheda, " + scartate.length + " segnalazioni scartate con motivo, " +
+  (prove.length - proveFallite.length) + "/" + prove.length + " autotest.");
+righe.push("");
+righe.push("L'audit resta **non bloccante** (`process.exit(0)`) e un guard in `tests/verify.cjs` impedisce");
+righe.push("di agganciarlo a `npm test`. I conteggi dei controlli bloccanti restano nell'uscita di `npm test`:");
+righe.push("non vengono copiati qui, per non lasciare numeri vecchi nel report.");
 
 const destinazione = path.join(root, "artifacts", "verifica-parafrasi-v" + versione + ".md");
 fs.mkdirSync(path.dirname(destinazione), { recursive: true });

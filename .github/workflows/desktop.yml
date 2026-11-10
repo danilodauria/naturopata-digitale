@@ -39,6 +39,9 @@ jobs:
       - name: Installa le dipendenze di test
         run: npm ci --no-audit --no-fund
 
+      - name: Controlli sui dati
+        run: npm test
+
       - name: Prepara il contenuto dell'app
         run: node scripts/prepare-desktop.cjs
 

@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.35</p><h2>Una dose, controllata due volte</h2><p class="text-small muted mb-0">Il quiz arriva a 134 domande con la dose della senna, 0,5–1 g di foglie in 200 ml di acqua a 90 °C. La guardia sulle dosi ora confronta davvero grammi e millilitri con la scheda: le quantità verificate passano da due a sei, e ogni cifra nuova deve esistere in tutte e due le pagine.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.36</p><h2>La dose che sta sull\'etichetta</h2><p class="text-small muted mb-0">Il quiz arriva a 135 domande con i frutti di senna: la dose non si fissa in grammi, perché dipende dai sennosidi dichiarati dalla titolazione del prodotto. La scheda rimanda alla posologia del prodotto titolato e la nuova domanda spiega il perché, senza inventare una cifra unica.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

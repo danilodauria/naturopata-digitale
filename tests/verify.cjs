@@ -578,7 +578,9 @@ if (fs.existsSync(backupScript)) {
   ok(/non corrisponde a HEAD/.test(sorgenteBackup), "il backup avvisa se l'archivio non corrisponde a HEAD");
   ok(/verificaArchivio/.test(sorgenteBackup), "backup.json registra l'esito del confronto");
   ok(/!v\.nome\.endsWith\("\/"\)/.test(sorgenteBackup), "il confronto ignora le voci di cartella dello zip");
-  ok(/documenti\/\n     I report delle verifiche/.test(sorgenteBackup), "il LEGGIMI spiega la cartella documenti");
+  // Il checkout Windows converte i fine riga in CRLF: il confronto li accetta
+  // entrambi, altrimenti la stessa guardia passa su Linux e fallisce lì.
+  ok(/documenti\/\r?\n     I report delle verifiche/.test(sorgenteBackup), "il LEGGIMI spiega la cartella documenti");
 }
 ok(/^\/backup\/$/m.test(fs.readFileSync(path.join(root, ".gitignore"), "utf8")), "la cartella dei backup resta fuori dal repository");
 

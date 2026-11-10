@@ -1,6 +1,6 @@
 # Naturopata Digitale
 
-**Il sapere gentile delle piante.** Erbario interattivo con 60 schede, manuale,
+**Il sapere gentile delle piante.** Erbario interattivo con 70 schede, manuale,
 fitoalimurgia, schede di benessere, sopravvivenza in tre livelli, biblioteca
 storica, quiz e **Neura**, un assistente di conoscenza locale che spiega e
 controlla. Tutto in italiano, senza account, senza pubblicità e funzionante
@@ -28,13 +28,13 @@ che prova a mettere insieme **tradizione, evidenza scientifica e sicurezza**.
 
 | Sezione | Contenuto |
 |---|---|
-| **Erbario** | 60 schede di piante officinali, aromatiche e alimentari, dalla A alla Z: proprietà, usi, preparazioni, sicurezza, sosia pericolosi, evidenza, curiosità e fonti. |
+| **Erbario** | 70 schede di piante officinali, aromatiche e alimentari, dalla A alla Z: proprietà, usi, preparazioni, sicurezza, sosia pericolosi, evidenza, curiosità e fonti. |
 | **Manuale** | 18 capitoli in 5 parti: fondamenti, linguaggio delle piante, fitoalimurgia, olistica pratica, consapevolezza. |
-| **Fitoalimurgia** | Regole del raccolto responsabile, 46 piante commestibili, 10 piante tossiche da riconoscere, preparazioni di base. |
+| **Fitoalimurgia** | Regole del raccolto responsabile, 47 piante commestibili, 10 piante tossiche da riconoscere, preparazioni di base. |
 | **Sopravvivenza** | Tre livelli (base, intermedio, esperto), 27 schede pratiche, kit essenziale, errori da evitare, norme italiane e fonti istituzionali. |
 | **Biblioteca** | *I Discorsi* di Pietro Andrea Mattioli: storia, struttura dell'opera, edizioni digitalizzate in pubblico dominio, lezioni di metodo e fonti. |
 | **Benessere** | 8 schede tematiche (sonno, stress, digestione, pelle, vie respiratorie, ciclo, articolazioni, difese) con piante collegate e segnali d'allarme. |
-| **Quiz** | 85 domande in 6 categorie e 3 livelli, con timer opzionale, spiegazioni, ripasso degli errori e statistiche locali. |
+| **Quiz** | 135 domande in 8 categorie e 3 livelli, con timer opzionale, spiegazioni, ripasso degli errori e statistiche locali. |
 | **Desktop** | Pacchetti per Windows (`.exe`), Linux (`.deb`, AppImage) e macOS (`.dmg`), generati da GitHub Actions. |
 | **Calendario** | 12 mesi di raccolte e lavori, con collegamenti alle schede. |
 | **Glossario** | 44 termini di botanica e fitoterapia, con ricerca istantanea. |
@@ -307,7 +307,7 @@ La guida tascabile è generata in tre versioni, tutte scaricabili dalla pagina
 
 Contengono segnali d'allarme, dieci piante tossiche, confusioni pericolose,
 interazioni con i farmaci, decalogo della raccolta, calendario, forme d'uso,
-le 60 piante in tabella, glossario e fonti.
+le 70 piante in tabella, glossario e fonti.
 
 Per il libricino: stampa su A4 orizzontale, fronte-retro con rilegatura sul
 **lato corto**, al 100% (nessun adattamento). Piega i fogli a metà, raccoglili
@@ -404,10 +404,10 @@ assets/
   img/icon-192.png         # icona PWA
   img/icon-512.png         # icona PWA / maskable
   js/
-    data-plants*.js        # 60 schede piante (cinque file)
+    data-plants*.js        # 70 schede piante (sei file)
     data-manual*.js        # 18 capitoli
     data-extra*.js         # benessere, calendario, tossiche, glossario, FAQ
-    data-quiz*.js          # 85 domande
+    data-quiz*.js          # 135 domande
     data-library.js        # Matthioli e sopravvivenza
     neura.js               # motore locale
     app.js                 # nucleo, routing, home, erbario

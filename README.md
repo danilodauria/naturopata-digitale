@@ -173,15 +173,17 @@ su Windows, Linux e macOS. Vedi la sezione [Programma desktop](#programma-deskto
 
 ### Fogli in PDF
 
-Due fogli accompagnano il programma e vivono nel repository, quindi sono già
+Tre fogli accompagnano il programma e vivono nel repository, quindi sono già
 sul sito:
 
 | File | Contenuto |
 |---|---|
 | `Naturopata-Digitale-Come-si-installa.pdf` | Guida completa: Windows, macOS, Linux, telefono, impronte, aggiornamenti, domande frequenti |
 | `Naturopata-Digitale-Scheda-rapida.pdf` | Quattro passaggi per sistema e i controlli da fare se il file non parte |
+| `Naturopata-Digitale-Lista-di-prova.pdf` | Tre pagine da spuntare mentre si provano i pacchetti, con il registro della prova |
 
-Si rigenerano con `npm run fogli` (serve `reportlab`, come per il Vademecum).
+Si rigenerano con `npm run fogli` (serve `reportlab`, come per il Vademecum); il
+solo foglio di prova con `npm run foglio:prova`.
 Ogni PDF dichiara nei metadati la stringa `versione=X`: il workflow
 `foglio.yml` la cerca nel file e rifiuta di allegare a una release un foglio
 rimasto indietro.
@@ -248,7 +250,7 @@ prima di costruire i pacchetti desktop: un controllo rosso blocca l'uscita.
 I test non vengono caricati all'interno dell'applicazione.
 
 I test controllano anche le pagine statiche (download, guide, scheda rapida,
-versioni), i due fogli in PDF con la loro versione dichiarata e i workflow di
+versioni), i tre fogli in PDF con la loro versione dichiarata e i workflow di
 pubblicazione.
 
 Quando aggiorni i contenuti, incrementa `VERSION` in `sw.js` (per esempio
@@ -416,7 +418,7 @@ assets/
 scripts/make_icons.py      # rigenera le icone PNG
 scripts/export-data.cjs    # esporta i dati dell'app in JSON
 scripts/build_vademecum.py # genera il Vademecum in PDF
-scripts/fogli_comune.py    # impaginazione comune dei due fogli
+scripts/fogli_comune.py    # impaginazione comune dei tre fogli
 scripts/build_come_installare_pdf.py # foglio «Come si installa»
 scripts/build_scheda_rapida_pdf.py   # foglio «Scheda rapida»
 scripts/check-links.cjs    # controlla link e impronte della release

@@ -445,7 +445,7 @@ ok(/Confronta le voci/.test(neuraVoce) && /Rimuovi le voci naturali/.test(neuraV
 ok(index.indexOf('href="come-installare.html"') !== -1, "index: voce di menu alla guida");
 
 // Fogli in PDF: esistono e dichiarano la versione dell'app
-["Naturopata-Digitale-Come-si-installa.pdf", "Naturopata-Digitale-Scheda-rapida.pdf"].forEach((f) => {
+["Naturopata-Digitale-Come-si-installa.pdf", "Naturopata-Digitale-Scheda-rapida.pdf", "Naturopata-Digitale-Lista-di-prova.pdf"].forEach((f) => {
   const percorso = path.join(root, "assets", "pdf", f);
   ok(fs.existsSync(percorso) && fs.statSync(percorso).size > 3000, "foglio mancante o troppo piccolo: " + f);
   if (!fs.existsSync(percorso)) return;
@@ -457,6 +457,21 @@ const foglioWf = fs.readFileSync(path.join(root, ".github", "workflows", "foglio
 ok(/Naturopata-Digitale-Come-si-installa\.pdf/.test(foglioWf), "workflow fogli: allega la guida");
 ok(/Naturopata-Digitale-Scheda-rapida\.pdf/.test(foglioWf), "workflow fogli: allega la scheda");
 ok(/versione=\$versione/.test(foglioWf), "workflow fogli: controlla la versione dichiarata");
+ok(/Naturopata-Digitale-Lista-di-prova\.pdf/.test(foglioWf), "workflow fogli: allega la lista di prova");
+// Il foglio di prova è parte del progetto come gli altri due: generatore in
+// scripts, comando npm, versione presa da package.json, PDF in assets/pdf.
+const listScript = path.join(root, "scripts", "build_lista_prova_pdf.py");
+ok(fs.existsSync(listScript), "esiste scripts/build_lista_prova_pdf.py");
+if (fs.existsSync(listScript)) {
+  const sorgenteLista = fs.readFileSync(listScript, "utf8");
+  ok(/versione_app\(\)/.test(sorgenteLista), "la lista di prova prende la versione da package.json");
+  ok(/PDF_DIR/.test(sorgenteLista), "la lista di prova scrive in assets/pdf");
+  ok(!/versione 1\.3\.\d+|\b1\.3\.\d+\b/.test(sorgenteLista), "la lista di prova non porta versioni scritte a mano");
+}
+const scriptsFogli = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).scripts;
+ok(/build_lista_prova_pdf\.py/.test(scriptsFogli["foglio:prova"] || ""), "npm run foglio:prova genera la lista di prova");
+ok(/build_lista_prova_pdf\.py/.test(scriptsFogli.fogli || ""), "npm run fogli rigenera anche la lista di prova");
+ok(/Lista-di-prova\.pdf/.test(fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8")), "scarica: la lista di prova è fra i PDF");
 const linkWf = fs.readFileSync(path.join(root, ".github", "workflows", "link.yml"), "utf8");
 ok(/check-links\.cjs/.test(linkWf), "workflow link: esegue il controllo");
 ok(/schedule:/.test(linkWf), "workflow link: gira ogni giorno");

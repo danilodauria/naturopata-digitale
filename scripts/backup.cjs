@@ -275,10 +275,10 @@ Dentro trovi cinque file e una cartella:
      commit, nome dello zip, impronta). Serve per l'indice storico.
 
   5. documenti/
-     I report delle verifiche di questa versione: parafrasi, schede, quiz,
-     sintesi. Sono copiati da artifacts/ e stanno fuori dalla cartella del
-     codice perché sono documentazione, non programma. Non sono versionati:
-     questo è l'unico posto dove restano.
+     I report delle verifiche di questa versione, copiati da artifacts/:
+     parafrasi, schede, quiz, sintesi e i loro allegati. Stanno fuori dalla
+     cartella del codice perché sono documentazione, non programma. Non sono
+     versionati: questo è l'unico posto dove restano.
 
   6. LEGGIMI-BACKUP.txt
      Questo file.

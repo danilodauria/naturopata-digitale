@@ -47,7 +47,7 @@ cd Naturopata-Digitale-X.Y.Z
 Su Windows: tasto destro → Estrai tutto, due volte.
 
 Accanto alla cartella del progetto c'è `documenti/`: i report delle verifiche
-(parafrasi, schede, quiz, sintesi) copiati da `artifacts/`. Non sono
+(parafrasi, schede, quiz, sintesi e i loro allegati) copiati da `artifacts/`. Non sono
 versionati, quindi questa è l'unica copia che viaggia con la versione; stanno
 fuori dal codice perché sono documentazione. I report che nel nome portano una
 versione precedente restano fuori dal backup: descrivono una fotografia

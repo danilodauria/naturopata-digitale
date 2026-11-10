@@ -3,6 +3,7 @@
  *
  * Crea una cartella datata dentro backup/ con:
  *   - l'archivio zip del commit corrente (solo file versionati),
+ *   - i report di verifica in una cartella documenti/, fuori dal codice,
  *   - l'elenco completo dei file con dimensioni,
  *   - il checksum SHA-256 dell'archivio,
  *   - un LEGGIMI-BACKUP.txt passo passo,
@@ -24,6 +25,7 @@ const { execFileSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const DEST = path.join(ROOT, "backup");
+const ARTEFATTI = path.join(ROOT, "artifacts");
 const PREFIX = "Naturopata-Digitale";
 
 const args = process.argv.slice(2);
@@ -176,6 +178,28 @@ git("archive", "--format=zip", "--prefix=" + prefissoZip, "-o", percorsoZip, "HE
 const zipBuffer = fs.readFileSync(percorsoZip);
 const sha256 = crypto.createHash("sha256").update(zipBuffer).digest("hex");
 
+/* 1b. Report di verifica. Non sono versionati (artifacts/ è fuori dal
+   repository), quindi senza questa copia sparirebbero insieme alla macchina che
+   li ha prodotti. Vanno accanto al codice ma in una cartella loro: sono
+   documentazione, non programma. I report che portano nel nome una versione
+   diversa da questa restano fuori, perché descrivono una fotografia superata. */
+function reportDaSalvare() {
+  if (!fs.existsSync(ARTEFATTI)) return [];
+  return fs.readdirSync(ARTEFATTI)
+    .filter((n) => /^verifica-.*\.md$/.test(n))
+    .filter((n) => {
+      const v = n.match(/-v?(\d+\.\d+\.\d+)\.md$/);
+      return !v || v[1] === versione;
+    })
+    .sort()
+    .map((n) => ({ nome: n, byte: fs.statSync(path.join(ARTEFATTI, n)).size }));
+}
+const documenti = reportDaSalvare();
+if (documenti.length) {
+  fs.mkdirSync(path.join(cartella, "documenti"), { recursive: true });
+  documenti.forEach((d) => fs.copyFileSync(path.join(ARTEFATTI, d.nome), path.join(cartella, "documenti", d.nome)));
+}
+
 /* 2. Elenco dei file contenuti nell'archivio (dimensione reale del blob). */
 const righeAlbero = git("ls-tree", "-r", "-l", "--full-name", "HEAD").toString().split("\n").filter(Boolean);
 const file = righeAlbero.map((r) => {
@@ -192,14 +216,24 @@ file.forEach((f) => {
 });
 const elencoCartelle = Object.keys(perCartella).sort().map((k) => "  " + k + " " + perCartella[k] + " file").join("\n");
 
+const elencoDocumenti =
+  "DOCUMENTI DI VERIFICA (cartella documenti/, fuori dal codice)\n" +
+  "Colonne: byte · percorso\n\n" +
+  (documenti.length
+    ? documenti.map((d) => String(d.byte).padStart(9, " ") + "  documenti/" + d.nome).join("\n")
+    : "Nessun report in artifacts/ al momento del backup.") +
+  "\n";
+
 const elencoFile =
   "ELENCO DEI FILE CONTENUTI NELL'ARCHIVIO\n" +
   "Backup: " + nomeCartella + " · versione " + versione + " · commit " + commit + "\n" +
   "File: " + file.length + " · dimensione sciolta: " + mb(byteTotali) + "\n" +
+  "Documenti di verifica: " + documenti.length + " (cartella documenti/, fuori dal codice)\n" +
   "Colonne: byte · percorso (nell'archivio, preceduto da " + prefissoZip + ")\n\n" +
   file.slice().sort((a, b) => a.percorso.localeCompare(b.percorso))
     .map((f) => String(f.byte).padStart(9, " ") + "  " + f.percorso).join("\n") +
-  "\n";
+  "\n" +
+  elencoDocumenti;
 fs.writeFileSync(path.join(cartella, "ELENCO-FILE.txt"), elencoFile);
 
 /* 3. Checksum verificabile. */
@@ -213,7 +247,8 @@ Cartella:  backup/${nomeCartella}
 Creato il: ${data} alle ${oraRoma()} (ora italiana)
 Versione:  ${versione}
 Commit:    ${commit} (ramo ${ramo})${nota ? "\nNota:      " + nota : ""}
-Contenuto: ${file.length} file versionati, ${mb(byteTotali)} sciolti, archivio ${mb(zipBuffer.length)}
+Contenuto: ${file.length} file versionati, ${documenti.length} documenti di verifica,
+           ${mb(byteTotali)} sciolti, archivio ${mb(zipBuffer.length)}
 
 Questo backup è una fotografia del progetto al commit indicato: il sito, i dati
 delle piante e dei saperi, i test, gli script, i PDF e il pacchetto desktop.
@@ -222,7 +257,7 @@ Non contiene node_modules né file generati o segreti (vedi "Che cosa NON c'è")
 -----------------------------------------------------
 PASSO 1 — Aprire la cartella
 -----------------------------------------------------
-Dentro trovi quattro file più questo LEGGIMI:
+Dentro trovi cinque file e una cartella:
 
   1. ${nomeZip}
      L'archivio completo del progetto. Dentro, tutto è raccolto in una
@@ -239,7 +274,13 @@ Dentro trovi quattro file più questo LEGGIMI:
      Gli stessi dati in formato leggibile da un programma (data, versione,
      commit, nome dello zip, impronta). Serve per l'indice storico.
 
-  5. LEGGIMI-BACKUP.txt
+  5. documenti/
+     I report delle verifiche di questa versione: parafrasi, schede, quiz,
+     sintesi. Sono copiati da artifacts/ e stanno fuori dalla cartella del
+     codice perché sono documentazione, non programma. Non sono versionati:
+     questo è l'unico posto dove restano.
+
+  6. LEGGIMI-BACKUP.txt
      Questo file.
 
 -----------------------------------------------------
@@ -285,7 +326,9 @@ In sintesi:
   - tests: i controlli automatici su dati, DOM e percorsi;
   - scripts: gli strumenti di build, link e questo backup;
   - desktop: il contenitore Electron e il pacchetto dell'app;
-  - docs e i file di radice: licenza, README, note di versione.
+  - docs e i file di radice: licenza, README, note di versione;
+  - documenti/: i report di verifica della versione, accanto al codice ma in
+    una cartella separata.
 
 -----------------------------------------------------
 PASSO 5 — Che cosa NON c'è
@@ -294,7 +337,9 @@ PASSO 5 — Che cosa NON c'è
   - desktop/app e desktop/dist: si rigenerano con "npm run desktop:prepare";
   - .env e ogni chiave o segreto: per scelta non entrano mai nei backup;
   - backup/ precedenti: restano nella loro cartella, non vengono copiati
-    dentro i backup successivi.
+    dentro i backup successivi;
+  - i report di verifica delle versioni passate: qui entra solo la verifica
+    di questa versione, così le fotografie non si confondono.
 
 -----------------------------------------------------
 PASSO 6 — Lo storico
@@ -335,6 +380,8 @@ const scheda = {
   file: file.length,
   byteSciolti: byteTotali,
   modificheNonCommittate: sporco ? sporco.split("\n").length : 0,
+  documenti: documenti.map((d) => d.nome),
+  byteDocumenti: documenti.reduce((s, d) => s + d.byte, 0),
   nota: nota
 };
 fs.writeFileSync(path.join(cartella, "backup.json"), JSON.stringify(scheda, null, 2) + "\n");
@@ -375,7 +422,6 @@ fs.writeFileSync(path.join(DEST, "INDICE-BACKUP.txt"), indice);
 /* 7. Archivio da consegnare: solo questo backup, con nome, data e versione.
    Chi ha già le versioni precedenti non deve riscaricarle: dentro c'è una sola
    fotografia, quella appena creata. */
-const ARTEFATTI = path.join(ROOT, "artifacts");
 const nomeUltimo = PREFIX + "-backup-" + data + "-v" + versione + ".zip";
 const percorsoUltimo = path.join(ARTEFATTI, nomeUltimo);
 fs.mkdirSync(ARTEFATTI, { recursive: true });
@@ -396,6 +442,7 @@ console.log("  sha256 " + sha256);
 if (sporco) {
   console.log("  ⚠ modifiche non committate: " + sporco.split("\n").length + " file (il backup fotografa il commit " + commit + ")");
 }
+console.log("  documenti: " + documenti.length + " report in documenti/" + (documenti.length ? " (" + kb(documenti.reduce((s, d) => s + d.byte, 0)) + ")" : ""));
 console.log("  storico: " + schede.length + " backup in backup/INDICE-BACKUP.txt");
 console.log("  da scaricare: artifacts/" + nomeUltimo + " · " + mb(byteUltimo) + " · solo la versione " + versione);
 console.log("  impronta archivio: " + shaUltimo);

@@ -545,6 +545,14 @@ if (fs.existsSync(backupScript)) {
   ok(/readdirSync\(ARTEFATTI\)/.test(sorgenteBackup), "in artifacts/ resta solo l'ultimo archivio da scaricare");
   ok(/while \(fs\.existsSync\(path\.join\(DEST, nomeCartella\)\)\)/.test(sorgenteBackup), "il backup non sovrascrive i salvataggi precedenti");
   ok(/PREFIX \+ "-" \+ data \+ "-v" \+ versione/.test(sorgenteBackup), "il nome del backup porta data e versione");
+  // I report di verifica non sono versionati: se il backup non li copia, se ne
+  // perdono le prove. Devono stare in documenti/, fuori dalla cartella del codice.
+  ok(/reportDaSalvare/.test(sorgenteBackup), "il backup raccoglie i report di verifica");
+  ok(/fs\.copyFileSync\(path\.join\(ARTEFATTI, d\.nome\), path\.join\(cartella, "documenti", d\.nome\)\)/.test(sorgenteBackup), "i report finiscono in documenti/, separati dal codice");
+  ok(/v\[1\] === versione/.test(sorgenteBackup), "il backup scarta i report delle versioni passate");
+  ok(/documenti: documenti\.map/.test(sorgenteBackup), "backup.json elenca i documenti inclusi");
+  ok(/Documenti di verifica/.test(sorgenteBackup), "l'elenco file conta i documenti");
+  ok(/documenti\/\n     I report delle verifiche/.test(sorgenteBackup), "il LEGGIMI spiega la cartella documenti");
 }
 ok(/^\/backup\/$/m.test(fs.readFileSync(path.join(root, ".gitignore"), "utf8")), "la cartella dei backup resta fuori dal repository");
 

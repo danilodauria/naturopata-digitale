@@ -32,7 +32,7 @@ all'archivio.
 
 1. Estrai l'archivio scaricato: ottieni una cartella con cinque file
    (`Naturopata-Digitale-X.Y.Z.zip`, `ELENCO-FILE.txt`, `SHA256SUMS.txt`,
-   `backup.json`, `LEGGIMI-BACKUP.txt`).
+   `backup.json`, `LEGGIMI-BACKUP.txt`) e la cartella `documenti/`.
 2. Estrai anche il secondo zip: è il progetto vero e proprio e si apre in
    `Naturopata-Digitale-X.Y.Z/`.
 
@@ -45,6 +45,13 @@ cd Naturopata-Digitale-X.Y.Z
 ```
 
 Su Windows: tasto destro → Estrai tutto, due volte.
+
+Accanto alla cartella del progetto c'è `documenti/`: i report delle verifiche
+(parafrasi, schede, quiz, sintesi) copiati da `artifacts/`. Non sono
+versionati, quindi questa è l'unica copia che viaggia con la versione; stanno
+fuori dal codice perché sono documentazione. I report che nel nome portano una
+versione precedente restano fuori dal backup: descrivono una fotografia
+superata e resterebbero accanto a un progetto che nel frattempo è cambiato.
 
 ## 4. Reinstalla e verifica
 

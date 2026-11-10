@@ -552,6 +552,13 @@ if (fs.existsSync(backupScript)) {
   ok(/v\[1\] === versione/.test(sorgenteBackup), "il backup scarta i report delle versioni passate");
   ok(/documenti: documenti\.map/.test(sorgenteBackup), "backup.json elenca i documenti inclusi");
   ok(/Documenti di verifica/.test(sorgenteBackup), "l'elenco file conta i documenti");
+  // L'archivio non deve solo esistere: deve essere la copia dell'albero del
+  // commit. Il confronto si fa sulle impronte Git dei singoli file.
+  ok(/function confrontaArchivio\(/.test(sorgenteBackup), "il backup confronta l'archivio con l'albero di HEAD");
+  ok(/0x06054b50/.test(sorgenteBackup), "il backup legge le voci dell'archivio da sé");
+  ok(/non corrisponde a HEAD/.test(sorgenteBackup), "il backup avvisa se l'archivio non corrisponde a HEAD");
+  ok(/verificaArchivio/.test(sorgenteBackup), "backup.json registra l'esito del confronto");
+  ok(/!v\.nome\.endsWith\("\/"\)/.test(sorgenteBackup), "il confronto ignora le voci di cartella dello zip");
   ok(/documenti\/\n     I report delle verifiche/.test(sorgenteBackup), "il LEGGIMI spiega la cartella documenti");
 }
 ok(/^\/backup\/$/m.test(fs.readFileSync(path.join(root, ".gitignore"), "utf8")), "la cartella dei backup resta fuori dal repository");

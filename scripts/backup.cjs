@@ -208,7 +208,88 @@ const file = righeAlbero.map((r) => {
   return m ? { modo: m[1], tipo: m[2], sha: m[3], byte: m[4] === "-" ? 0 : parseInt(m[4], 10), percorso: m[5] } : null;
 }).filter(Boolean);
 
+/* 2b. L'archivio deve essere la copia esatta dell'albero del commit: stessi
+   file, stessi contenuti. Il controllo riapre lo zip, ricalcola l'impronta Git
+   di ogni voce e la confronta con quella dell'oggetto in HEAD. Se qualcosa non
+   torna lo dice e lo registra in backup.json, senza fermare il salvataggio: un
+   avviso serve a farlo guardare, non a impedire il backup. */
+const FORMATO_OGGETTI = git("rev-parse", "--show-object-format").toString().trim() || "sha1";
+
+function improntaGit(contenuto) {
+  return crypto
+    .createHash(FORMATO_OGGETTI === "sha256" ? "sha256" : "sha1")
+    .update(Buffer.from("blob " + contenuto.length + "\0", "utf8"))
+    .update(contenuto)
+    .digest("hex");
+}
+
+function vociArchivio(buffer) {
+  let fine = -1;
+  for (let i = buffer.length - 22; i >= 0 && i >= buffer.length - 65557; i--) {
+    if (buffer.readUInt32LE(i) === 0x06054b50) { fine = i; break; }
+  }
+  if (fine < 0) throw new Error("indice centrale dello zip non trovato");
+  const quante = buffer.readUInt16LE(fine + 10);
+  let p = buffer.readUInt32LE(fine + 16);
+  const voci = [];
+  for (let i = 0; i < quante; i++) {
+    if (buffer.readUInt32LE(p) !== 0x02014b50) throw new Error("voce dell'indice centrale non valida");
+    const metodo = buffer.readUInt16LE(p + 10);
+    const compresso = buffer.readUInt32LE(p + 20);
+    const nomeLen = buffer.readUInt16LE(p + 28);
+    const extraLen = buffer.readUInt16LE(p + 30);
+    const commentoLen = buffer.readUInt16LE(p + 32);
+    const offset = buffer.readUInt32LE(p + 42);
+    const nome = buffer.toString("utf8", p + 46, p + 46 + nomeLen);
+    const nLen = buffer.readUInt16LE(offset + 26);
+    const eLen = buffer.readUInt16LE(offset + 28);
+    const inizio = offset + 30 + nLen + eLen;
+    const grezzo = buffer.subarray(inizio, inizio + compresso);
+    const contenuto = metodo === 8 ? zlib.inflateRawSync(grezzo) : Buffer.from(grezzo);
+    voci.push({ nome, byte: contenuto.length, sha: improntaGit(contenuto) });
+    p += 46 + nomeLen + extraLen + commentoLen;
+  }
+  return voci;
+}
+
+function confrontaArchivio(buffer, attesi) {
+  const esito = { stato: "ok", voci: 0, byte: 0, mancanti: [], estranei: [], diversi: [], errore: "" };
+  let voci;
+  try {
+    // git archive scrive anche una voce per ogni cartella, a zero byte: non sono
+    // file da confrontare, e contarle come estranee falserebbe l'esito.
+    voci = vociArchivio(buffer).filter((v) => v.nome.indexOf(prefissoZip) === 0 && !v.nome.endsWith("/"));
+  } catch (e) {
+    esito.stato = "illeggibile";
+    esito.errore = e.message;
+    return esito;
+  }
+  esito.voci = voci.length;
+  esito.byte = voci.reduce((s, v) => s + v.byte, 0);
+  const perNome = new Map(voci.map((v) => [v.nome.slice(prefissoZip.length), v]));
+  const attesiPerNome = new Map(attesi.map((f) => [f.percorso, f]));
+  attesi.forEach((f) => {
+    const v = perNome.get(f.percorso);
+    if (!v) esito.mancanti.push(f.percorso);
+    else if (v.sha !== f.sha) esito.diversi.push(f.percorso);
+  });
+  perNome.forEach((v, nome) => {
+    if (!attesiPerNome.has(nome)) esito.estranei.push(nome);
+  });
+  if (esito.mancanti.length || esito.estranei.length || esito.diversi.length) esito.stato = "differenze";
+  return esito;
+}
+
+const controlloArchivio = confrontaArchivio(zipBuffer, file);
+
 const byteTotali = file.reduce((s, f) => s + f.byte, 0);
+const esitoControllo =
+  controlloArchivio.stato === "ok"
+    ? "identico all'albero del commit (" + controlloArchivio.voci + " file, " + controlloArchivio.byte + " byte)"
+    : controlloArchivio.stato === "illeggibile"
+      ? "non verificabile: " + controlloArchivio.errore
+      : "DIVERSO dall'albero del commit · " + controlloArchivio.mancanti.length + " mancanti, " +
+        controlloArchivio.diversi.length + " diversi, " + controlloArchivio.estranei.length + " estranei";
 const perCartella = {};
 file.forEach((f) => {
   const testa = f.percorso.indexOf("/") === -1 ? "(radice)" : f.percorso.split("/")[0] + "/";
@@ -249,6 +330,7 @@ Versione:  ${versione}
 Commit:    ${commit} (ramo ${ramo})${nota ? "\nNota:      " + nota : ""}
 Contenuto: ${file.length} file versionati, ${documenti.length} documenti di verifica,
            ${mb(byteTotali)} sciolti, archivio ${mb(zipBuffer.length)}
+Archivio:  ${esitoControllo}
 
 Questo backup è una fotografia del progetto al commit indicato: il sito, i dati
 delle piante e dei saperi, i test, gli script, i PDF e il pacchetto desktop.
@@ -379,6 +461,14 @@ const scheda = {
   sha256: sha256,
   file: file.length,
   byteSciolti: byteTotali,
+  verificaArchivio: {
+    esito: controlloArchivio.stato,
+    file: controlloArchivio.voci,
+    byte: controlloArchivio.byte,
+    mancanti: controlloArchivio.mancanti,
+    estranei: controlloArchivio.estranei,
+    diversi: controlloArchivio.diversi
+  },
   modificheNonCommittate: sporco ? sporco.split("\n").length : 0,
   documenti: documenti.map((d) => d.nome),
   byteDocumenti: documenti.reduce((s, d) => s + d.byte, 0),
@@ -439,6 +529,20 @@ console.log("✓ Backup creato: backup/" + nomeCartella);
 console.log("  " + nomeZip + " · " + mb(zipBuffer.length) + " · " + file.length + " file (" + mb(byteTotali) + " sciolti)");
 console.log("  versione " + versione + " · commit " + commit + " · " + data + " " + oraRoma());
 console.log("  sha256 " + sha256);
+if (controlloArchivio.stato === "ok") {
+  console.log("  controllo: archivio identico all'albero di HEAD · " + controlloArchivio.voci + " file");
+} else if (controlloArchivio.stato === "illeggibile") {
+  console.log("  ⚠ controllo archivio impossibile: " + controlloArchivio.errore);
+} else {
+  const dettagli = [].concat(
+    controlloArchivio.mancanti.map((n) => "manca " + n),
+    controlloArchivio.diversi.map((n) => "diverso " + n),
+    controlloArchivio.estranei.map((n) => "in più " + n)
+  );
+  console.log("  ⚠ l'archivio non corrisponde a HEAD: " + dettagli.length + " differenze");
+  dettagli.slice(0, 8).forEach((d) => console.log("      " + d));
+  if (dettagli.length > 8) console.log("      … e altre " + (dettagli.length - 8));
+}
 if (sporco) {
   console.log("  ⚠ modifiche non committate: " + sporco.split("\n").length + " file (il backup fotografa il commit " + commit + ")");
 }

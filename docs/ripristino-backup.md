@@ -123,6 +123,20 @@ su un computer nuovo, senza il repository né i backup precedenti. Non basta
 solo per ripartire con la storia Git o con i segreti, che per scelta non
 contiene.
 
+## Il controllo dell'archivio
+
+Ogni backup riapre lo zip che ha appena creato e confronta ogni file con
+l'albero del commit: nome per nome e impronta Git per impronta Git. Se un file
+manca, avanza o ha un contenuto diverso, lo script lo dice a schermo con un
+avviso (`⚠ l'archivio non corrisponde a HEAD`), elenca le prime differenze e
+registra l'esito in `backup.json` sotto `verificaArchivio`. Il backup viene
+comunque creato: un avviso serve a farlo guardare, non a impedire il
+salvataggio.
+
+Se compare quell'avviso, l'archivio non è la fotografia del commit: di solito
+vuol dire che si è salvato con modifiche non committate o che il commit è
+cambiato durante la creazione. Rifai il backup da albero pulito.
+
 ## Backup automatico
 
 Due strade, perché il gancio non è sempre installabile.

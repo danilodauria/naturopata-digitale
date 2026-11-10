@@ -181,6 +181,7 @@ sul sito:
 | `Naturopata-Digitale-Come-si-installa.pdf` | Guida completa: Windows, macOS, Linux, telefono, impronte, aggiornamenti, domande frequenti |
 | `Naturopata-Digitale-Scheda-rapida.pdf` | Quattro passaggi per sistema e i controlli da fare se il file non parte |
 | `Naturopata-Digitale-Lista-di-prova.pdf` | Tre pagine da spuntare mentre si provano i pacchetti, con il registro della prova |
+| `Naturopata-Digitale-Lista-di-prova-rapida.pdf` | Una pagina: le prove essenziali, da fare in dieci minuti |
 
 Si rigenerano con `npm run fogli` (serve `reportlab`, come per il Vademecum); il
 solo foglio di prova con `npm run foglio:prova`.

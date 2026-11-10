@@ -25,6 +25,8 @@ from fogli_comune import (  # noqa: E402
 VERSIONE = versione_app()
 TITOLO = "Lista di prova " + VERSIONE
 OUT = PDF_DIR / "Naturopata-Digitale-Lista-di-prova.pdf"
+OUT_RAPIDA = PDF_DIR / "Naturopata-Digitale-Lista-di-prova-rapida.pdf"
+TITOLO_RAPIDA = "Prova in dieci minuti " + VERSIONE
 LARG = 493  # larghezza utile A4 con margini da 18 mm
 
 
@@ -221,9 +223,73 @@ def storia(versione=VERSIONE):
     return out
 
 
+def storia_rapida(versione=VERSIONE):
+    """Le prove che in dieci minuti dicono se il pacchetto è sano."""
+    S = stili()
+    out = []
+
+    out += testata(
+        "Prova in dieci minuti",
+        "LISTA RAPIDA · VERSIONE " + versione + " · WINDOWS, LINUX, MACOS",
+        "Le prove che valgono la pena anche quando il tempo è poco. Se una casella "
+        "resta vuota, il foglio completo da tre pagine dice che cosa guardare dopo.",
+        versione, S,
+    )
+
+    out.append(para("Prima di cominciare", "h2", S))
+    out.append(caselle([
+        "Pacchetto giusto dalla pagina della release, con <font name='Courier' size='8'>SHA256SUMS.txt</font> accanto.",
+        "L'impronta del file scaricato coincide.",
+    ], S))
+
+    out.append(para("A · Installazione e primo avvio", "h2", S))
+    out.append(caselle([
+        "L'installer (o il <font name='Courier' size='8'>.dmg</font>, o il <font name='Courier' size='8'>.deb</font>) conclude senza errori.",
+        "Windows: SmartScreen → <i>Ulteriori informazioni</i> → <i>Esegui comunque</i>. macOS: tasto destro → <i>Apri</i>.",
+        "La finestra si apre in pochi secondi, sfondo color carta, senza barra dei menu.",
+        "In fondo alla pagina la versione è la " + versione + ".",
+    ], S))
+
+    out.append(para("B · Contenuti", "h2", S))
+    out.append(caselle([
+        "L'erbario mostra 70 schede, il manuale 18 capitoli, il quiz 135 domande.",
+        "La domanda sui frutti di senna rimanda alla titolazione del prodotto.",
+        "Una scheda a caso (Senna): testo, fonti e avvisi leggibili.",
+        "Un link esterno si apre nel browser di sistema, non nella finestra.",
+    ], S))
+
+    out.append(para("C · Senza rete e voce naturale", "h2", S))
+    out.append(caselle([
+        "Staccando la rete, contenuti e quiz funzionano ancora.",
+        "La sezione «Voce naturale» si vede e dice che si scarica una volta sola; "
+        "«Installa Paola» arriva in fondo e la lettura è naturale. Su Mac: una voce "
+        "Premium compare dopo «Rileggi voci».",
+    ], S))
+
+    out.append(para("D · Aggiornamento", "h2", S))
+    out.append(caselle([
+        "Con una versione precedente installata, «Controlla adesso» trova la nuova.",
+        "Dopo il riavvio la versione è cambiata e preferiti, letture e chat sono ancora lì.",
+    ], S))
+
+    out.append(Spacer(1, 3))
+    out.append(riquadro(
+        "Se una casella resta vuota",
+        "Segna sistema, formato usato e messaggio esatto, poi passa alla lista completa: "
+        "<font name='Courier' size='8'>Naturopata-Digitale-Lista-di-prova.pdf</font>, tre pagine "
+        "con il registro della prova.",
+        S=S))
+
+    out.append(Spacer(1, 6))
+    out.append(para("Firma e data: ______________________________________", "corpo", S))
+    return out
+
+
 def main():
     doc = compila(storia(VERSIONE), OUT, TITOLO, VERSIONE)
     print("PDF: %s · %d pagine · %.0f kB" % (OUT, doc.page, OUT.stat().st_size / 1024))
+    rapida = compila(storia_rapida(VERSIONE), OUT_RAPIDA, TITOLO_RAPIDA, VERSIONE)
+    print("PDF: %s · %d pagine · %.0f kB" % (OUT_RAPIDA, rapida.page, OUT_RAPIDA.stat().st_size / 1024))
 
 
 if __name__ == "__main__":

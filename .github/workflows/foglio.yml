@@ -37,7 +37,8 @@ jobs:
           for foglio in \
             assets/pdf/Naturopata-Digitale-Come-si-installa.pdf \
             assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf \
-            assets/pdf/Naturopata-Digitale-Lista-di-prova.pdf; do
+            assets/pdf/Naturopata-Digitale-Lista-di-prova.pdf \
+            assets/pdf/Naturopata-Digitale-Lista-di-prova-rapida.pdf; do
             test -s "$foglio" || { echo "::error::Manca $foglio."; exit 1; }
             if ! grep -aq "versione=$versione" "$foglio"; then
               echo "::error::$foglio dichiara una versione diversa da $versione: rigeneralo con npm run fogli."
@@ -53,6 +54,7 @@ jobs:
             assets/pdf/Naturopata-Digitale-Come-si-installa.pdf
             assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf
             assets/pdf/Naturopata-Digitale-Lista-di-prova.pdf
+            assets/pdf/Naturopata-Digitale-Lista-di-prova-rapida.pdf
           overwrite_files: true
 
       - name: Verifica che siano nella versione
@@ -65,7 +67,8 @@ jobs:
             presenti="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '.assets[].name' 2>/dev/null || true)"
             if grep -qxF "Naturopata-Digitale-Come-si-installa.pdf" <<< "$presenti" \
               && grep -qxF "Naturopata-Digitale-Scheda-rapida.pdf" <<< "$presenti" \
-              && grep -qxF "Naturopata-Digitale-Lista-di-prova.pdf" <<< "$presenti"; then
+              && grep -qxF "Naturopata-Digitale-Lista-di-prova.pdf" <<< "$presenti" \
+              && grep -qxF "Naturopata-Digitale-Lista-di-prova-rapida.pdf" <<< "$presenti"; then
               echo "Fogli allegati alla versione $TAG."
               exit 0
             fi

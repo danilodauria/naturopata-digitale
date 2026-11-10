@@ -76,7 +76,7 @@ def storia(versione):
         "menu Start e sul desktop.", "nota", S))
 
     # --- macOS ------------------------------------------------------------
-    out.append(para("macOS 10.15 o successivo", "h2", S))
+    out.append(para("macOS 11 o successivo", "h2", S))
     out.append(punti([
         "Scarica il <font name='Courier' size='8.4'>.dmg</font> del tuo processore: Apple Silicon oppure Intel.",
         "Apri il file: si apre una finestra con l'icona del programma e quella della cartella Applicazioni.",

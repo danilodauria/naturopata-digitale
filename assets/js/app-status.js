@@ -259,7 +259,7 @@
     }
     if (id === "macos") {
       return {
-        titolo: "macOS 10.15 o successivo",
+        titolo: "macOS 11 o successivo",
         file: "Naturopata-Digitale-Mac-arm64.dmg",
         anche: "Naturopata-Digitale-Mac-x64.dmg",
         passi: [

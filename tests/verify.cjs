@@ -747,6 +747,63 @@ ok(divergenzeSoglia(notaProva, "Non superare 40 mg di glicirrizina.", []).soloSc
 ok(divergenzeSoglia("Non superare 100 mg di glicirrizina.", "L'ANSES indica 10 mg.", []).entiMancanti.indexOf("ANSES") !== -1, "soglie: l'ente citato dal quiz deve essere documentato nella scheda");
 ok(divergenzeSoglia(notaProva, "L'ANSES indica 10 mg per 70 kg, cioè 0,14 mg/kg.", []).soloQuiz.length === 0, "soglie: il valore per chilo non viene scambiato per una soglia");
 
+/* --- Dosi: le quantità in g e mg del quiz devono esistere nella scheda ---
+   Una domanda che nomina una pianta e cita una quantità deve ritrovare la
+   stessa quantità, o un intervallo che la contiene, nella scheda di quella
+   pianta: è così che un «1–2 g» nel quiz e un «0,5–1 g» nella scheda non
+   possono convivere. I grammi si portano a milligrammi, così «0,5 g» e
+   «500 mg» risultano la stessa dose; i millilitri si confrontano solo con i
+   millilitri, perché sono il volume d'acqua e non la quantità di droga. */
+function quantitaIn(testo) {
+  const trovate = [];
+  const re = /(\d{1,4}(?:[.,]\d+)?)\s*(?:[–-]\s*(\d{1,4}(?:[.,]\d+)?))?\s*(milligrammi|mg|grammi|g|ml)\b/gi;
+  let m;
+  while ((m = re.exec(testoPiatto(testo)))) {
+    const numero = (v) => Number(String(v).replace(",", "."));
+    const grammi = /^(g|grammi)$/i.test(m[3]);
+    const fattore = grammi ? 1000 : 1;
+    const a = numero(m[1]) * fattore;
+    const b = m[2] ? numero(m[2]) * fattore : a;
+    trovate.push({
+      min: Math.min(a, b),
+      max: Math.max(a, b),
+      unita: grammi ? "mg" : /^ml$/i.test(m[3]) ? "ml" : "mg",
+      testo: m[0].replace(/\s+/g, " ")
+    });
+  }
+  return trovate;
+}
+const siToccano = (a, b) => a.unita === b.unita && a.min <= b.max + 0.001 && b.min <= a.max + 0.001;
+const dosiDiscordanti = (quantita, scheda) => quantita.filter((x) => !scheda.some((y) => siToccano(x, y)));
+const testoScheda = (p) => testoPiatto(Object.keys(p || {}).map((k) => (typeof p[k] === "string" ? p[k] : JSON.stringify(p[k] || ""))).join(" "));
+
+const confrontiDosi = [];
+quiz.forEach((q) => {
+  const testoDomanda = testoPiatto([q.q, q.o[q.r], q.e].join(" "));
+  const quantita = quantitaIn(testoDomanda);
+  if (!quantita.length) return;
+  piantaCitata(testoDomanda).forEach((p) => quantita.forEach((x) => confrontiDosi.push({ dove: "quiz " + q.id, pianta: p.id, x })));
+});
+ok(confrontiDosi.length >= 1, "dosi: almeno una quantità da confrontare (" + confrontiDosi.length + ")");
+
+let dosiIncoerenti = 0;
+confrontiDosi.forEach((c) => {
+  const p = plants.find((x) => x.id === c.pianta);
+  if (!p) return;
+  const mancanti = dosiDiscordanti([c.x], quantitaIn(testoScheda(p)));
+  if (mancanti.length) dosiIncoerenti++;
+  ok(!mancanti.length, c.dove + "/" + c.pianta + ": «" + c.x.testo + "» non compare nella scheda");
+});
+console.log("Dosi quiz/schede: " + confrontiDosi.length + " quantità confrontate, " + dosiIncoerenti + " discordanti, 5 autotest.");
+
+// Autotest: la guardia deve leggere le dosi, unificare g e mg e tacere su
+// intervalli che si toccano.
+ok(quantitaIn("1–2 g in 200 ml").length === 2, "dosi: intervallo di droga e volume d'acqua letti");
+ok(siToccano(quantitaIn("0,5 g")[0], quantitaIn("500 mg")[0]), "dosi: 0,5 g e 500 mg sono la stessa dose");
+ok(dosiDiscordanti(quantitaIn("1–2 g"), quantitaIn("0,5–1 g")).length === 0, "dosi: intervalli che si toccano non sono discordanti");
+ok(dosiDiscordanti(quantitaIn("2 g"), quantitaIn("0,5–1 g")).length === 1, "dosi: una quantità fuori intervallo viene segnalata");
+ok(dosiDiscordanti(quantitaIn("10 ml"), quantitaIn("200 ml")).length === 1, "dosi: i millilitri non si confondono con i grammi");
+
 // Statistiche di copertura
 console.log("Domande per categoria: " + Object.keys(catCounts).map((k) => k + "=" + catCounts[k]).join(", "));
 console.log("Piante alimentari: " + plants.filter((p) => p.fito && p.fito.commestibile).length + "/" + plants.length);

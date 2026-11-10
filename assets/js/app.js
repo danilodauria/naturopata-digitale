@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.33</p><h2>Quattro schede, una voce sola</h2><p class="text-small muted mb-0">Liquirizia, timo, menta e rosa canina ora dicono quello che dicono il quiz e le fonti: la soglia ANSES accanto a quella EMA, lolio essenziale di timo non prima dei sei anni, l età dei prodotti mentolati e i mesi dei petali. L olio di iperico passa a trenta-quaranta giorni, come la sua scheda nelle spezierie.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.34</p><h2>Le dosi si controllano a vicenda</h2><p class="text-small muted mb-0">Ogni quantità in grammi o milligrammi citata da una domanda deve ritrovarsi nella scheda della stessa pianta: «0,5 g» e «500 mg» sono la stessa dose, i millilitri restano volume d’acqua. La soglia della liquirizia è sorvegliata in entrambe le direzioni, e il contenitore desktop passa a Electron 45 con macOS 11 come minimo.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

@@ -445,7 +445,7 @@ ok(/Confronta le voci/.test(neuraVoce) && /Rimuovi le voci naturali/.test(neuraV
 ok(index.indexOf('href="come-installare.html"') !== -1, "index: voce di menu alla guida");
 
 // Fogli in PDF: esistono e dichiarano la versione dell'app
-["Naturopata-Digitale-Come-si-installa.pdf", "Naturopata-Digitale-Scheda-rapida.pdf", "Naturopata-Digitale-Lista-di-prova.pdf", "Naturopata-Digitale-Lista-di-prova-rapida.pdf"].forEach((f) => {
+["Naturopata-Digitale-Come-si-installa.pdf", "Naturopata-Digitale-Scheda-rapida.pdf", "Naturopata-Digitale-Lista-di-prova.pdf", "Naturopata-Digitale-Lista-di-prova-rapida.pdf", "Naturopata-Digitale-Prove-a-mano.pdf"].forEach((f) => {
   const percorso = path.join(root, "assets", "pdf", f);
   ok(fs.existsSync(percorso) && fs.statSync(percorso).size > 3000, "foglio mancante o troppo piccolo: " + f);
   if (!fs.existsSync(percorso)) return;
@@ -476,6 +476,22 @@ ok(/build_lista_prova_pdf\.py/.test(scriptsFogli["foglio:prova"] || ""), "npm ru
 ok(/build_lista_prova_pdf\.py/.test(scriptsFogli.fogli || ""), "npm run fogli rigenera anche la lista di prova");
 ok(/Lista-di-prova\.pdf/.test(fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8")), "scarica: la lista di prova è fra i PDF");
 ok(/Lista-di-prova-rapida\.pdf/.test(fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8")), "scarica: c'è anche la versione a una pagina");
+// Anche il foglio «Prove a mano» è un foglio del progetto: generatore,
+// comando npm, allegato al tag e link nella pagina Scarica.
+const proveScript = path.join(root, "scripts", "build_prove_pdf.py");
+ok(fs.existsSync(proveScript), "esiste scripts/build_prove_pdf.py");
+if (fs.existsSync(proveScript)) {
+  const sorgenteProve = fs.readFileSync(proveScript, "utf8");
+  ok(/versione_app\(\)/.test(sorgenteProve), "prove a mano: versione presa da package.json");
+  ok(/PDF_DIR/.test(sorgenteProve), "prove a mano: scrive in assets/pdf");
+  ok(!/\b1\.3\.\d+\b/.test(sorgenteProve), "prove a mano: nessuna versione scritta a mano");
+}
+ok(/build_prove_pdf\.py/.test(scriptsFogli.prove || ""), "npm run prove genera il foglio «Prove a mano»");
+ok(/build_prove_pdf\.py/.test(scriptsFogli.fogli || ""), "npm run fogli rigenera anche «Prove a mano»");
+ok(/Prove-a-mano\.pdf/.test(foglioWf), "workflow fogli: allega «Prove a mano»");
+ok(/Prove-a-mano\.pdf/.test(fs.readFileSync(path.join(root, "scarica", "index.html"), "utf8")), "scarica: «Prove a mano» è fra i PDF");
+ok(/Prove-a-mano\.pdf/.test(fs.readFileSync(path.join(root, "scripts", "check-links.cjs"), "utf8")), "check-links: controlla anche «Prove a mano»");
+ok(/Prove-a-mano\.pdf/.test(fs.readFileSync(path.join(root, ".github", "workflows", "desktop.yml"), "utf8")), "workflow desktop: «Prove a mano» fra gli allegati attesi");
 const linkWf = fs.readFileSync(path.join(root, ".github", "workflows", "link.yml"), "utf8");
 ok(/check-links\.cjs/.test(linkWf), "workflow link: esegue il controllo");
 ok(/schedule:/.test(linkWf), "workflow link: gira ogni giorno");

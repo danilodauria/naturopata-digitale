@@ -38,7 +38,8 @@ jobs:
             assets/pdf/Naturopata-Digitale-Come-si-installa.pdf \
             assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf \
             assets/pdf/Naturopata-Digitale-Lista-di-prova.pdf \
-            assets/pdf/Naturopata-Digitale-Lista-di-prova-rapida.pdf; do
+            assets/pdf/Naturopata-Digitale-Lista-di-prova-rapida.pdf \
+            assets/pdf/Naturopata-Digitale-Prove-a-mano.pdf; do
             test -s "$foglio" || { echo "::error::Manca $foglio."; exit 1; }
             if ! grep -aq "versione=$versione" "$foglio"; then
               echo "::error::$foglio dichiara una versione diversa da $versione: rigeneralo con npm run fogli."
@@ -55,6 +56,7 @@ jobs:
             assets/pdf/Naturopata-Digitale-Scheda-rapida.pdf
             assets/pdf/Naturopata-Digitale-Lista-di-prova.pdf
             assets/pdf/Naturopata-Digitale-Lista-di-prova-rapida.pdf
+            assets/pdf/Naturopata-Digitale-Prove-a-mano.pdf
           overwrite_files: true
 
       - name: Verifica che siano nella versione
@@ -68,7 +70,8 @@ jobs:
             if grep -qxF "Naturopata-Digitale-Come-si-installa.pdf" <<< "$presenti" \
               && grep -qxF "Naturopata-Digitale-Scheda-rapida.pdf" <<< "$presenti" \
               && grep -qxF "Naturopata-Digitale-Lista-di-prova.pdf" <<< "$presenti" \
-              && grep -qxF "Naturopata-Digitale-Lista-di-prova-rapida.pdf" <<< "$presenti"; then
+              && grep -qxF "Naturopata-Digitale-Lista-di-prova-rapida.pdf" <<< "$presenti" \
+              && grep -qxF "Naturopata-Digitale-Prove-a-mano.pdf" <<< "$presenti"; then
               echo "Fogli allegati alla versione $TAG."
               exit 0
             fi

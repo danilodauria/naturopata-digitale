@@ -27,7 +27,7 @@ const REPORT = process.env.REPORT || path.join(os.tmpdir(), "link-report.md");
 const AGENTE = "naturopata-digitale-link-check";
 
 // Tutto quello che una release deve contenere per essere scaricabile:
-// sei pacchetti, i due fogli in PDF, il codice sorgente e le impronte.
+// Sei pacchetti, i quattro fogli in PDF, il codice sorgente e le impronte.
 const PACCHETTI = [
   "Naturopata-Digitale-Windows-x64.exe",
   "Naturopata-Digitale-Windows-portatile.zip",
@@ -40,6 +40,9 @@ const PACCHETTI = [
 const ATTESI = PACCHETTI.concat([
   "Naturopata-Digitale-Come-si-installa.pdf",
   "Naturopata-Digitale-Scheda-rapida.pdf",
+  "Naturopata-Digitale-Lista-di-prova.pdf",
+  "Naturopata-Digitale-Lista-di-prova-rapida.pdf",
+  "Naturopata-Digitale-Prove-a-mano.pdf",
   "Naturopata-Digitale-Sorgenti.zip",
   "SHA256SUMS.txt"
 ]);

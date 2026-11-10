@@ -173,7 +173,7 @@ su Windows, Linux e macOS. Vedi la sezione [Programma desktop](#programma-deskto
 
 ### Fogli in PDF
 
-Tre fogli accompagnano il programma e vivono nel repository, quindi sono già
+Quattro fogli accompagnano il programma e vivono nel repository, quindi sono già
 sul sito:
 
 | File | Contenuto |
@@ -182,9 +182,10 @@ sul sito:
 | `Naturopata-Digitale-Scheda-rapida.pdf` | Quattro passaggi per sistema e i controlli da fare se il file non parte |
 | `Naturopata-Digitale-Lista-di-prova.pdf` | Tre pagine da spuntare mentre si provano i pacchetti, con il registro della prova |
 | `Naturopata-Digitale-Lista-di-prova-rapida.pdf` | Una pagina: le prove essenziali, da fare in dieci minuti |
+| `Naturopata-Digitale-Prove-a-mano.pdf` | Tre pagine per le versioni leggere: dove guardare dentro i pacchetti, percorsi del LEGGIMI, regressione, registro |
 
-Si rigenerano con `npm run fogli` (serve `reportlab`, come per il Vademecum); il
-solo foglio di prova con `npm run foglio:prova`.
+Si rigenerano con `npm run fogli` (serve `reportlab`, come per il Vademecum); i
+soli fogli di prova con `npm run foglio:prova` e `npm run prove`.
 Ogni PDF dichiara nei metadati la stringa `versione=X`: il workflow
 `foglio.yml` la cerca nel file e rifiuta di allegare a una release un foglio
 rimasto indietro.

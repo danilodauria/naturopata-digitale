@@ -507,6 +507,27 @@ const backupScript = path.join(root, "scripts", "backup.cjs");
 ok(fs.existsSync(backupScript), "esiste scripts/backup.cjs");
 ok(pacchettoRadice.scripts.backup === "node scripts/backup.cjs", "npm run backup chiama lo script di backup");
 ok(/npm run backup/.test(pacchettoRadice.scripts.rilascio || ""), "npm run rilascio crea anche il backup");
+// Il backup deve restare automatico: un gancio post-commit lo rinnova a ogni
+// commit, e npm ci lo reinstalla su un clone nuovo.
+ok(pacchettoRadice.scripts.hook === "node scripts/installa-hook.cjs", "npm run hook installa il gancio del backup");
+ok(/installa-hook/.test(pacchettoRadice.scripts.prepare || ""), "npm ci reinstalla il gancio del backup");
+const installaHook = path.join(root, "scripts", "installa-hook.cjs");
+ok(fs.existsSync(installaHook), "esiste scripts/installa-hook.cjs");
+if (fs.existsSync(installaHook)) {
+  const sorgenteHook = fs.readFileSync(installaHook, "utf8");
+  ok(/post-commit/.test(sorgenteHook), "il gancio installato è post-commit");
+  ok(/backup\.cjs/.test(sorgenteHook), "il gancio richiama lo script del backup");
+  ok(/dentroIlProgetto|gianciReali|ganciReali/.test(sorgenteHook), "il gancio non si installa in un repository condiviso");
+}
+// «npm run salva» è la via che funziona anche nei worktree: commit, poi backup.
+const salvaScript = path.join(root, "scripts", "salva.cjs");
+ok(pacchettoRadice.scripts.salva === "node scripts/salva.cjs", "npm run salva esiste");
+ok(fs.existsSync(salvaScript), "esiste scripts/salva.cjs");
+if (fs.existsSync(salvaScript)) {
+  const sorgenteSalva = fs.readFileSync(salvaScript, "utf8");
+  ok(/backup\.cjs/.test(sorgenteSalva), "npm run salva finisce con il backup");
+  ok(/commit/.test(sorgenteSalva), "npm run salva committa prima del backup");
+}
 if (fs.existsSync(backupScript)) {
   const sorgenteBackup = fs.readFileSync(backupScript, "utf8");
   ok(/LEGGIMI-BACKUP\.txt/.test(sorgenteBackup), "il backup scrive il LEGGIMI passo passo");

@@ -115,3 +115,24 @@ Conclusione: l'archivio è sufficiente per ricostruire e verificare il progetto
 su un computer nuovo, senza il repository né i backup precedenti. Non basta
 solo per ripartire con la storia Git o con i segreti, che per scelta non
 contiene.
+
+## Backup automatico
+
+Due strade, perché il gancio non è sempre installabile.
+
+**Gancio post-commit.** In un repository normale il progetto installa un
+gancio che dopo ogni commit esegue `node scripts/backup.cjs`: l'archivio più
+recente in `artifacts/` corrisponde così sempre all'ultima versione. Il gancio
+vive in `.git/hooks`, non è versionato, e si reinstalla con `npm run hook`
+oppure da solo con `npm ci` (la vita `prepare` lo richiama).
+
+**Comando unico.** Dove la cartella dei ganci è condivisa (worktree, repository
+comune a più progetti) il gancio non viene installato di proposito: scriverlo
+lì lo farebbe scattare per tutti. In quel caso si usa:
+
+```bash
+npm run salva -- "messaggio del commit"
+```
+
+che committa e subito dopo crea il backup, così le due cose restano allineate.
+Anche `npm run rilascio` finisce con il backup.

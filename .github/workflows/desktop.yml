@@ -19,8 +19,65 @@ concurrency:
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
 jobs:
+  # Un avvio rotto deve fermare la release, non arrivare all'utente: qui il
+  # pacchetto Linux viene aperto sotto un display virtuale e si controlla che
+  # la pagina dell'app sia davvero caricata. Il job «build» lo aspetta, quindi
+  # se l'avvio non riesce i pacchetti non vengono nemmeno costruiti.
+  avvio:
+    name: Avvio con display virtuale
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Installa le dipendenze di test
+        run: npm ci --no-audit --no-fund
+
+      - name: Prepara il contenuto dell'app
+        run: node scripts/prepare-desktop.cjs
+
+      - name: Installa Electron
+        working-directory: desktop
+        run: npm ci --no-audit --no-fund
+
+      # Solo la cartella non compressa: basta per provare l'avvio e costa meno
+      # di .deb e AppImage, che servono soltanto alla release.
+      - name: Costruisce il pacchetto Linux non compresso
+        working-directory: desktop
+        run: npx electron-builder --linux dir --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+      - name: Installa il display virtuale e le librerie di Electron
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            xvfb libnss3 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libgbm1 \
+            libasound2t64 libcups2 libdrm2 libxkbcommon0 libxcomposite1 \
+            libxdamage1 libxfixes3 libxrandr2 libxss1 libxtst6 libpango-1.0-0 libcairo2
+
+      # --no-sandbox vale solo per questa prova: sui runner il sandbox di
+      # Chromium non ha i privilegi che avrebbe su un computer normale.
+      - name: Avvia l'app e verifica che la pagina carichi
+        run: xvfb-run -a node scripts/smoke-avvio.cjs desktop/dist/linux-unpacked/naturopata-digitale --no-sandbox
+
+      - name: Conserva il registro dell'avvio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: avvio-log
+          path: artifacts/avvio-*.log
+          if-no-files-found: ignore
+
   build:
     name: ${{ matrix.os }}
+    needs: avvio
     # Sui push su main gira solo il job delle impronte: le build servono per i tag.
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ${{ matrix.os }}

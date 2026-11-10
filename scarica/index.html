@@ -364,22 +364,22 @@
                     <section class="section" id="novita">
       <div class="wrap">
         <div class="section-head">
-          <h2>Novità della versione 1.3.39</h2>
-          <p>Novembre 2026. Arriva «Prove a mano»: un foglio in più per le versioni leggere, quelle in cui cambiano testi o numeri e non i contenuti.</p>
+          <h2>Novità della versione 1.3.40</h2>
+          <p>Novembre 2026. Corretto il foglio «Prove a mano»: il percorso del LEGGIMI su Windows portatile e un refuso in una casella. Nient'altro cambia.</p>
         </div>
         <div class="split">
           <div class="card">
             <ul>
-              <li><strong>Tre pagine da spuntare</strong>: versione e conteggi dentro il pacchetto, i percorsi del LEGGIMI per Windows, macOS e Linux, regressione rapida su quiz, offline e Neura.</li>
-              <li><strong>Dove sta il LEGGIMI</strong>: una tabella con il percorso esatto in ogni formato, compreso il portatile e l'AppImage, e le frasi che deve contenere.</li>
-              <li><strong>Stesso stile degli altri fogli</strong>: caselle da spuntare a penna, comandi in monospaziato, registro con firma e data.</li>
+              <li><strong>Percorso completo</strong>: la riga di Windows portatile ora mostra <code>&lt;cartella estratta&gt;\resources\app\README.md</code>, non più solo la coda.</li>
+              <li><strong>Refuso corretto</strong>: la casella sotto i comandi dice «vista sul sito», non «versta».</li>
+              <li><strong>Il resto è uguale</strong>: tre pagine con le prove dentro il pacchetto, i percorsi su ogni sistema, la regressione e il registro.</li>
             </ul>
           </div>
           <div class="card">
             <ul>
-              <li><strong>Nella release e sul sito</strong>: il foglio vive in <code>assets/pdf</code>, si allega da solo alla versione e il workflow rifiuta di pubblicarlo se dichiara una versione vecchia.</li>
+              <li><strong>Trovato guardando</strong>: i due difetti sono emersi dal rendering delle pagine, non dai test: il percorso si verificava solo leggendo il testo estratto.</li>
               <li><strong>Rigenerabile</strong>: <code>npm run prove</code> rifà solo questo foglio; <code>npm run fogli</code> lo fa insieme agli altri tre.</li>
-              <li><strong>Nessun'altra modifica</strong>: schede, quiz, manuale e programmi restano quelli della 1.3.38.</li>
+              <li><strong>Nessun'altra modifica</strong>: schede, quiz, manuale e programmi restano quelli della 1.3.39.</li>
             </ul>
           </div>
         </div>

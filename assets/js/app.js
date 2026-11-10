@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.39</p><h2>Le prove, su carta</h2><p class="text-small muted mb-0">Arriva un foglio in più: «Prove a mano», tre pagine per le versioni leggere. Dice dove guardare dentro i pacchetti, dove sta il LEGGIMI su ogni sistema, che cosa ricontrollare dopo una correzione ai testi e dove annotare quello che non torna.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.40</p><h2>Le prove, su carta</h2><p class="text-small muted mb-0">Il foglio «Prove a mano» esce corretto: il percorso del LEGGIMI su Windows portatile non perde più il prefisso della cartella e una casella non dice più «versta» al posto di «vista». Tre pagine per le versioni leggere, con il registro in fondo.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

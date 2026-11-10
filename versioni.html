@@ -110,7 +110,16 @@
     <section class="section" id="storia">
       <div class="wrap">
         <article class="card versione attuale">
-          <p class="numero">1.3.39 <small>10 novembre 2026</small><span class="badge-ora">in uso</span></p>
+          <p class="numero">1.3.40 <small>10 novembre 2026</small><span class="badge-ora">in uso</span></p>
+          <ul>
+            <li><strong>Percorso del LEGGIMI</strong>: nella tabella di «Prove a mano» la riga di Windows portatile usciva come <code>\resources\app\README.md</code>, senza il prefisso della cartella: reportlab leggeva <code>&lt;cartella estratta&gt;</code> come un tag e lo toglieva.</li>
+            <li><strong>Un refuso</strong>: la casella sotto i comandi diceva «versta sul sito» invece di «vista sul sito».</li>
+            <li><strong>Nessun'altra modifica</strong>: schede, quiz, manuale e programmi restano quelli della 1.3.39.</li>
+          </ul>
+        </article>
+
+        <article class="card versione">
+          <p class="numero">1.3.39 <small>10 novembre 2026</small></p>
           <ul>
             <li><strong>Un foglio in più</strong>: «Prove a mano», tre pagine per le versioni leggere — versione e conteggi dentro il pacchetto, percorsi del LEGGIMI su ogni sistema, regressione rapida e registro.</li>
             <li><strong>Nella pagina Scarica e nella release</strong>: il workflow ne controlla la versione e lo allega insieme agli altri fogli; si rigenera con <code>npm run prove</code>.</li>
@@ -552,7 +561,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>Versione 1.3.39 · novembre 2026</p>
+        <p>Versione 1.3.40 · novembre 2026</p>
         <p>Codice MIT · Contenuti CC BY-NC-SA 4.0</p>
       </div>
     </div>

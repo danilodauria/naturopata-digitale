@@ -30,7 +30,9 @@ OUT = PDF_DIR / "Naturopata-Digitale-Prove-a-mano.pdf"
 
 PERCORSI = [
     ("Windows installato", "%LOCALAPPDATA%\\Programs\\naturopata-digitale\\resources\\app\\README.md"),
-    ("Windows portatile", "<cartella estratta>\\resources\\app\\README.md"),
+    # I segni di minore e maggiore vanno scritti come entità: reportlab legge
+    # <cartella estratta> come un tag e lo toglie dal testo, mutilando il percorso.
+    ("Windows portatile", "&lt;cartella estratta&gt;\\resources\\app\\README.md"),
     ("macOS", "/Applications/Naturopata Digitale.app/Contents/Resources/app/README.md"),
     ("Linux .deb", "/opt/Naturopata Digitale/resources/app/README.md"),
     ("AppImage", "resources/app/README.md dopo --appimage-extract"),
@@ -98,7 +100,7 @@ def storia(versione=VERSIONE):
         "shasum -a 256 ~/Downloads/Naturopata-Digitale-Mac-arm64.dmg", S))
     out.append(caselle([
         "L'impronta di ogni file scaricato coincide con quella di <font name='Courier' size='8'>SHA256SUMS.txt</font>.",
-        "Il file scaricato è quello della release giusta: nel nome del tag c'è la versione versta sul sito.",
+        "Il file scaricato è quello della release giusta: nel nome del tag c'è la versione vista sul sito.",
     ], S))
 
     out.append(para("B · Installazione e primo avvio", "h2", S))

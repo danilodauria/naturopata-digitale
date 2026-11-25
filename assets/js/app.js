@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.41</p><h2>Fogli che si tengono insieme</h2><p class="text-small muted mb-0">In «Prove a mano» la sezione sull\'aggiornamento non si spezza più fra due pagine, e la «Scheda rapida» usa tutte e due le facciate: davanti come si installa, dietro che cosa fare se il file non parte. Nessun testo cambia.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.42</p><h2>Cerca, da qualsiasi pagina</h2><p class="text-small muted mb-0">Un pulsante «Cerca» in testata — o Ctrl K — apre la ricerca in tutto il programma: 70 piante, 18 capitoli, le schede di benessere, il glossario e le pagine del menu. L\'indice sta nel dispositivo, quindi funziona anche senza rete.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

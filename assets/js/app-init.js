@@ -56,6 +56,7 @@
     if (mbtn) mbtn.setAttribute("aria-expanded", "false");
     document.body.classList.remove("no-scroll");
   }
+  A.closeMenus = closeMenus;
 
   /* Backup ---------------------------------------------------------------- */
 

@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.3.41-1";
+const VERSION = "nd-v1.3.42-3";
 const SHELL = [
   "./",
   "index.html",
@@ -47,7 +47,8 @@ const SHELL = [
   "assets/js/app-init.js",
   "assets/js/app-voce.js",
   "assets/js/app-status.js",
-  "assets/js/app-welcome.js"
+  "assets/js/app-welcome.js",
+  "assets/js/cerca.js"
 ];
 
 self.addEventListener("install", (event) => {

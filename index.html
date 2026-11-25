@@ -49,6 +49,10 @@
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="Navigazione principale">
+        <button class="nav-cerca" id="cercaNav" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4.3-4.3"/></svg>
+          <span>Cerca in tutto il programma</span>
+        </button>
         <a href="#/erbario" data-nav="erbario">Erbario</a>
         <a href="#/manuale" data-nav="manuale">Manuale</a>
         <a href="#/fitoalimurgia" data-nav="fitoalimurgia">Fitoalimurgia</a>
@@ -79,6 +83,11 @@
       </nav>
 
       <div class="header-actions">
+        <button class="cerca-btn" id="cercaBtn" type="button" aria-label="Cerca in tutto il programma" title="Cerca in tutto il programma (Ctrl+K)" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4.3-4.3"/></svg>
+          <span class="cerca-etichetta">Cerca</span>
+          <kbd class="cerca-tasto">Ctrl K</kbd>
+        </button>
         <button class="icon-btn" id="voiceBtn" type="button" aria-pressed="false" aria-label="Leggi ad alta voce le risposte di Neura" title="Leggi ad alta voce le risposte di Neura">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.7a5 5 0 0 1 0 6.6"/><path d="M18.6 5.6a9 9 0 0 1 0 12.8"/></svg>
         </button>
@@ -145,7 +154,7 @@
     </div>
     <div class="wrap footer-bottom">
       <p>Ideato e sviluppato da <strong>Danilo D'Auria</strong> · un progetto <strong>FeniceOS</strong></p>
-      <p>Codice <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT</a> · Contenuti <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · v1.3.41</p>
+      <p>Codice <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT</a> · Contenuti <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · v1.3.42</p>
     </div>
   </footer>
 
@@ -158,6 +167,24 @@
       <p>Per usare l'erbario interattivo, il manuale, i quiz e Neura serve JavaScript attivo. I contenuti restano comunque tuoi: puoi consultarli anche senza connessione dopo aver aperto il programma una volta.</p>
     </div>
   </noscript>
+
+  <div class="cerca-finestra" id="cercaModal" hidden>
+    <div class="cerca-box" role="dialog" aria-modal="true" aria-labelledby="cercaTitolo">
+      <div class="cerca-testa">
+        <h2 id="cercaTitolo">Cerca in tutto il programma</h2>
+        <button class="icon-btn" id="cercaChiudi" type="button" aria-label="Chiudi la ricerca" title="Chiudi (Esc)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="cerca-campo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4.3-4.3"/></svg>
+        <input id="cercaInput" type="search" placeholder="Pianta, disturbo, capitolo…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="cercaEsiti" aria-autocomplete="list" aria-label="Cerca in tutto il programma">
+        <kbd class="cerca-tasto">Ctrl K</kbd>
+      </div>
+      <p class="cerca-aiuto" id="cercaAiuto">Scrivi per cercare in tutto il programma.</p>
+      <div class="cerca-esiti" id="cercaEsiti" role="listbox" aria-label="Risultati della ricerca"></div>
+    </div>
+  </div>
 
   <script src="assets/js/data-plants.js"></script>
   <script src="assets/js/data-plants-2.js"></script>
@@ -190,5 +217,6 @@
   <script src="assets/js/app-voce.js"></script>
   <script src="assets/js/app-status.js"></script>
   <script src="assets/js/app-welcome.js"></script>
+  <script src="assets/js/cerca.js"></script>
 </body>
 </html>

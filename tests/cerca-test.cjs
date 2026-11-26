@@ -193,9 +193,51 @@ function clicca(target) { target.dispatchEvent(new win.MouseEvent("click", { bub
   ok(gruppi().length === 1 && /^Manuale · /.test(gruppi()[0]), "conteggi: «capitolo» resta nel manuale");
 
   cerca("sonno");
-  ok(nomi().length === 11, "conteggi: «sonno» dà 11 risultati (" + nomi().length + ")");
-  ok(gruppi().join("|") === "Pagine · 1|Piante · 6|Manuale · 1|Benessere · 2|Glossario · 1", "ordine: i gruppi seguono Pagine, Piante, Manuale, Benessere, Glossario (" + gruppi().join(" / ") + ")");
+  ok(nomi().length === 12, "conteggi: «sonno» dà 12 risultati (" + nomi().length + ")");
+  ok(gruppi().join("|") === "Pagine · 1|Piante · 6|Interazioni · 1|Manuale · 1|Benessere · 2|Glossario · 1", "ordine: i gruppi seguono Pagine, Piante, Interazioni, Manuale, Benessere, Glossario (" + gruppi().join(" / ") + ")");
+  ok(/sonnolenza/.test(doc.querySelector(".cerca-frase").textContent), "interazioni: «sonno» trova anche la frase sulla sonnolenza dell'escolzia");
   ok(gruppi().reduce((n, g) => n + Number(g.split(" · ")[1]), 0) === nomi().length, "conteggi: le testate dei gruppi sommano ai risultati");
+
+  // --- Indice inverso: dal farmaco alla pianta ----------------------------
+  const indiceFarmaci = win.NP.interazioniIndice;
+  const frasiTotali = win.NP.plants.reduce((n, p) => n + ((p.sicurezza.interazioni || []).length), 0);
+  ok(indiceFarmaci.length === frasiTotali, "interazioni: l'indice copre tutte le " + frasiTotali + " frasi delle schede");
+
+  cerca("warfarin");
+  ok(gruppi().join("|") === "Interazioni · 12", "interazioni: «warfarin» dà dodici frasi nel gruppo Interazioni (" + gruppi().join(" / ") + ")");
+  ok(righe().length === 12, "interazioni: dodici righe per «warfarin» (" + righe().length + ")");
+  ok(righe().every((b) => /warfarin/i.test((b.querySelector(".cerca-frase") || {}).textContent || "")), "interazioni: ogni riga porta la frase che nomina warfarin");
+  ok(righe().every((b) => /Cautela (alta|media|bassa)/.test(b.querySelector(".cerca-percorso").textContent)), "interazioni: ogni riga dichiara il livello di cautela");
+  ok(/Cautela alta/.test(righe()[0].querySelector(".cerca-percorso").textContent), "interazioni: la cautela alta viene per prima");
+  ok(!el("cercaAvviso").hidden, "interazioni: l'avvertenza compare con i risultati sui farmaci");
+  ok(/Informazione, non consiglio/.test(el("cercaAvviso").textContent), "interazioni: l'avvertenza dice che è informazione e non consiglio");
+  const fraseIperico = win.NP.plants.find((p) => p.id === "iperico").sicurezza.interazioni.filter((f) => /warfarin/i.test(f))[0];
+  ok(righe().some((b) => b.querySelector(".cerca-frase").textContent.indexOf(fraseIperico) !== -1), "interazioni: la frase è quella esatta della scheda");
+
+  cerca("digossina");
+  ok(gruppi().join("|") === "Interazioni · 11", "interazioni: «digossina» dà undici frasi (" + gruppi().join(" / ") + ")");
+  ok(nomi().indexOf("Iperico") !== -1 && nomi().indexOf("Liquirizia") !== -1, "interazioni: la digossina cita iperico e liquirizia");
+
+  cerca("litio");
+  ok(gruppi().join("|") === "Interazioni · 7", "interazioni: «litio» dà sette frasi (" + gruppi().join(" / ") + ")");
+  ok(nomi().indexOf("Equiseto") !== -1, "interazioni: il litio cita l'equiseto");
+
+  // Cercare una pianta non rovescia addosso le sue interazioni: la scheda basta.
+  cerca("malva");
+  ok(!/Interazioni/.test(gruppi().join("|")), "interazioni: il nome di una pianta non apre il gruppo Interazioni");
+  ok(el("cercaAvviso").hidden, "interazioni: senza risultati sui farmaci l'avvertenza resta nascosta");
+
+  // La riga apre la scheda della pianta, dove la frase sta nel riquadro sicurezza.
+  cerca("litio");
+  const primaRiga = righe()[0];
+  const nomePrima = primaRiga.querySelector(".cerca-nome").textContent;
+  const voceAttesa = indiceFarmaci.filter((r) => r.pianta === nomePrima)[0];
+  primaRiga.click();
+  await tick(80);
+  ok(!aperta(), "interazioni: scegliere una riga chiude la ricerca");
+  ok(win.location.hash === voceAttesa.via, "interazioni: la riga porta alla scheda della pianta (" + win.location.hash + ")");
+  el("cercaBtn").click();
+  await tick(20);
 
   // Oltre i 40 risultati si mostrano i primi 40 e lo si dice.
   cerca("a");
@@ -205,7 +247,7 @@ function clicca(target) { target.dispatchEvent(new win.MouseEvent("click", { bub
   // --- Nessun doppione, in nessuna ricerca --------------------------------
   ["a", "glossario", "malva", "sonno", "foglie"].forEach((q) => {
     cerca(q);
-    const chiavi = righe().map(chiave);
+    const chiavi = righe().map((b) => chiave(b) + "|" + ((b.querySelector(".cerca-frase") || {}).textContent || ""));
     ok(new Set(chiavi).size === chiavi.length, "niente doppioni: «" + q + "» non ripete un risultato");
   });
 

@@ -13,9 +13,9 @@
   const esc = A.esc;
 
   /* ordine in cui i risultati si mostrano, un gruppo dopo l'altro */
-  const GRUPPI = ["Pagine", "Piante", "Manuale", "Benessere", "Glossario"];
+  const GRUPPI = ["Pagine", "Piante", "Interazioni", "Manuale", "Benessere", "Glossario"];
 
-  let modal, input, esiti, aiuto;
+  let modal, input, esiti, aiuto, avviso;
   let voci = [], mostrati = [], attivo = -1, ultimoFocus = null;
 
   function norm(s) {
@@ -54,7 +54,7 @@
     const out = [], viste = new Set();
 
     function aggiungi(v) {
-      const chiave = v.via + "|" + v.nome;
+      const chiave = v.chiave || v.via + "|" + v.nome;
       if (!v.nome || !v.via || viste.has(chiave)) return;
       viste.add(chiave);
       out.push(v);
@@ -90,6 +90,22 @@
         percorso: cat ? "Erbario › " + cat : "Erbario",
         gruppo: "Piante",
         kw: [p.latino, p.famiglia, lista(p.nomi), lista(p.categorie), lista(p.proprieta), lista(p.usi), p.sintesi].filter(Boolean).join(" ")
+      });
+    });
+
+    /* l'indice inverso delle interazioni: la stessa pianta compare una volta per
+       ogni frase che la riguarda, con la frase esatta e la cautela della scheda */
+    (NP.interazioniIndice || []).forEach(function (r) {
+      aggiungi({
+        nome: r.pianta,
+        via: r.via,
+        percorso: "Interazioni · " + r.cautela,
+        gruppo: "Interazioni",
+        kw: r.frase,
+        frase: r.frase,
+        soloFrase: true,
+        peso: r.peso * 10,
+        chiave: r.via + "|" + r.frase
       });
     });
 
@@ -140,7 +156,7 @@
       const nome = norm(v.nome);
       const kw = norm(v.kw);
       const percorso = norm(v.percorso);
-      if (!parola.every(function (re) { return re.test(nome + " " + kw + " " + percorso); })) return null;
+      if (!parola.every(function (re) { return re.test(v.soloFrase ? kw : nome + " " + kw + " " + percorso); })) return null;
       let s = 0;
       if (nome === frase) s += 120;
       else if (nome.indexOf(frase) === 0) s += 90;
@@ -151,7 +167,9 @@
       });
       if (fraseInizio.test(kw)) s += 12;
       if (fraseInizio.test(percorso)) s += 5;
-      return { v: v, s: s - Math.min(nome.length, 80) / 100 };
+      s += v.peso || 0;
+      /* fra pari cautela le frasi si ordinano per nome, non per lunghezza */
+      return { v: v, s: s - (v.soloFrase ? 0 : Math.min(nome.length, 80) / 100) };
     }).filter(Boolean)
       .sort(function (a, b) { return b.s - a.s || a.v.nome.localeCompare(b.v.nome, "it"); })
       .map(function (x) { return x.v; });
@@ -173,6 +191,7 @@
       }
       html += '<button type="button" role="option" class="cerca-voce" id="cercaVoce' + i + '" data-i="' + i + '" aria-selected="' + (i === attivo ? "true" : "false") + '">' +
         '<span class="cerca-nome">' + esc(v.nome) + "</span>" +
+        (v.frase ? '<span class="cerca-frase">«' + esc(v.frase) + "»</span>" : "") +
         '<span class="cerca-percorso">' + esc(v.percorso) + "</span>" +
         "</button>";
     });
@@ -194,6 +213,7 @@
     aiuto.textContent = q
       ? (trovati.length > 40 ? "Primi 40 risultati: affina la ricerca." : trovati.length + (trovati.length === 1 ? " risultato" : " risultati"))
       : notaIniziale();
+    if (avviso) avviso.hidden = !mostrati.some(function (v) { return v.gruppo === "Interazioni"; });
     input.setAttribute("aria-expanded", String(!!mostrati.length));
     input.setAttribute("aria-activedescendant", mostrati.length ? "cercaVoce0" : "");
   }
@@ -242,6 +262,7 @@
     input = document.getElementById("cercaInput");
     esiti = document.getElementById("cercaEsiti");
     aiuto = document.getElementById("cercaAiuto");
+    avviso = document.getElementById("cercaAvviso");
 
     /* il tasto mostrato è quello giusto anche su Mac */
     if (/Mac|iPhone|iPad|iPod/.test(navigator.platform || "")) {

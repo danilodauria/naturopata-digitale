@@ -73,6 +73,35 @@ quiz.forEach((q) => {
   ok(q.e && q.e.length > 20, q.id + ": spiegazione assente");
 });
 
+// Indice inverso delle interazioni: ogni frase di ogni scheda deve avere la sua
+// riga, con la pianta, il livello di cautela e la frase esatta.
+require(path.join(__dirname, "..", "assets", "js", "interazioni.js"));
+const indiceInterazioni = NP.interazioniIndice;
+const frasiInterazioni = plants.reduce((n, p) => n + ((p.sicurezza.interazioni || []).length), 0);
+ok(indiceInterazioni.length === frasiInterazioni, "interazioni: l'indice ha una riga per frase (" + indiceInterazioni.length + " di " + frasiInterazioni + ")");
+ok(new Set(indiceInterazioni.map((r) => r.id + "|" + r.frase)).size === indiceInterazioni.length, "interazioni: nessuna riga ripetuta");
+const livelliInterazioni = { verde: "Cautela bassa", giallo: "Cautela media", rosso: "Cautela alta" };
+indiceInterazioni.forEach((r) => {
+  const pianta = plants.filter((p) => p.id === r.id)[0];
+  ok(!!pianta, "interazioni: la riga punta a una pianta vera (" + r.id + ")");
+  ok(!!pianta && (pianta.sicurezza.interazioni || []).indexOf(r.frase) !== -1, "interazioni: la frase è quella della scheda (" + r.pianta + ")");
+  ok(pianta && r.livello === pianta.sicurezza.livello, "interazioni: il livello è quello della scheda (" + r.pianta + ")");
+  ok(r.cautela === livelliInterazioni[r.livello], "interazioni: l'etichetta di cautela (" + r.pianta + ")");
+  ok(r.via === "#/pianta/" + r.id, "interazioni: la riga porta alla scheda (" + r.pianta + ")");
+});
+["warfarin", "digossina", "litio"].forEach((q) => {
+  const trovate = NP.cercaInterazioni(q);
+  ok(trovate.length > 0, "interazioni: «" + q + "» trova qualcosa");
+  ok(trovate.every((r) => new RegExp("\\b" + q, "i").test(r.frase)), "interazioni: «" + q + "» torna solo frasi che lo nominano");
+  ok(trovate.every((r, i) => i === 0 || trovate[i - 1].peso >= r.peso), "interazioni: «" + q + "» mette prima la cautela più alta");
+});
+ok(NP.cercaInterazioni("warfarin").length === 12, "interazioni: warfarin in dodici schede (" + NP.cercaInterazioni("warfarin").length + ")");
+ok(NP.cercaInterazioni("digossina").length === 11, "interazioni: digossina in undici schede (" + NP.cercaInterazioni("digossina").length + ")");
+ok(NP.cercaInterazioni("litio").length === 7, "interazioni: litio in sette schede (" + NP.cercaInterazioni("litio").length + ")");
+ok(NP.cercaInterazioni("malva").length === 0, "interazioni: il nome di una pianta non è una ricerca di farmaci");
+ok(NP.cercaInterazioni("zzzz").length === 0, "interazioni: una parola sconosciuta non trova nulla");
+ok((NP.interazioniEsempi || []).indexOf("warfarin") !== -1, "interazioni: wafarin fra gli esempi proposti");
+
 const catCounts = {};
 cats.forEach((c) => { catCounts[c.id] = quiz.filter((q) => q.cat === c.id).length; ok(catCounts[c.id] >= 10, "categoria " + c.id + " con meno di 10 domande"); });
 

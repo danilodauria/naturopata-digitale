@@ -308,7 +308,17 @@
         ).join("") + "</div>" +
       "</section>" +
 
-      '<section class="section" id="interazioni"><div class="section-head"><div><h2>Interazioni principali</h2><p>Una tabella di orientamento, non un sostituto del parere del farmacista.</p></div></div>' +
+      '<section class="section" id="interazioni"><div class="section-head"><div><h2>Cerca un farmaco</h2><p>L\'indice va al contrario: scrivi il nome di un farmaco — warfarin, digossina, litio — e leggi quali schede lo citano, con la frase esatta e il livello di cautela.</p></div></div>' +
+        '<div class="panel">' +
+          '<label class="search-field"><span class="sr-only">Cerca un farmaco</span>' + A.ico("search") + '<input class="input" id="farmacoInput" type="search" placeholder="Es.: warfarin, digossina, litio…" autocomplete="off" spellcheck="false"></label>' +
+          '<div class="farmaco-esempi">' + (NP.interazioniEsempi || []).map((f) => '<button class="chip" type="button" data-farmaco="' + esc(f) + '">' + esc(f) + "</button>").join("") + "</div>" +
+          '<p class="farmaco-aiuto" id="farmacoAiuto">L\'indice raccoglie ' + (NP.interazioniIndice || []).length + " frasi di interazione da " + (NP.plants || []).length + " schede. Scrivi un farmaco: warfarin, digossina, litio.</p>" +
+          '<div id="farmacoEsiti"></div>' +
+          '<div class="callout warn mt-2"><span aria-hidden="true">⚠️</span><p class="mb-0"><strong>Informazione, non consiglio.</strong> Le frasi sono quelle scritte nella scheda della pianta e servono a farti fare domande giuste. Non sospendere né cambiare una terapia da solo: parlane con il medico o con il farmacista, che conosce la tua situazione, le dosi e gli altri farmaci.</p></div>' +
+        "</div>" +
+      "</section>" +
+
+      '<section class="section" id="interazioni-principali"><div class="section-head"><div><h2>Interazioni principali</h2><p>Una tabella di orientamento, non un sostituto del parere del farmacista.</p></div></div>' +
         '<div class="table-wrap"><table class="data-table"><thead><tr><th>Pianta</th><th>Farmaci</th><th>Rischio</th><th>Livello</th></tr></thead><tbody>' +
           (NP.interactions || []).map((it) => "<tr><td><strong>" + esc(it.pianta) + "</strong></td><td>" + esc(it.farmaci) + "</td><td>" + esc(it.effetto) + "</td><td>" + (it.livello === "alto" ? '<span class="badge-dot safety-rosso">alto</span>' : it.livello === "medio" ? '<span class="badge-dot safety-giallo">medio</span>' : '<span class="badge-dot safety-verde">basso</span>') + "</td></tr>").join("") +
         "</tbody></table></div>" +
@@ -378,7 +388,7 @@
       "</section>" +
 
       '<section class="section"><div class="home-split"><div class="panel"><h2>Che cosa c\'è dentro</h2><div class="mini-stats"><div class="mini-stat"><strong>' + (NP.plants || []).length + "</strong><span>schede</span></div><div class=\"mini-stat\"><strong>" + (NP.manual || []).length + "</strong><span>capitoli</span></div><div class=\"mini-stat\"><strong>" + (NP.quiz || []).length + "</strong><span>domande</span></div></div><p class=\"text-small muted mt-2 mb-0\">Tecnologia: HTML, CSS e JavaScript senza dipendenze esterne; PWA con service worker; tutti i contenuti sono locali.</p></div>" +
-        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.43 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
+        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.44 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
       "</section>" +
 
       '<div class="callout warn"><span aria-hidden="true">⚕️</span><p class="mb-0"><strong>Avvertenza sanitaria.</strong> Naturopata Digitale è un\'opera divulgativa. Non fornisce diagnosi, prescrizioni o trattamenti. Le informazioni sulle piante non sostituiscono il parere di medico, farmacista, dietista o altro professionista sanitario. In caso di sintomi importanti, rivolgiti alle strutture sanitarie.</p></div>',

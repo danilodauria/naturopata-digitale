@@ -206,6 +206,20 @@ async function go(hash) {
   // Sicurezza
   await go("#/sicurezza");
   ok(doc.querySelectorAll(".toxic-card").length === 10, "sicurezza: piante tossiche");
+  const farmaco = doc.querySelector("#farmacoInput");
+  ok(!!farmaco, "sicurezza: campo per cercare un farmaco");
+  ok(/Informazione, non consiglio/.test(doc.querySelector("#interazioni").textContent), "sicurezza: avvertenza informazione e non consiglio");
+  ok(/217 frasi di interazione/.test(doc.querySelector("#farmacoAiuto").textContent), "sicurezza: quanti farmaci sono nell'indice");
+  farmaco.value = "warfarin";
+  farmaco.dispatchEvent(new win.Event("input", { bubbles: true }));
+  await tick(20);
+  ok(doc.querySelectorAll(".farmaco-riga").length === 12, "sicurezza: warfarin trova dodici righe (" + doc.querySelectorAll(".farmaco-riga").length + ")");
+  ok(/Warfarin: interazione teorica solo per uso interno/.test(doc.querySelector(".farmaco-riga").textContent), "sicurezza: la frase esatta della scheda");
+  ok(/Cautela alta/.test(doc.querySelector(".farmaco-riga").textContent), "sicurezza: il livello di cautela");
+  ok(/12 frasi in 12 schede/.test(doc.querySelector("#farmacoAiuto").textContent), "sicurezza: il conteggio dei risultati");
+  doc.querySelector('[data-farmaco="litio"]').click();
+  await tick(20);
+  ok(farmaco.value === "litio" && doc.querySelectorAll(".farmaco-riga").length === 7, "sicurezza: il pulsante «litio» riempie il campo e cerca");
   ok(doc.querySelectorAll(".data-table").length >= 3, "sicurezza: tabelle");
   ok(doc.body.textContent.indexOf("112") !== -1, "sicurezza: numero di emergenza");
 

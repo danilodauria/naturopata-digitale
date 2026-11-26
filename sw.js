@@ -4,7 +4,7 @@
    Licenza del codice: MIT · Danilo D'Auria
    ========================================================================== */
 
-const VERSION = "nd-v1.3.43-1";
+const VERSION = "nd-v1.3.44-1";
 const SHELL = [
   "./",
   "index.html",
@@ -48,6 +48,7 @@ const SHELL = [
   "assets/js/app-voce.js",
   "assets/js/app-status.js",
   "assets/js/app-welcome.js",
+  "assets/js/interazioni.js",
   "assets/js/cerca.js"
 ];
 

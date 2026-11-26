@@ -26,6 +26,7 @@ NP.app = (function () {
     favs: new Set(readJSON("favs", [])),
     read: new Set(readJSON("read", [])),
     quizStats: readJSON("quiz", { played: 0, best: 0, correct: 0, total: 0, byCat: {} }),
+    drugs: readJSON("drugs", []),
     filters: { q: "", cat: "tutte", safety: "tutte" },
     calMonth: new Date().getMonth() + 1,
     chat: [],
@@ -36,6 +37,7 @@ NP.app = (function () {
   function saveFavs() { writeJSON("favs", Array.from(state.favs)); }
   function saveRead() { writeJSON("read", Array.from(state.read)); }
   function saveQuizStats() { writeJSON("quiz", state.quizStats); }
+  function saveDrugs() { writeJSON("drugs", state.drugs); }
 
   const MONTHS = ["", "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"];
   const MONTHS_SHORT = ["", "gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"];
@@ -230,7 +232,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.45</p><h2>I farmaci più citati, a colpo d\'occhio</h2><p class="text-small muted mb-0">Nella pagina Sicurezza, sotto il campo di ricerca, c\'è l\'elenco dei farmaci e delle famiglie che ricorrono nelle schede, con quante ne nominano: anticoagulanti e antiaggreganti in 40, warfarin in 12, digossina in 11. Un clic apre le frasi, senza sapere la parola esatta. È informazione, non consiglio: parla con il medico o il farmacista.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.46</p><h2>I farmaci più citati, a colpo d\'occhio</h2><p class="text-small muted mb-0">Nella pagina Sicurezza, sotto il campo di ricerca, c\'è l\'elenco dei farmaci e delle famiglie che ricorrono nelle schede, con quante ne nominano: anticoagulanti e antiaggreganti in 40, warfarin in 12, digossina in 11. Un clic apre le frasi, senza sapere la parola esatta. È informazione, non consiglio: parla con il medico o il farmacista.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 
@@ -560,6 +562,6 @@ NP.app = (function () {
 
   return {
     app, page, render, goNeura, ico, esc, collegaPiante, monthLabel, MONTHS, MONTHS_SHORT, SAFETY,
-    state, views, saveFavs, saveRead, saveQuizStats, readJSON, writeJSON, PREFIX
+    state, views, saveFavs, saveRead, saveQuizStats, saveDrugs, readJSON, writeJSON, PREFIX
   };
 })();

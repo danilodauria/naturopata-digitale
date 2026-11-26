@@ -279,6 +279,50 @@
   };
 
   /* ------------------------------------------------------------------------
+     Mia lista di farmaci
+     ------------------------------------------------------------------------ */
+
+  function miaListaFarmaciHTML() {
+    const drugs = A.state.drugs || [];
+    const risultati = [];
+    const visti = new Set();
+    drugs.forEach((d) => {
+      const trovate = (typeof NP.cercaInterazioni === "function") ? NP.cercaInterazioni(d) : [];
+      trovate.forEach((r) => {
+        if (visti.has(r.id + "::" + r.frase)) return;
+        visti.add(r.id + "::" + r.frase);
+        risultati.push({ farmaco: d, r: r });
+      });
+    });
+    const piante = new Set(risultati.map((x) => x.r.id)).size;
+
+    return '<section class="section" id="mia-lista"><div class="section-head"><div><h2>La mia lista di farmaci</h2><p>Salva i farmaci che assumi: l\'app mostra le piante delle schede che li citano. Resta sul tuo dispositivo, non viene inviato da nessuna parte.</p></div></div>' +
+      '<div class="panel">' +
+        '<div class="farmaco-lista-add">' +
+          '<label class="search-field"><span class="sr-only">Aggiungi un farmaco alla lista</span>' + A.ico("search") + '<input class="input" id="drugListInput" type="search" placeholder="Es.: warfarin, metformina, SSRI…" autocomplete="off" spellcheck="false"></label>' +
+          '<button class="btn btn-primary btn-small" type="button" data-drug-add>Aggiungi</button>' +
+        '</div>' +
+        (drugs.length ?
+          '<ul class="farmaco-lista">' + drugs.map((d) =>
+            '<li><span>' + esc(d) + '</span><button class="btn btn-ghost btn-small" type="button" data-drug-remove="' + esc(d) + '" aria-label="Rimuovi ' + esc(d) + '">✕</button></li>'
+          ).join("") + '</ul>' :
+          '<p class="farmaco-aiuto">Nessun farmaco salvato. Aggiungine uno per vedere le interazioni delle schede.</p>') +
+        (drugs.length ?
+          '<p class="farmaco-aiuto">' + risultati.length + (risultati.length === 1 ? " frase" : " frasi") + " in " + piante + (piante === 1 ? " scheda" : " schede") + " per i farmaci della tua lista.</p>" +
+          (risultati.length ? '<div class="farmaco-esiti-lista">' + risultati.map((x) =>
+            '<article class="farmaco-riga">' +
+              '<p class="farmaco-testa"><a href="' + esc(x.r.via) + '">' + esc(x.r.pianta) + '</a>' +
+              '<span class="badge-dot safety-' + esc(x.r.livello) + '">' + esc(x.r.cautela) + "</span>" +
+              '<span class="farmaco-da">per ' + esc(x.farmaco) + "</span></p>" +
+              '<p class="farmaco-frase">«' + esc(x.r.frase) + "»</p>" +
+            "</article>"
+          ).join("") + '</div>' : '') :
+          "") +
+        '<div class="callout warn mt-2"><span aria-hidden="true">⚠️</span><p class="mb-0"><strong>Informazione, non consiglio.</strong> La lista resta sul tuo dispositivo e serve a farti fare domande giuste. Portala al medico o al farmacista, che conosce dosi e altri farmaci.</p></div>' +
+      "</div></section>";
+  }
+
+  /* ------------------------------------------------------------------------
      Sicurezza
      ------------------------------------------------------------------------ */
 
@@ -339,6 +383,7 @@
         "</div>" +
       "</section>" +
 
+      miaListaFarmaciHTML() +
       '<section class="section" id="interazioni-principali"><div class="section-head"><div><h2>Interazioni principali</h2><p>Una tabella di orientamento, non un sostituto del parere del farmacista.</p></div></div>' +
         '<div class="table-wrap"><table class="data-table"><thead><tr><th>Pianta</th><th>Farmaci</th><th>Rischio</th><th>Livello</th></tr></thead><tbody>' +
           (NP.interactions || []).map((it) => "<tr><td><strong>" + esc(it.pianta) + "</strong></td><td>" + esc(it.farmaci) + "</td><td>" + esc(it.effetto) + "</td><td>" + (it.livello === "alto" ? '<span class="badge-dot safety-rosso">alto</span>' : it.livello === "medio" ? '<span class="badge-dot safety-giallo">medio</span>' : '<span class="badge-dot safety-verde">basso</span>') + "</td></tr>").join("") +
@@ -409,7 +454,7 @@
       "</section>" +
 
       '<section class="section"><div class="home-split"><div class="panel"><h2>Che cosa c\'è dentro</h2><div class="mini-stats"><div class="mini-stat"><strong>' + (NP.plants || []).length + "</strong><span>schede</span></div><div class=\"mini-stat\"><strong>" + (NP.manual || []).length + "</strong><span>capitoli</span></div><div class=\"mini-stat\"><strong>" + (NP.quiz || []).length + "</strong><span>domande</span></div></div><p class=\"text-small muted mt-2 mb-0\">Tecnologia: HTML, CSS e JavaScript senza dipendenze esterne; PWA con service worker; tutti i contenuti sono locali.</p></div>" +
-        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.45 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
+        '<div class="panel panel-soft"><h2>Un progetto FeniceOS</h2><p class="text-small">Ideato e sviluppato da <strong>Danilo D\'Auria</strong>, autore anche del Professore Digitale, del Consulente Digitale, di FeniceOS e del libro «Tecnologia Gentile: Informatica Sostenibile».</p><p class="text-small muted mb-0">Versione 1.3.46 · novembre 2026 · nessun dato inviato in rete.</p></div></div>' +
       "</section>" +
 
       '<div class="callout warn"><span aria-hidden="true">⚕️</span><p class="mb-0"><strong>Avvertenza sanitaria.</strong> Naturopata Digitale è un\'opera divulgativa. Non fornisce diagnosi, prescrizioni o trattamenti. Le informazioni sulle piante non sostituiscono il parere di medico, farmacista, dietista o altro professionista sanitario. In caso di sintomi importanti, rivolgiti alle strutture sanitarie.</p></div>',

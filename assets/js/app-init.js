@@ -67,7 +67,8 @@
       exportedAt: new Date().toISOString(),
       favs: Array.from(state.favs),
       read: Array.from(state.read),
-      quiz: state.quizStats
+      quiz: state.quizStats,
+      drugs: state.drugs
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -91,6 +92,7 @@
         if (!confirm("Importare il backup? I dati attuali di preferiti, letture e quiz verranno sostituiti.")) return;
         state.favs = new Set(data.favs.filter((x) => typeof x === "string"));
         state.read = new Set(data.read.filter((x) => typeof x === "string"));
+        if (Array.isArray(data.drugs)) state.drugs = data.drugs.filter((x) => typeof x === "string");
         if (data.quiz && typeof data.quiz === "object") {
           state.quizStats = {
             played: Number(data.quiz.played) || 0,
@@ -103,6 +105,7 @@
         A.saveFavs();
         A.saveRead();
         A.saveQuizStats();
+        A.saveDrugs();
         A.render();
         toast("Backup importato.");
       } catch (e) {
@@ -120,6 +123,7 @@
     state.favs = new Set();
     state.read = new Set();
     state.quizStats = { played: 0, best: 0, correct: 0, total: 0, byCat: {} };
+    state.drugs = [];
     A.state.chat = [];
     location.hash = "#/";
     location.reload();
@@ -215,6 +219,28 @@
       const resetBtn = e.target.closest("[data-reset]");
       if (resetBtn) resetData();
 
+      const drugAdd = e.target.closest("[data-drug-add]");
+      if (drugAdd) {
+        const input = document.getElementById("drugListInput");
+        if (input) {
+          const val = input.value.trim();
+          if (val && state.drugs.indexOf(val) === -1) {
+            state.drugs.push(val);
+            A.saveDrugs();
+            toast("Aggiunto alla lista: " + val);
+          }
+          input.value = "";
+          A.render();
+        }
+      }
+      const drugRemove = e.target.closest("[data-drug-remove]");
+      if (drugRemove) {
+        const val = drugRemove.getAttribute("data-drug-remove");
+        state.drugs = state.drugs.filter((x) => x !== val);
+        A.saveDrugs();
+        A.render();
+      }
+
       const nqBtn = e.target.closest(".neura-quiz .option");
       if (nqBtn && !nqBtn.disabled) {
         const wrap = nqBtn.closest(".neura-quiz");
@@ -245,6 +271,12 @@
           const apriAltro = document.getElementById("moreBtn");
           if (apriAltro) apriAltro.focus();
         }
+      }
+      if (e.target && e.target.id === "drugListInput" && e.key === "Enter") {
+        e.preventDefault();
+        const btn = document.querySelector("[data-drug-add]");
+        if (btn) btn.click();
+        return;
       }
       const tag = (e.target.tagName || "").toLowerCase();
       if (tag === "input" || tag === "textarea" || tag === "select" || e.target.isContentEditable) return;

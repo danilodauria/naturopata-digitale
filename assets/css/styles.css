@@ -334,6 +334,12 @@ html[data-theme="dark"] .nav-more-btn.is-active { color: #c9ecd5; }
 .farmaco-frase { margin: .2rem 0 0; font-size: .85rem; color: var(--text-soft); }
 .farmaco-vuoto { margin: .6rem 0 0; color: var(--text-faint); }
 .farmaco-aiuto { margin: .55rem 0 0; font-size: .8rem; color: var(--text-faint); }
+.farmaco-lista-add { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.farmaco-lista-add .search-field { flex: 1 1 240px; }
+.farmaco-lista { list-style: none; margin: .7rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.farmaco-lista li { display: inline-flex; align-items: center; gap: .35rem; padding: .25rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font-size: .85rem; }
+.farmaco-lista li button { border: 0; background: transparent; color: var(--text-faint); cursor: pointer; font-size: .9rem; line-height: 1; padding: 0 .15rem; }
+.farmaco-da { margin-left: .5rem; font-size: .7rem; color: var(--text-faint); font-style: italic; }
 .cerca-vuoto { padding: .8rem .6rem; color: var(--text-faint); }
 .nav-cerca { display: none; align-items: center; gap: .5rem; width: 100%; border: 0; border-bottom: 1px solid var(--bordo); background: transparent; color: var(--text); padding: .85rem 1rem; font: 600 .95rem var(--sans); text-align: left; cursor: pointer; }
 .nav-cerca svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }

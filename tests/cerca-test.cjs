@@ -227,6 +227,11 @@ function clicca(target) { target.dispatchEvent(new win.MouseEvent("click", { bub
   // nomi si apre per esteso con NP.cercaInterazioni, come fa il pulsante.
   cerca("Sedativi");
   ok(righe().length === 24 && new Set(nomi()).size === 22, "interazioni: «Sedativi» dà 24 frasi in 22 schede (" + righe().length + "/" + new Set(nomi()).size + ")");
+  // La ricerca rapida riconosce il nome per esteso di una voce dell'elenco,
+  // come la pagina Sicurezza, e apre tutte le sue frasi.
+  cerca("Anticoagulanti e antiaggreganti");
+  ok(righe().length === 40, "interazioni: «Anticoagulanti e antiaggreganti» dà 40 frasi nella ricerca rapida (" + righe().length + ")");
+  ok(!el("cercaAvviso").hidden, "interazioni: l'avvertenza compare con i risultati sui farmaci");
   ok(win.NP.cercaInterazioni("Anticoagulanti e antiaggreganti").length === 40, "interazioni: la voce per esteso apre le 40 frasi degli anticoagulanti e antiaggreganti");
   ok(win.NP.cercaInterazioni("Antidiabetici e ipoglicemizzanti").length === 25, "interazioni: la voce degli antidiabetici trova anche gli ipoglicemizzanti");
 

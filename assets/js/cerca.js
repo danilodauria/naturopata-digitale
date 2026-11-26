@@ -145,18 +145,35 @@
   }
 
   /* tutte le parole della ricerca devono comparire; vince chi ha il nome
-     che comincia con quello che si è scritto */
+     che comincia con quello che si è scritto. Il nome di una voce dell'elenco
+     dei farmaci (come nella pagina Sicurezza) apre tutte le sue frasi, anche
+     quando la voce unisce più nomi (anticoagulanti e antiaggreganti). */
   function filtra(q) {
     const t = norm(q).split(" ").filter(Boolean);
     if (!t.length) return voci;
     const frase = t.join(" ");
     const parola = t.map(inizioParola);
     const fraseInizio = inizioParola(frase);
+    /* riconoscimento del nome di una voce dell'elenco, esatto come in
+       NP.cercaInterazioni: chiave o etichetta normalizzata */
+    let frasiVoce = null;
+    const voce = (NP.interazioniPiuCitati || []).filter(function (v) {
+      return v.chiave === frase || norm(v.etichetta) === frase;
+    })[0];
+    if (voce) {
+      const frasi = NP.filtraInterazioni(voce.chiave);
+      frasiVoce = {};
+      frasi.forEach(function (r) { frasiVoce[r.via + "|" + r.frase] = true; });
+    }
     return voci.map(function (v) {
       const nome = norm(v.nome);
       const kw = norm(v.kw);
       const percorso = norm(v.percorso);
-      if (!parola.every(function (re) { return re.test(v.soloFrase ? kw : nome + " " + kw + " " + percorso); })) return null;
+      if (v.gruppo === "Interazioni" && frasiVoce) {
+        if (!frasiVoce[v.via + "|" + v.frase]) return null;
+      } else {
+        if (!parola.every(function (re) { return re.test(v.soloFrase ? kw : nome + " " + kw + " " + percorso); })) return null;
+      }
       let s = 0;
       if (nome === frase) s += 120;
       else if (nome.indexOf(frase) === 0) s += 90;

@@ -122,26 +122,35 @@
     return out;
   }
 
+  /* la parola cercata deve cominciare una parola intera: «menta» trova la
+     menta e non «alimentare», mentre «alim» trova ancora «alimentare» */
+  function inizioParola(x) {
+    return new RegExp("(^|[^a-z0-9])" + x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  }
+
   /* tutte le parole della ricerca devono comparire; vince chi ha il nome
      che comincia con quello che si è scritto */
   function filtra(q) {
     const t = norm(q).split(" ").filter(Boolean);
     if (!t.length) return voci;
     const frase = t.join(" ");
+    const parola = t.map(inizioParola);
+    const fraseInizio = inizioParola(frase);
     return voci.map(function (v) {
       const nome = norm(v.nome);
-      const hay = norm([v.nome, v.kw, v.percorso].join(" "));
-      if (!t.every(function (x) { return hay.indexOf(x) >= 0; })) return null;
+      const kw = norm(v.kw);
+      const percorso = norm(v.percorso);
+      if (!parola.every(function (re) { return re.test(nome + " " + kw + " " + percorso); })) return null;
       let s = 0;
       if (nome === frase) s += 120;
       else if (nome.indexOf(frase) === 0) s += 90;
-      else if (nome.indexOf(frase) >= 0) s += 60;
-      t.forEach(function (x) {
+      else if (fraseInizio.test(nome)) s += 60;
+      t.forEach(function (x, i) {
         if (nome.indexOf(x) === 0) s += 25;
-        else if (nome.indexOf(x) >= 0) s += 15;
+        else if (parola[i].test(nome)) s += 15;
       });
-      if (norm(v.kw).indexOf(frase) >= 0) s += 12;
-      if (norm(v.percorso).indexOf(frase) >= 0) s += 5;
+      if (fraseInizio.test(kw)) s += 12;
+      if (fraseInizio.test(percorso)) s += 5;
       return { v: v, s: s - Math.min(nome.length, 80) / 100 };
     }).filter(Boolean)
       .sort(function (a, b) { return b.s - a.s || a.v.nome.localeCompare(b.v.nome, "it"); })

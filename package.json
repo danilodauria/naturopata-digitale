@@ -1,6 +1,6 @@
 {
   "name": "naturopata-digitale",
-  "version": "1.3.42",
+  "version": "1.3.43",
   "private": true,
   "description": "Erbario con 70 piante officinali, manuale, fitoalimurgia, sopravvivenza, biblioteca storica, quiz e assistente locale Neura. PWA statica in italiano, anche offline.",
   "author": "Danilo D'Auria",
@@ -32,10 +32,11 @@
   "salva": "node scripts/salva.cjs",
     "prepare": "node scripts/installa-hook.cjs",
     "rilascio": "npm test && npm run fogli && npm run desktop:prepare && npm test && npm run backup",
-    "test": "node tests/verify.cjs && node tests/dom-test.cjs && node tests/interfacce.cjs",
+    "test": "node tests/verify.cjs && node tests/dom-test.cjs && node tests/cerca-test.cjs && node tests/interfacce.cjs",
     "test:interfacce": "node tests/interfacce.cjs",
     "test:data": "node tests/verify.cjs",
-    "test:dom": "node tests/dom-test.cjs"
+    "test:dom": "node tests/dom-test.cjs",
+    "test:cerca": "node tests/cerca-test.cjs"
   },
   "devDependencies": {
     "jsdom": "^30.1.3"

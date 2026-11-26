@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.42</p><h2>Cerca, da qualsiasi pagina</h2><p class="text-small muted mb-0">Un pulsante «Cerca» in testata — o Ctrl K — apre la ricerca in tutto il programma: 70 piante, 18 capitoli, le schede di benessere, il glossario e le pagine del menu. L\'indice sta nel dispositivo, quindi funziona anche senza rete.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.43</p><h2>La ricerca trova la parola giusta</h2><p class="text-small muted mb-0">La ricerca rapida ora chiede parole intere: «menta» porta alla menta piperita e non alle parole che la contengono per caso. I mezzi termini funzionano lo stesso, e l\'indice resta nel dispositivo, quindi anche senza rete.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

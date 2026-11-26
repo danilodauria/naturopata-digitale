@@ -230,7 +230,7 @@ NP.app = (function () {
       "</section>" +
 
       '<section class="section"><div class="panel novita-panel">' +
-        '<div><p class="eyebrow">Novità · versione 1.3.44</p><h2>Quali piante interagiscono con i tuoi farmaci</h2><p class="text-small muted mb-0">Scrivendo «warfarin», «digossina» o «litio» nella ricerca — o nella pagina Sicurezza — compaiono le schede che li citano, con la frase esatta e il livello di cautela. È informazione, non consiglio: parla con il medico o il farmacista.</p></div>' +
+        '<div><p class="eyebrow">Novità · versione 1.3.45</p><h2>I farmaci più citati, a colpo d\'occhio</h2><p class="text-small muted mb-0">Nella pagina Sicurezza, sotto il campo di ricerca, c\'è l\'elenco dei farmaci e delle famiglie che ricorrono nelle schede, con quante ne nominano: anticoagulanti e antiaggreganti in 40, warfarin in 12, digossina in 11. Un clic apre le frasi, senza sapere la parola esatta. È informazione, non consiglio: parla con il medico o il farmacista.</p></div>' +
         '<div class="hero-actions"><a class="btn btn-primary btn-small" href="#/neura">Prova Neura</a><a class="btn btn-secondary btn-small" href="#/spezierie">Antiche spezierie</a><a class="btn btn-ghost btn-small" href="versioni.html">Versioni e novità</a></div>' +
       "</div></section>" +
 

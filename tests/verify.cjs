@@ -102,6 +102,27 @@ ok(NP.cercaInterazioni("malva").length === 0, "interazioni: il nome di una piant
 ok(NP.cercaInterazioni("zzzz").length === 0, "interazioni: una parola sconosciuta non trova nulla");
 ok((NP.interazioniEsempi || []).indexOf("warfarin") !== -1, "interazioni: wafarin fra gli esempi proposti");
 
+// L'elenco dei farmaci e delle famiglie più citati: i conteggi si ricavano
+// dalle frasi delle schede, voce per voce, e devono tornare con l'indice.
+const piuCitati = NP.interazioniPiuCitati || [];
+ok(piuCitati.length >= 20, "elenco farmaci: almeno 20 voci (" + piuCitati.length + ")");
+ok(piuCitati.some((v) => v.tipo === "famiglia") && piuCitati.some((v) => v.tipo === "farmaco"), "elenco farmaci: ci sono famiglie e farmaci");
+ok(new Set(piuCitati.map((v) => v.chiave)).size === piuCitati.length, "elenco farmaci: nessuna voce ripetuta");
+ok(piuCitati.every((v, i) => i === 0 || piuCitati[i - 1].schede >= v.schede), "elenco farmaci: dalla voce più citata alla meno citata");
+ok(piuCitati.every((v) => v.schede > 0 && v.frasi >= v.schede), "elenco farmaci: ogni voce ha almeno una scheda e una frase");
+piuCitati.forEach((v) => {
+  const righe = NP.filtraInterazioni(v.chiave);
+  const schede = new Set(righe.map((r) => r.id));
+  ok(righe.length === v.frasi, "elenco farmaci: «" + v.etichetta + "» ha " + v.frasi + " frasi (" + righe.length + ")");
+  ok(schede.size === v.schede, "elenco farmaci: «" + v.etichetta + "» è in " + v.schede + " schede (" + schede.size + ")");
+  ok(righe.every((r, i) => i === 0 || righe[i - 1].peso >= r.peso), "elenco farmaci: «" + v.etichetta + "» mette prima la cautela più alta");
+  ok(NP.cercaInterazioni(v.etichetta).length === righe.length, "elenco farmaci: il nome della voce apre le sue frasi («" + v.etichetta + "»)");
+});
+ok(piuCitati[0].etichetta === "Anticoagulanti e antiaggreganti" && piuCitati[0].schede === 40, "elenco farmaci: in cima gli anticoagulanti, in 40 schede (" + piuCitati[0].etichetta + ", " + piuCitati[0].schede + ")");
+const voceWarfarin = piuCitati.filter((v) => v.etichetta === "Warfarin")[0];
+ok(voceWarfarin && voceWarfarin.schede === 12, "elenco farmaci: warfarin in 12 schede");
+ok(piuCitati.filter((v) => v.etichetta === "Sedativi")[0].frasi > piuCitati.filter((v) => v.etichetta === "Sedativi")[0].schede, "elenco farmaci: frasi e schede restano due numeri diversi (sedativi)");
+
 const catCounts = {};
 cats.forEach((c) => { catCounts[c.id] = quiz.filter((q) => q.cat === c.id).length; ok(catCounts[c.id] >= 10, "categoria " + c.id + " con meno di 10 domande"); });
 

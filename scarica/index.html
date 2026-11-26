@@ -364,21 +364,21 @@
                     <section class="section" id="novita">
       <div class="wrap">
         <div class="section-head">
-          <h2>Novità della versione 1.3.44</h2>
-          <p>Novembre 2026. L'indice inverso delle interazioni: scrivendo un farmaco — warfarin, digossina, litio — compaiono le piante che lo citano, con la frase esatta e il livello di cautela. Nient'altro cambia.</p>
+          <h2>Novità della versione 1.3.45</h2>
+          <p>Novembre 2026. L'elenco dei farmaci e delle famiglie più citati nella pagina Sicurezza: le voci si sfogliano una per una, con quante schede le nominano. Un clic apre le frasi. Nient'altro cambia.</p>
         </div>
         <div class="split">
           <div class="card">
             <ul>
-              <li><strong>Dal farmaco alla pianta</strong>: l'indice copre le 217 frasi di interazione delle schede; warfarin ne trova 12, la digossina 11, il litio 7.</li>
-              <li><strong>La frase esatta</strong>: ogni risultato riporta la frase della scheda, parola per parola, con la cautela della pianta (alta, media, bassa) e il collegamento alla scheda completa.</li>
-              <li><strong>Informazione, non consiglio</strong>: l'avvertenza è accanto ai risultati; le scelte su una terapia restano del medico o del farmacista.</li>
+              <li><strong>L'elenco dei più citati</strong>: sotto il campo «Cerca un farmaco» ci sono 33 voci, 25 famiglie e 8 farmaci, con il numero di schede che le nominano.</li>
+              <li><strong>In cima</strong>: anticoagulanti e antiaggreganti (40 schede), antidiabetici e ipoglicemizzanti (25), sedativi (22), diuretici (19), antipertensivi (18); warfarin 12, digossina 11, litio 7.</li>
+              <li><strong>Anche senza la parola esatta</strong>: basta scegliere una voce perché il campo si riempia e compaiano le frasi, con la cautela della scheda e il collegamento alla scheda completa.</li>
             </ul>
           </div>
           <div class="card">
             <ul>
-              <li><strong>Due porte d'ingresso</strong>: il gruppo «Interazioni» nella ricerca rapida e il campo «Cerca un farmaco» nella pagina Sicurezza, con i pulsanti warfarin, digossina, litio.</li>
-              <li><strong>I test</strong>: l'indice è controllato a ogni <code>npm test</code> — una riga per frase, nessun doppione, frasi e livelli presi dalle schede, i conteggi dei tre farmaci.</li>
+              <li><strong>Frasi e schede</strong>: i due numeri restano distinti — i sedativi sono 24 frasi in 22 schede — e l'avvertenza «informazione, non consiglio» resta accanto ai risultati.</li>
+              <li><strong>I test</strong>: ogni voce dell'elenco è confrontata con le frasi reali a ogni <code>npm test</code> — conteggi, ordine, nessuna voce scritta a mano.</li>
               <li><strong>I file</strong>: si scaricano come sempre dalla release; le impronte SHA-256 stanno nella tabella qui sopra.</li>
             </ul>
           </div>

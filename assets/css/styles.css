@@ -320,7 +320,13 @@ html[data-theme="dark"] .nav-more-btn.is-active { color: #c9ecd5; }
 .cerca-frase { font-size: .8rem; color: var(--text-soft); }
 .cerca-avviso { margin: .4rem .2rem 0; padding: .4rem .55rem; border-left: 3px solid var(--rosso); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; background: var(--surface-2); font-size: .76rem; color: var(--text-soft); }
 .cerca-avviso[hidden] { display: none; }
-.farmaco-esempi { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+.farmaco-piu { margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--line); }
+.farmaco-piu h3 { margin: 0 0 .25rem; font-size: 1rem; }
+.farmaco-piu-nota { margin: 0 0 .7rem; font-size: .8rem; color: var(--text-faint); }
+.farmaco-piu-titolo { margin: .8rem 0 .35rem; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); }
+.farmaco-piu-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+.farmaco-voce { display: inline-flex; align-items: center; gap: .4rem; }
+.farmaco-conteggio { padding: .05rem .35rem; border-radius: 999px; background: var(--line); font-size: .68rem; font-weight: 700; color: var(--text-soft); }
 .farmaco-riga { padding: .55rem 0; border-top: 1px solid var(--line); }
 .farmaco-testa { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; margin: 0; }
 .farmaco-testa a { font-weight: 700; }

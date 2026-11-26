@@ -210,6 +210,19 @@ async function go(hash) {
   ok(!!farmaco, "sicurezza: campo per cercare un farmaco");
   ok(/Informazione, non consiglio/.test(doc.querySelector("#interazioni").textContent), "sicurezza: avvertenza informazione e non consiglio");
   ok(/217 frasi di interazione/.test(doc.querySelector("#farmacoAiuto").textContent), "sicurezza: quanti farmaci sono nell'indice");
+
+  // L'elenco dei farmaci e delle famiglie più citati, sotto il campo.
+  const piu = doc.querySelector("#farmacoPiu");
+  ok(!!piu, "sicurezza: l'elenco dei più citati sta sotto il campo");
+  const vociPiu = piu.querySelectorAll("[data-farmaco]");
+  ok(vociPiu.length === win.NP.interazioniPiuCitati.length, "sicurezza: una voce per ogni termine (" + vociPiu.length + ") di " + win.NP.interazioniPiuCitati.length);
+  ok(vociPiu[0].getAttribute("data-farmaco") === "Anticoagulanti e antiaggreganti", "sicurezza: in cima gli anticoagulanti");
+  ok(vociPiu[0].querySelector(".farmaco-conteggio").textContent === "40", "sicurezza: il numero dice quante schede nominano la voce");
+  ok(/40 schede/.test(vociPiu[0].getAttribute("aria-label")), "sicurezza: la voce lo dice anche a chi usa il lettore di schermo");
+  vociPiu[2].click();
+  await tick(30);
+  ok(farmaco.value === "Sedativi" && doc.querySelectorAll(".farmaco-riga").length === 24, "sicurezza: la voce «Sedativi» riempie il campo e mostra 24 frasi (" + doc.querySelectorAll(".farmaco-riga").length + ")");
+  ok(/24 frasi in 22 schede/.test(doc.querySelector("#farmacoAiuto").textContent), "sicurezza: il conteggio distingue frasi e schede (" + doc.querySelector("#farmacoAiuto").textContent + ")");
   farmaco.value = "warfarin";
   farmaco.dispatchEvent(new win.Event("input", { bubbles: true }));
   await tick(20);
@@ -217,9 +230,9 @@ async function go(hash) {
   ok(/Warfarin: interazione teorica solo per uso interno/.test(doc.querySelector(".farmaco-riga").textContent), "sicurezza: la frase esatta della scheda");
   ok(/Cautela alta/.test(doc.querySelector(".farmaco-riga").textContent), "sicurezza: il livello di cautela");
   ok(/12 frasi in 12 schede/.test(doc.querySelector("#farmacoAiuto").textContent), "sicurezza: il conteggio dei risultati");
-  doc.querySelector('[data-farmaco="litio"]').click();
+  doc.querySelector('[data-farmaco="Litio"]').click();
   await tick(20);
-  ok(farmaco.value === "litio" && doc.querySelectorAll(".farmaco-riga").length === 7, "sicurezza: il pulsante «litio» riempie il campo e cerca");
+  ok(farmaco.value === "Litio" && doc.querySelectorAll(".farmaco-riga").length === 7, "sicurezza: il pulsante «Litio» riempie il campo e cerca");
   ok(doc.querySelectorAll(".data-table").length >= 3, "sicurezza: tabelle");
   ok(doc.body.textContent.indexOf("112") !== -1, "sicurezza: numero di emergenza");
 

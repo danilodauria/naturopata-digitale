@@ -222,6 +222,14 @@ function clicca(target) { target.dispatchEvent(new win.MouseEvent("click", { bub
   ok(gruppi().join("|") === "Interazioni · 7", "interazioni: «litio» dà sette frasi (" + gruppi().join(" / ") + ")");
   ok(nomi().indexOf("Equiseto") !== -1, "interazioni: il litio cita l'equiseto");
 
+  // Le voci dell'elenco nella pagina Sicurezza: frasi e schede sono due numeri
+  // distinti (i sedativi sono 24 frasi in 22 schede) e la voce che unisce più
+  // nomi si apre per esteso con NP.cercaInterazioni, come fa il pulsante.
+  cerca("Sedativi");
+  ok(righe().length === 24 && new Set(nomi()).size === 22, "interazioni: «Sedativi» dà 24 frasi in 22 schede (" + righe().length + "/" + new Set(nomi()).size + ")");
+  ok(win.NP.cercaInterazioni("Anticoagulanti e antiaggreganti").length === 40, "interazioni: la voce per esteso apre le 40 frasi degli anticoagulanti e antiaggreganti");
+  ok(win.NP.cercaInterazioni("Antidiabetici e ipoglicemizzanti").length === 25, "interazioni: la voce degli antidiabetici trova anche gli ipoglicemizzanti");
+
   // Cercare una pianta non rovescia addosso le sue interazioni: la scheda basta.
   cerca("malva");
   ok(!/Interazioni/.test(gruppi().join("|")), "interazioni: il nome di una pianta non apre il gruppo Interazioni");
